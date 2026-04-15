@@ -4,11 +4,11 @@ import { Helmet } from "react-helmet-async";
 import {
   ArrowLeft, MapPin, Phone, Flag, Star, RefreshCw, Bell, ChevronRight,
   MessageCircle, ExternalLink, Truck, Wrench, ShieldCheck, RotateCcw,
-  Clock, Calendar,
+  Clock, Calendar, Heart,
 } from "lucide-react";
 import { mockProducts } from "@/data/mockData";
 import { formatPrice, getDistance, getPlatformsForCity } from "@/lib/cityUtils";
-import PriceComparisonTable from "@/components/PriceComparisonTable";
+import SellerPriceTable from "@/components/SellerPriceTable";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 import ProductVariants from "@/components/ProductVariants";
 import PriceHistoryChart from "@/components/PriceHistoryChart";
@@ -18,6 +18,7 @@ import ReportModal from "@/components/ReportModal";
 import ProductCard from "@/components/ProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { toggleWishlist, isInWishlist, addToRecentlyViewed } from "@/lib/wishlist";
 
 /* ── Scroll reveal ── */
 const useReveal = () => {
@@ -60,7 +61,7 @@ const tvProduct = {
     ["Connectivity", "3x HDMI, 1x USB, Wi-Fi, Bluetooth 5.2"],
     ["Voice Assistant", "Alexa Built-in, Google Assistant"],
     ["Weight", "8.2 kg (without stand)"],
-  ],
+  ] as [string, string][],
   cityPartners: [
     { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9876543210", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
     { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9876512345", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
@@ -102,12 +103,12 @@ const ProductPage: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [refreshCooldown, setRefreshCooldown] = useState(0);
   const [mainImage, setMainImage] = useState(0);
+  const [wishlisted, setWishlisted] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState(() =>
     new Date().toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true })
   );
   const [showCompareBtn, setShowCompareBtn] = useState(false);
 
-  // Use mock TV product for id=200 or fallback to mockProducts
   const existingProduct = mockProducts.find(p => p.id === Number(id));
   const isTVProduct = Number(id) === 200 || !existingProduct;
   const product = existingProduct;
@@ -115,7 +116,6 @@ const ProductPage: React.FC = () => {
   const amazonHistory = useMemo(() => generatePriceHistory(), []);
   const flipkartHistory = useMemo(() => generatePriceHistory(), []);
 
-  // Build city-aware price list
   const cityPrices = useMemo(() => {
     const prices = [allPrices.local, allPrices.amazon, allPrices.flipkart, allPrices.meesho, allPrices.croma, allPrices.relianceDigital];
     if (tamilNaduCities.includes(selectedCity)) prices.push(allPrices.poorvika);
@@ -123,14 +123,21 @@ const ProductPage: React.FC = () => {
     return prices;
   }, [selectedCity]);
 
-  // Scroll listener for compare button
+  // Track recently viewed + wishlist state
+  useEffect(() => {
+    const pid = String(id || "");
+    if (pid) {
+      addToRecentlyViewed(pid);
+      setWishlisted(isInWishlist(pid));
+    }
+  }, [id]);
+
   useEffect(() => {
     const onScroll = () => setShowCompareBtn(window.scrollY > 400);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Refresh cooldown timer
   useEffect(() => {
     if (refreshCooldown <= 0) return;
     const timer = setInterval(() => setRefreshCooldown(c => c - 1), 1000);
@@ -143,20 +150,42 @@ const ProductPage: React.FC = () => {
     setTimeout(() => {
       setRefreshing(false);
       setLastRefreshed("just now");
-      setRefreshCooldown(300); // 5 min
+      setRefreshCooldown(300);
     }, 1500);
   };
 
-  // For existing products, render the enhanced version
+  const handleWishlistToggle = () => {
+    const result = toggleWishlist(String(id || ""));
+    setWishlisted(result);
+  };
+
   const productName = isTVProduct ? tvProduct.name : product!.name;
   const productBrand = isTVProduct ? tvProduct.brand : product!.brand;
   const productDesc = isTVProduct ? tvProduct.description : product!.description;
-  const productImages = isTVProduct ? tvProduct.images : [product!.image];
+  const productImages = isTVProduct ? tvProduct.images : (product!.galleryImages?.length ? product!.galleryImages : [product!.image]);
   const variants = isTVProduct ? tvProduct.variants : product!.variants;
+  const specs = isTVProduct ? tvProduct.specs : product!.specs;
   const cityPartner = isTVProduct ? tvProduct.cityPartners[0] : (product?.localShop ? { ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" } : null);
-  const priceList = isTVProduct ? cityPrices : product!.prices;
-  const isLocalAvailable = isTVProduct ? true : product!.localAvailable;
-  const cheapest = Math.min(...priceList.filter(p => p.inStock).map(p => p.price));
+  const cityPartnersList = isTVProduct
+    ? tvProduct.cityPartners
+    : (product?.localShop
+      ? [{ ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "", inStock: true }]
+      : []);
+  const onlinePrices = isTVProduct
+    ? Object.values(allPrices).filter(p => p.isAffiliate)
+    : product!.prices.filter(p => p.isAffiliate);
+  const allPriceValues = [
+    ...onlinePrices.filter(p => p.inStock).map(p => p.price),
+    ...cityPartnersList.map(p => p.price),
+  ];
+  const cheapest = Math.min(...allPriceValues);
+  const onlineBest = Math.min(...onlinePrices.filter(p => p.inStock).map(p => p.price));
+  const localBest = cityPartnersList.length > 0 ? Math.min(...cityPartnersList.map(p => p.price)) : null;
+  const priceDiff = localBest !== null ? Math.abs(onlineBest - localBest) : 0;
+  const cheaperSource = localBest !== null && localBest < onlineBest ? "city partner" : "online";
+  const cheapestSeller = isTVProduct
+    ? (cheaperSource === "city partner" ? tvProduct.cityPartners[0].name : "Amazon")
+    : (cheaperSource === "city partner" ? product?.localShop?.name : onlinePrices.filter(p => p.inStock).sort((a, b) => a.price - b.price)[0]?.platform) || "Online";
 
   if (!isTVProduct && !product) {
     return (
@@ -168,76 +197,86 @@ const ProductPage: React.FC = () => {
     );
   }
 
-  const waMessage = encodeURIComponent(`Vanakkam! Bazaar Hub-il ungal ${productName} patthi parthen`);
   const similarProducts = mockProducts.filter(p => p.id !== Number(id)).slice(0, 6);
 
   return (
     <>
       <Helmet>
         <title>Buy {productName} in {selectedCity} — Cheapest Price | Bazaar Hub</title>
-        <meta name="description" content={`Compare ${productName} in ${selectedCity} — Local vs Amazon vs Flipkart`} />
+        <meta name="description" content={`Compare ${productName} in ${selectedCity} — City Partners vs Amazon vs Flipkart`} />
       </Helmet>
 
       <div className="pb-20 md:pb-0">
         <div className="container py-4">
 
-          {/* ── A. BREADCRUMB + H1 + REPORT ── */}
+          {/* ── BREADCRUMB ── */}
           <nav className="mb-4 flex items-center gap-1 text-sm text-muted-foreground">
             <Link to="/" className="transition-all duration-200 hover:text-primary">Home</Link>
             <ChevronRight className="h-3 w-3" />
-            <Link to="/search" className="transition-all duration-200 hover:text-primary">Search</Link>
+            <Link to={`/search?q=${encodeURIComponent(isTVProduct ? tvProduct.category : product!.category)}`} className="transition-all duration-200 hover:text-primary">
+              {isTVProduct ? tvProduct.category : product!.category}
+            </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-foreground font-medium truncate max-w-[200px]">{productName}</span>
+            <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productBrand}</span>
+            <ChevronRight className="h-3 w-3" />
+            <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productName}</span>
           </nav>
 
+          {/* ── H1 + REPORT ── */}
           <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
             <div>
-              <h1 className="text-2xl font-bold text-foreground md:text-3xl">{productName}</h1>
+              <h1 className="notranslate text-2xl font-bold text-foreground md:text-3xl">{productName}</h1>
               <div className="mt-1 flex items-center gap-2">
                 <div className="flex items-center gap-0.5 text-warning">
-                  {[1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-current" />)}
+                  {[1, 2, 3, 4].map(i => <Star key={i} className="h-4 w-4 fill-current" />)}
                   <Star className="h-4 w-4" />
                 </div>
-                <span className="text-sm text-muted-foreground">4.2 (1,240 ratings)</span>
+                <span className="text-sm text-muted-foreground">4.5 (2,340 reviews)</span>
               </div>
             </div>
-            <button
-              onClick={() => setReportOpen(true)}
-              className="flex items-center gap-1 text-xs text-muted-foreground transition-all duration-200 hover:text-primary"
-            >
+            <button onClick={() => setReportOpen(true)} className="flex items-center gap-1 text-xs text-muted-foreground transition-all duration-200 hover:text-primary">
               <Flag className="h-3 w-3" /> Report wrong info
             </button>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
-            {/* LEFT COLUMN */}
+            {/* ════════════ LEFT COLUMN ════════════ */}
             <div className="space-y-8">
-              {/* ── B. IMAGE GALLERY ── */}
+              {/* ── IMAGE GALLERY ── */}
               <div>
                 <div className="mb-3 overflow-hidden rounded-2xl bg-background">
-                  <img
-                    src={productImages[mainImage]}
-                    alt={productName}
-                    className="mx-auto h-72 w-full object-contain"
-                    loading="eager"
-                  />
+                  <img src={productImages[mainImage]} alt={productName} className="mx-auto h-72 w-full object-contain" loading="eager" />
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  {productImages.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setMainImage(idx)}
-                      className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-background transition-all duration-200 ${
-                        mainImage === idx ? "ring-2 ring-primary" : "border border-border hover:border-primary"
-                      }`}
-                    >
-                      <img src={img} alt="" className="h-full w-full object-contain" loading="lazy" />
-                    </button>
-                  ))}
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-2 overflow-x-auto pb-1 flex-1">
+                    {productImages.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setMainImage(idx)}
+                        className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-background transition-all duration-200 ${
+                          mainImage === idx ? "ring-2 ring-primary" : "border border-border hover:border-primary"
+                        }`}
+                      >
+                        <img src={img} alt="" className="h-full w-full object-contain" loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                  {/* Wishlist button */}
+                  <button
+                    onClick={handleWishlistToggle}
+                    className={`flex items-center gap-1.5 rounded-pill border-2 px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                      wishlisted
+                        ? "border-red-400 bg-red-50 text-red-500"
+                        : "border-border text-muted-foreground hover:border-red-300 hover:text-red-400"
+                    }`}
+                  >
+                    <Heart className={`h-4 w-4 ${wishlisted ? "fill-current" : ""}`} />
+                    {wishlisted ? "Saved" : "Save"}
+                  </button>
                 </div>
               </div>
 
-              {/* ── C. PRODUCT VARIANTS ── */}
+              {/* ── VARIANTS ── */}
               {variants && (
                 <ProductVariants
                   sizes={variants.sizes}
@@ -249,11 +288,45 @@ const ProductPage: React.FC = () => {
                 />
               )}
 
-              {/* ── E. LOCAL ADVANTAGE BOX ── */}
-              {isLocalAvailable && (
+              {/* ── SPECS TABLE ── */}
+              {specs && specs.length > 0 && (
+                <Reveal>
+                  <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
+                    <h3 className="p-4 text-base font-bold text-foreground">📋 Product Specifications</h3>
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {specs.map(([key, val], idx) => (
+                          <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
+                            <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
+                            <td className="notranslate px-4 py-2.5 text-foreground">{val}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </Reveal>
+              )}
+
+              {/* ── ALL SELLERS TABLE ── */}
+              <Reveal>
+                <h3 className="mb-4 text-lg font-bold text-foreground">
+                  All Sellers for <span className="notranslate">{productName}</span> in {selectedCity}
+                </h3>
+                <SellerPriceTable
+                  onlinePrices={onlinePrices}
+                  cityPartners={cityPartnersList}
+                  city={selectedCity}
+                  productName={productName}
+                  lastRefreshed={lastRefreshed}
+                  onReport={() => setReportOpen(true)}
+                />
+              </Reveal>
+
+              {/* ── LOCAL ADVANTAGE BOX ── */}
+              {cityPartnersList.length > 0 && (
                 <Reveal>
                   <div className="rounded-xl border border-primary/20 bg-primary-light p-4">
-                    <h3 className="mb-3 text-sm font-bold text-foreground">🏪 Why buy local?</h3>
+                    <h3 className="mb-3 text-sm font-bold text-foreground">🏪 Why buy from a city partner?</h3>
                     <div className="grid grid-cols-2 gap-3">
                       {[
                         { icon: Truck, text: "Same day delivery" },
@@ -274,87 +347,24 @@ const ProductPage: React.FC = () => {
                 </Reveal>
               )}
 
-              {/* ── G. PRICE HISTORY CHART ── */}
+              {/* ── PRICE HISTORY CHART ── */}
               <Reveal>
                 <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
-                  <h3 className="mb-4 text-base font-bold text-foreground">📈 30-Day Price History</h3>
+                  <h3 className="mb-4 text-base font-bold text-foreground">📈 Price History — Last 30 Days</h3>
                   <PriceHistoryChart
                     amazonPrices={amazonHistory}
                     flipkartPrices={flipkartHistory}
-                    localPrice={cityPartner?.price || cheapest}
+                    localPrice={localBest || cheapest}
                   />
                 </div>
               </Reveal>
 
-              {/* ── G2. AI PRICE PREDICTION (Phase 2) ── */}
+              {/* ── AI PRICE PREDICTION ── */}
               <Reveal>
                 <AIPricePrediction currentPrice={cheapest} productName={productName} />
               </Reveal>
 
-              {/* ── H. SPECS TABLE ── */}
-              {isTVProduct && (
-                <Reveal>
-                  <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-                    <h3 className="p-4 text-base font-bold text-foreground">📋 Specifications</h3>
-                    <table className="w-full text-sm">
-                      <tbody>
-                        {tvProduct.specs.map(([key, val], idx) => (
-                          <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
-                            <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
-                            <td className="px-4 py-2.5 text-foreground">{val}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </Reveal>
-              )}
-
-              {/* ── I. OTHER CITY PARTNERS ── */}
-              {isTVProduct && (
-                <Reveal>
-                  <h3 className="mb-4 text-base font-bold text-foreground">🏪 Other {selectedCity} City Partners</h3>
-                  <div className="flex gap-4 overflow-x-auto pb-2">
-                    {tvProduct.cityPartners.map((seller) => (
-                      <div key={seller.name} className="min-w-[260px] flex-shrink-0 rounded-xl border border-border bg-card p-4 shadow-card">
-                        <div className="mb-2 flex items-center gap-2">
-                          <span className="text-2xl">{seller.photo}</span>
-                          <div>
-                            <p className="text-sm font-semibold text-foreground">{seller.name}</p>
-                            <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                              <Star className="h-3 w-3 fill-warning text-warning" /> {seller.rating}
-                            </p>
-                          </div>
-                        </div>
-                        <p className="text-lg font-bold text-primary">{formatPrice(seller.price)}</p>
-                        <p className="mb-3 text-xs text-muted-foreground">
-                          <MapPin className="mr-1 inline h-3 w-3" />{seller.address} · {getDistance(seller.km)}
-                        </p>
-                        {seller.holiday && (
-                          <div className="mb-3 flex items-center gap-1 rounded-pill bg-primary-light px-3 py-1 text-xs font-medium text-primary">
-                            <Calendar className="h-3 w-3" /> Shop on holiday until {seller.holidayUntil}
-                          </div>
-                        )}
-                        <a
-                          href={seller.holiday ? undefined : `https://wa.me/91${seller.phone}?text=${waMessage}`}
-                          target="_blank"
-                          rel="nofollow sponsored noopener"
-                          className={`flex w-full items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                            seller.holiday
-                              ? "bg-muted text-muted-foreground cursor-not-allowed"
-                              : "bg-[#25D366] text-white hover:opacity-90"
-                          }`}
-                          onClick={seller.holiday ? (e) => e.preventDefault() : undefined}
-                        >
-                          <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                </Reveal>
-              )}
-
-              {/* ── J. REVIEWS (Phase 2 Enhanced) ── */}
+              {/* ── REVIEWS ── */}
               <Reveal>
                 <ReviewSection
                   productReviews={[
@@ -367,14 +377,14 @@ const ProductPage: React.FC = () => {
                     { user: "Priya S.", rating: 4, text: "Quick response on WhatsApp. Good after-sales support.", date: "Nov 2024", helpful: 3 },
                     { user: "Arun M.", rating: 5, text: "Best electronics shop in Madurai. Fair prices always.", date: "Oct 2024", helpful: 15 },
                   ]}
-                  productRating={4.2}
+                  productRating={4.5}
                   sellerRating={4.5}
                 />
               </Reveal>
 
-              {/* ── K. SIMILAR PRODUCTS ── */}
+              {/* ── SIMILAR PRODUCTS ── */}
               <Reveal>
-                <h3 className="mb-4 text-base font-bold text-foreground">Similar Products</h3>
+                <h3 className="mb-4 text-base font-bold text-foreground">You may also compare:</h3>
                 <div className="flex gap-4 overflow-x-auto pb-2">
                   {similarProducts.map(p => (
                     <div key={p.id} className="min-w-[180px] flex-shrink-0">
@@ -385,64 +395,73 @@ const ProductPage: React.FC = () => {
               </Reveal>
             </div>
 
-            {/* RIGHT COLUMN (STICKY) */}
+            {/* ════════════ RIGHT COLUMN (STICKY) ════════════ */}
             <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
 
-              {/* ── D. PRICE BLOCK ── */}
+              {/* ── BEST PRICE SUMMARY ── */}
               <div className="rounded-2xl border-2 border-primary p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="text-sm font-bold text-foreground">
-                    Prices in {selectedCity}
+                    🏆 Best Price in {selectedCity}
                   </h3>
                   <Link to="/" className="text-xs font-medium text-primary transition-all duration-200 hover:underline">
                     Change City
                   </Link>
                 </div>
 
-                {/* Best price */}
-                <div className="mb-4">
-                  <p className="text-xs text-muted-foreground">Best price</p>
-                  <p className="text-3xl font-bold text-primary">{formatPrice(cheapest)}</p>
+                <p className="notranslate text-3xl font-bold text-primary">{formatPrice(cheapest)}</p>
+                <p className="text-sm text-muted-foreground mb-4">
+                  at <span className="font-semibold text-foreground">{cheapestSeller}</span>
+                </p>
+
+                {/* Online vs City Partner comparison */}
+                <div className="rounded-xl bg-muted/50 p-3 space-y-2 mb-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Online Best:</span>
+                    <span className="notranslate font-semibold text-foreground">{formatPrice(onlineBest)}</span>
+                  </div>
+                  {localBest !== null && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">City Partner Best:</span>
+                      <span className="notranslate font-semibold text-foreground">{formatPrice(localBest)}</span>
+                    </div>
+                  )}
+                  {priceDiff > 0 && (
+                    <div className="pt-1 border-t border-border">
+                      <span className="rounded-pill bg-success px-2.5 py-1 text-xs font-bold text-success-foreground">
+                        {formatPrice(priceDiff)} cheaper via {cheaperSource}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Price list */}
-                <PriceComparisonTable
-                  prices={priceList}
-                  localAvailable={isLocalAvailable}
-                  city={selectedCity}
-                />
+                {/* Action buttons */}
+                <div className="grid grid-cols-2 gap-2">
+                  <a href="#sellers" className="flex items-center justify-center gap-1 rounded-pill bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90">
+                    Compare All Prices
+                  </a>
+                  <button className="flex items-center justify-center gap-1 rounded-pill border-2 border-primary py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground">
+                    <Bell className="h-4 w-4" /> Price Alert
+                  </button>
+                </div>
 
                 {/* Refresh */}
                 <div className="mt-3 flex items-center justify-between">
-                  <p className="text-[11px] text-muted-foreground">
-                    Last updated: {lastRefreshed}
-                  </p>
+                  <p className="text-[11px] text-muted-foreground">Last updated: {lastRefreshed}</p>
                   <button
                     onClick={handleRefresh}
                     disabled={refreshCooldown > 0}
                     className={`flex items-center gap-1 rounded-pill px-3 py-1 text-[11px] font-medium transition-all duration-200 ${
-                      refreshCooldown > 0
-                        ? "text-muted-foreground cursor-not-allowed"
-                        : "text-primary hover:bg-accent"
+                      refreshCooldown > 0 ? "text-muted-foreground cursor-not-allowed" : "text-primary hover:bg-accent"
                     }`}
                   >
                     <RefreshCw className={`h-3 w-3 ${refreshing ? "animate-spin" : ""}`} />
                     {refreshCooldown > 0 ? `${Math.floor(refreshCooldown / 60)}:${String(refreshCooldown % 60).padStart(2, "0")}` : "Refresh"}
                   </button>
                 </div>
-
-                {/* Price Disclaimer (mandatory) */}
-                <div className="mt-2">
-                  <AffiliateDisclaimer />
-                </div>
-
-                {/* Price Alert button */}
-                <button className="mt-3 flex w-full items-center justify-center gap-2 rounded-pill border-2 border-primary py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground">
-                  <Bell className="h-4 w-4" /> Set Price Alert
-                </button>
               </div>
 
-              {/* ── F. CITY PARTNER CARD ── */}
+              {/* ── TOP CITY PARTNER CARD ── */}
               {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
                   <div className="mb-3 flex items-center gap-3">
@@ -458,55 +477,34 @@ const ProductPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <p className="mb-1 text-lg font-bold text-primary">{formatPrice(cityPartner.price)}</p>
+                  <p className="notranslate mb-1 text-lg font-bold text-primary">{formatPrice(cityPartner.price)}</p>
                   <p className="mb-3 text-xs text-muted-foreground">{cityPartner.address}</p>
 
-                  {cityPartner.holiday && (
-                    <div className="mb-3 flex items-center gap-1 rounded-pill bg-[hsl(var(--primary-light))] px-3 py-1.5 text-xs font-medium text-primary">
+                  {cityPartner.holiday ? (
+                    <div className="flex items-center gap-1 rounded-pill bg-primary-light px-3 py-1.5 text-xs font-medium text-primary">
                       <Calendar className="h-3.5 w-3.5" /> Shop on holiday until {cityPartner.holidayUntil}
                     </div>
-                  )}
-
-                  {isLoggedIn ? (
+                  ) : isLoggedIn ? (
                     <div className="grid grid-cols-3 gap-2">
-                      <a
-                        href={cityPartner.holiday ? undefined : `tel:+91${cityPartner.phone}`}
-                        className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-secondary text-secondary-foreground hover:opacity-90"
-                        }`}
-                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
-                      >
+                      <a href={`tel:+91${cityPartner.phone}`} className="flex items-center justify-center gap-1 rounded-pill bg-secondary py-2 text-xs font-semibold text-secondary-foreground transition-all duration-200 hover:opacity-90">
                         <Phone className="h-3.5 w-3.5" /> Call
                       </a>
-                      <a
-                        href={cityPartner.holiday ? undefined : `https://wa.me/91${cityPartner.phone}?text=${waMessage}`}
-                        target="_blank"
-                        rel="nofollow sponsored noopener"
-                        className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-[#25D366] text-white hover:opacity-90"
-                        }`}
-                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
-                      >
+                      <a href={`https://wa.me/91${cityPartner.phone}`} target="_blank" rel="nofollow sponsored noopener" className="flex items-center justify-center gap-1 rounded-pill bg-[#25D366] py-2 text-xs font-semibold text-white transition-all duration-200 hover:opacity-90">
                         <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                       </a>
-                      <a
-                        href={`https://maps.google.com/?q=${encodeURIComponent(cityPartner.address)}`}
-                        target="_blank"
-                        rel="noopener"
-                        className="flex items-center justify-center gap-1 rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
-                      >
+                      <a href={`https://maps.google.com/?q=${encodeURIComponent(cityPartner.address)}`} target="_blank" rel="noopener" className="flex items-center justify-center gap-1 rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent">
                         <MapPin className="h-3.5 w-3.5" /> Map
                       </a>
                     </div>
                   ) : (
-                    <Link to="/buyer/login" className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:bg-[hsl(var(--primary-dark))]">
+                    <Link to="/buyer/login" className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90">
                       <Phone className="h-3.5 w-3.5" /> Login to see contact details
                     </Link>
                   )}
                 </div>
               )}
 
-              {/* Product description */}
+              {/* ── DESCRIPTION ── */}
               <div className="rounded-xl border border-border bg-card p-4">
                 <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground">{productBrand}</p>
                 <p className="text-sm text-muted-foreground">{productDesc}</p>
@@ -516,7 +514,7 @@ const ProductPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ── L. ADD TO COMPARE BUTTON ── */}
+      {/* ── COMPARE BUTTON ── */}
       {showCompareBtn && (
         <Link
           to="/product/compare"
@@ -526,7 +524,6 @@ const ProductPage: React.FC = () => {
         </Link>
       )}
 
-      {/* ── M. REPORT MODAL ── */}
       <ReportModal isOpen={reportOpen} onClose={() => setReportOpen(false)} productName={productName} />
     </>
   );
