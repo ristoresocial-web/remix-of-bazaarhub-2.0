@@ -260,7 +260,7 @@ const ProductsTab: React.FC<{ isApproved: boolean }> = ({ isApproved }) => {
 
   const statusDot = (status: string) => {
     if (status === "Live") return "bg-success";
-    if (status === "Pending") return "bg-warning";
+    if (status === "Pending") return "bg-primary";
     return "bg-muted-foreground";
   };
 
