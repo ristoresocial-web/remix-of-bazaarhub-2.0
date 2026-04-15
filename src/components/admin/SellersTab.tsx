@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import StatusBadge, { type StatusVariant } from "@/components/StatusBadge";
+import TrustBadge, { type TrustVariant } from "@/components/TrustBadge";
 
 interface Seller {
   name: string; city: string; state: string; gst: string; products: number; status: string; trust: string; joinedDays: number; revenue: number;
@@ -40,14 +42,9 @@ const allSellers: Seller[] = [
   { name: "Electro Mart", city: "Raipur", state: "Chhattisgarh", gst: "22AABCE3456D0Z4", products: 12, status: "live", trust: "Established", joinedDays: 60, revenue: 520000 },
 ];
 
-const trustColor: Record<string, string> = {
-  New: "border border-primary text-primary bg-transparent",
-  Established: "bg-accent text-accent-foreground",
-  Trusted: "bg-success-light text-success",
-  "Under Review": "border border-warning text-warning bg-transparent",
-};
+const statusMap: Record<string, StatusVariant> = { pending: "getting-ready", live: "live", review: "review" };
+const trustMap: Record<string, TrustVariant> = { New: "new", Established: "established", Trusted: "trusted", "Under Review": "under-review" };
 const statusLabel: Record<string, string> = { pending: "Getting Ready", live: "Live", review: "Under Review" };
-const statusColor: Record<string, string> = { pending: "bg-primary-light text-primary", live: "bg-success-light text-success", review: "border border-primary text-primary bg-transparent" };
 
 const PAGE_SIZE = 25;
 const allCities = [...new Set(allSellers.map(s => s.city))].sort();
@@ -166,8 +163,8 @@ const SellersTab: React.FC = () => {
                 <td className="p-3 text-muted-foreground">{s.city}</td>
                 <td className="p-3 text-muted-foreground hidden lg:table-cell font-mono text-xs">{s.gst}</td>
                 <td className="p-3 text-center text-foreground">{s.products}</td>
-                <td className="p-3 text-center"><span className={`rounded-pill px-2 py-0.5 text-xs font-semibold ${statusColor[s.status]}`}>{statusLabel[s.status]}</span></td>
-                <td className="p-3 text-center"><span className={`rounded-pill px-2 py-0.5 text-xs font-semibold ${trustColor[s.trust]}`}>{s.trust}</span></td>
+                <td className="p-3 text-center"><StatusBadge variant={statusMap[s.status]} label={statusLabel[s.status]} /></td>
+                <td className="p-3 text-center"><TrustBadge variant={trustMap[s.trust]} /></td>
                 <td className="p-3 text-right notranslate text-foreground">₹{(s.revenue / 100000).toFixed(1)}L</td>
                 <td className="p-3 text-center">
                   <div className="flex items-center justify-center gap-1 flex-wrap">
