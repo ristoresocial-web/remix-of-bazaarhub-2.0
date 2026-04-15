@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Bell, Phone, ToggleLeft, ToggleRight, Calendar, Clock, ExternalLink } from "lucide-react";
+import { Bell, Phone, ToggleLeft, ToggleRight, Calendar, Clock, ExternalLink, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SellerSidebar, { type SellerTab } from "@/components/seller/SellerSidebar";
@@ -21,6 +21,7 @@ const SellerDashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<SellerTab>("dashboard");
   const [whatsappSetup, setWhatsappSetup] = useState(false);
   const [holidayMode, setHolidayMode] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   const renderTab = () => {
     switch (activeTab) {
@@ -102,16 +103,21 @@ const SellerDashboardPage: React.FC = () => {
       </div>
 
       {/* Verification Banner */}
-      {!isApproved && (
+      {!isApproved && !bannerDismissed && (
         <div className="mx-4 mt-4 rounded-card bg-primary p-4 text-primary-foreground md:mx-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="font-semibold">Your shop is getting ready to go live!</p>
               <p className="text-sm opacity-90">You are almost there! Our team reviews within 24 hours. SMS + WhatsApp sent on approval.</p>
             </div>
-            <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/20 self-start">
-              <Phone className="h-3.5 w-3.5 mr-1" /> Contact Support
-            </Button>
+            <div className="flex items-center gap-2 self-start">
+              <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/20">
+                <Phone className="h-3.5 w-3.5 mr-1" /> Contact Support
+              </Button>
+              <button onClick={() => setBannerDismissed(true)} className="rounded-full p-1 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}

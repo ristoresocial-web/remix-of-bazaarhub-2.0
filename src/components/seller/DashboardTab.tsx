@@ -60,12 +60,12 @@ const DashboardTab: React.FC<Props> = ({ whatsappSetup, setWhatsappSetup }) => (
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-success text-xs font-bold text-success-foreground">1</span>
-            <span className="text-sm text-foreground">Save Bazaar Hub Number: <strong>+91 98765 00000</strong></span>
+            <span className="text-sm text-foreground">Save Bazaar Hub Number: <strong>+91 9943440384</strong></span>
           </div>
           <div className="flex items-center gap-3">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-success text-xs font-bold text-success-foreground">2</span>
             <a
-              href="https://wa.me/919876500000?text=Hi"
+              href="https://wa.me/919943440384?text=Hi"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 rounded-pill bg-success px-4 py-1.5 text-sm font-semibold text-success-foreground transition-all duration-200 hover:bg-success/90"
