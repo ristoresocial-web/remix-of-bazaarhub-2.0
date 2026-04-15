@@ -186,7 +186,65 @@ const ComparePage: React.FC = () => {
           </button>
         </div>
 
-        {mode === "config" ? (
+        {mode === "price" ? (
+          <div className="space-y-4">
+            <div>
+              <Input
+                placeholder="Search product to compare prices…"
+                value={priceQuery}
+                onChange={(e) => {
+                  setPriceQuery(e.target.value);
+                  setPriceResults(searchComparisonProducts(e.target.value));
+                  if (!e.target.value) setSelectedComparison(null);
+                }}
+                className="max-w-md"
+              />
+            </div>
+
+            {!selectedComparison && priceResults.length > 0 && (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {priceResults.map((r) => (
+                  <button
+                    key={r.product.id}
+                    onClick={() => setSelectedComparison(r)}
+                    className="flex items-center gap-3 rounded-card border border-border bg-card p-3 text-left transition-all hover:border-primary hover:shadow-md"
+                  >
+                    <img src={r.product.image} alt={r.product.name} className="h-14 w-14 rounded-lg object-contain bg-background" />
+                    <div className="min-w-0 flex-1">
+                      <p className="notranslate truncate text-sm font-bold text-foreground">{r.product.name}</p>
+                      <p className="text-xs text-muted-foreground">{r.product.brand}</p>
+                      <p className="text-xs text-success font-semibold">
+                        from ₹{Math.min(r.lowestOnlinePrice, r.lowestLocalPrice).toLocaleString("en-IN")}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {!selectedComparison && priceResults.length === 0 && priceQuery && (
+              <div className="rounded-card border-2 border-dashed border-border bg-muted/20 py-12 text-center">
+                <p className="text-sm text-muted-foreground">No products found. Try a different search.</p>
+              </div>
+            )}
+
+            {!selectedComparison && !priceQuery && (
+              <div className="rounded-card border-2 border-dashed border-border bg-muted/20 py-12 text-center">
+                <DollarSign className="mx-auto mb-3 h-10 w-10 text-primary/40" />
+                <p className="text-sm text-muted-foreground">Search for a product above to compare online vs local prices</p>
+              </div>
+            )}
+
+            {selectedComparison && (
+              <div>
+                <Button variant="ghost" size="sm" className="mb-3 gap-1" onClick={() => setSelectedComparison(null)}>
+                  <RotateCcw className="h-3.5 w-3.5" /> Pick Different Product
+                </Button>
+                <ComparisonEngine data={selectedComparison} city={city} />
+              </div>
+            )}
+          </div>
+        ) : mode === "config" ? (
           <ConfigSearchPanel category={category} onSelectForCompare={handleConfigCompare} city={city} />
         ) : (
           <>
