@@ -109,7 +109,9 @@ const ComparePage: React.FC = () => {
               <p className="mt-1 text-sm text-muted-foreground">
                 {mode === "model"
                   ? "Head-to-head specs comparison — pick models to compare side by side"
-                  : "Search by configuration — find products that match your requirements"}
+                  : mode === "config"
+                  ? "Search by configuration — find products that match your requirements"
+                  : "Compare online vs local prices for the same product"}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -160,19 +162,27 @@ const ComparePage: React.FC = () => {
         <div className="flex items-center rounded-card border border-border bg-card p-1">
           <button
             onClick={() => setMode("model")}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-pill py-2.5 text-sm font-semibold transition-all ${
+            className={`flex flex-1 items-center justify-center gap-2 rounded-pill py-2.5 text-xs font-semibold transition-all ${
               mode === "model" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Search className="h-4 w-4" /> Search by Model Name
+            <Search className="h-4 w-4" /> Model vs Model
           </button>
           <button
             onClick={() => setMode("config")}
-            className={`flex flex-1 items-center justify-center gap-2 rounded-pill py-2.5 text-sm font-semibold transition-all ${
+            className={`flex flex-1 items-center justify-center gap-2 rounded-pill py-2.5 text-xs font-semibold transition-all ${
               mode === "config" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <SlidersHorizontal className="h-4 w-4" /> Search by Configuration
+            <SlidersHorizontal className="h-4 w-4" /> Config Search
+          </button>
+          <button
+            onClick={() => setMode("price")}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-pill py-2.5 text-xs font-semibold transition-all ${
+              mode === "price" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <DollarSign className="h-4 w-4" /> Price Compare
           </button>
         </div>
 
