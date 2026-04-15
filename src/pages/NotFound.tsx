@@ -12,11 +12,11 @@ const NotFound = () => (
     <div className="text-center px-4">
       <BazaarLogo className="mx-auto mb-6 text-4xl" showTagline={false} />
       <h1 className="text-8xl font-bold text-primary mb-4">404</h1>
-      <p className="text-xl font-semibold text-foreground mb-1">பக்கம் கிடைக்கவில்லை</p>
-      <p className="text-lg text-muted-foreground mb-8">Page Not Found</p>
+      <p className="text-xl font-semibold text-foreground mb-1">Page Not Found</p>
+      <p className="text-lg text-muted-foreground mb-8">The page you're looking for doesn't exist.</p>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button asChild size="lg">
-          <Link to="/">Go to Homepage</Link>
+          <Link to="/">Go Home</Link>
         </Button>
         <Button asChild variant="outline" size="lg">
           <Link to="/search"><Search className="h-4 w-4 mr-2" /> Search Products</Link>
