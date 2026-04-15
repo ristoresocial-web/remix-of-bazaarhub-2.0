@@ -262,6 +262,137 @@ export const mockSamsungTV: Product = {
   ],
 };
 
+// Additional products for search filtering
+export const mockSearchProducts: Product[] = [
+  {
+    id: 7,
+    slug: "samsung-galaxy-a55",
+    name: "Samsung Galaxy A55 5G 128GB",
+    category: "Smartphones",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop",
+    description: "Samsung Galaxy A55 5G with Super AMOLED display, Exynos 1480 processor, and 50MP triple camera.",
+    localAvailable: true,
+    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 98765 11111" },
+    prices: [
+      { platform: "Kumar Electronics (Local)", price: 32990, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 34999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 33499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 8,
+    slug: "samsung-galaxy-s23-fe",
+    name: "Samsung Galaxy S23 FE 128GB",
+    category: "Smartphones",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop",
+    description: "Samsung Galaxy S23 FE with Dynamic AMOLED 2X, Exynos 2200, and 50MP camera.",
+    localAvailable: false,
+    prices: [
+      { platform: "Amazon", price: 29999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 30499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Croma", price: 31990, url: "https://croma.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 9,
+    slug: "samsung-55-crystal-4k-tv",
+    name: 'Samsung 55" Crystal 4K UHD Smart TV',
+    category: "TVs",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop",
+    description: "Samsung 55-inch Crystal 4K UHD Smart TV with Dynamic Crystal Color and SmartThings.",
+    localAvailable: true,
+    localShop: { name: "Raja Electronics", address: "45 FC Road, Pune", km: 1.2, phone: "+91 98765 22222" },
+    prices: [
+      { platform: "Raja Electronics (Local)", price: 44990, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 46999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 45999, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 10,
+    slug: "samsung-galaxy-book4-pro",
+    name: "Samsung Galaxy Book4 Pro 14-inch",
+    category: "Laptops",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
+    description: "Samsung Galaxy Book4 Pro with Intel Core Ultra, 16GB RAM, 512GB SSD, and AMOLED display.",
+    localAvailable: false,
+    prices: [
+      { platform: "Amazon", price: 124990, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 126999, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Croma", price: 129990, url: "https://croma.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 11,
+    slug: "samsung-galaxy-buds-fe",
+    name: "Samsung Galaxy Buds FE",
+    category: "Headphones",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=400&fit=crop",
+    description: "Samsung Galaxy Buds FE with ANC, 30-hour battery, and IPX2 water resistance.",
+    localAvailable: true,
+    localShop: { name: "Smart Store", address: "78 JM Road, Pune", km: 2.1, phone: "+91 98765 33333" },
+    prices: [
+      { platform: "Smart Store (Local)", price: 6999, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 7499, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 7299, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 12,
+    slug: "samsung-galaxy-tab-s9",
+    name: "Samsung Galaxy Tab S9 128GB",
+    category: "Laptops",
+    brand: "Samsung",
+    image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop",
+    description: "Samsung Galaxy Tab S9 with Snapdragon 8 Gen 2, 11-inch AMOLED, and S Pen included.",
+    localAvailable: true,
+    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 98765 11111" },
+    prices: [
+      { platform: "Kumar Electronics (Local)", price: 67990, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 69999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 68499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 13,
+    slug: "apple-iphone-15",
+    name: "Apple iPhone 15 128GB",
+    category: "Smartphones",
+    brand: "Apple",
+    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop",
+    description: "iPhone 15 with A16 Bionic chip, 48MP camera, Dynamic Island, and USB-C.",
+    localAvailable: true,
+    localShop: { name: "iWorld Pune", address: "23 Bund Garden Rd, Pune", km: 1.5, phone: "+91 98765 44444" },
+    prices: [
+      { platform: "iWorld (Local)", price: 74990, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 72999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 73499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+  {
+    id: 14,
+    slug: "oneplus-12",
+    name: "OnePlus 12 256GB",
+    category: "Smartphones",
+    brand: "OnePlus",
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop",
+    description: "OnePlus 12 with Snapdragon 8 Gen 3, 50MP Hasselblad camera, and 100W SUPERVOOC.",
+    localAvailable: false,
+    prices: [
+      { platform: "Amazon", price: 64999, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 64999, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+    ],
+  },
+];
+
+// Combine all products for search
+export const allProducts: Product[] = [...mockProducts, ...mockSearchProducts];
+
 export const mockSellerProducts = [
   { id: 1, name: "Samsung Galaxy S24 Ultra", price: 129990, stock: 5, status: "active" as const, views: 342 },
   { id: 2, name: "iPhone 15 Pro Max", price: 159900, stock: 3, status: "active" as const, views: 289 },
