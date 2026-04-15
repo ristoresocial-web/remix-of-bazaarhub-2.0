@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react";
+import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 
 interface Seller {
   name: string; city: string; state: string; gst: string; products: number; status: string; trust: string; joinedDays: number; revenue: number;
@@ -39,13 +40,17 @@ const allSellers: Seller[] = [
   { name: "Electro Mart", city: "Raipur", state: "Chhattisgarh", gst: "22AABCE3456D0Z4", products: 12, status: "live", trust: "Established", joinedDays: 60, revenue: 520000 },
 ];
 
-const trustColor: Record<string, string> = { New: "bg-primary-light text-primary", Established: "bg-accent text-accent-foreground", Trusted: "bg-success-light text-success", "Under Review": "bg-warning/10 text-warning" };
-const statusLabel: Record<string, string> = { pending: "Pending", live: "Live", review: "Under Review" };
-const statusColor: Record<string, string> = { pending: "bg-primary-light text-primary", live: "bg-success-light text-success", review: "bg-warning/10 text-warning" };
+const trustColor: Record<string, string> = {
+  New: "border border-primary text-primary bg-transparent",
+  Established: "bg-accent text-accent-foreground",
+  Trusted: "bg-success-light text-success",
+  "Under Review": "border border-warning text-warning bg-transparent",
+};
+const statusLabel: Record<string, string> = { pending: "Getting Ready", live: "Live", review: "Under Review" };
+const statusColor: Record<string, string> = { pending: "bg-primary-light text-primary", live: "bg-success-light text-success", review: "border border-primary text-primary bg-transparent" };
 
 const PAGE_SIZE = 25;
 const allCities = [...new Set(allSellers.map(s => s.city))].sort();
-const allStates = [...new Set(allSellers.map(s => s.state))].sort();
 
 type SortKey = "name" | "city" | "products" | "revenue" | "joinedDays";
 
@@ -57,6 +62,8 @@ const SellersTab: React.FC = () => {
   const [page, setPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
+
+  const pendingCount = allSellers.filter(s => s.status === "pending").length;
 
   const filtered = useMemo(() => {
     let list = [...allSellers];
@@ -101,12 +108,19 @@ const SellersTab: React.FC = () => {
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-lg font-bold text-foreground">Sellers ({filtered.length})</h2>
-        <Button variant="outline" size="sm" onClick={exportCSV} className="gap-1 rounded-pill">
-          <Download className="h-3.5 w-3.5" /> Export CSV
-        </Button>
+        <div className="flex items-center gap-2">
+          {pendingCount > 0 && (
+            <span className="rounded-pill bg-primary-light px-3 py-1 text-xs font-medium text-primary flex items-center gap-1">
+              <Sparkles className="h-3 w-3" />
+              {pendingCount} sellers ready to join — approve to grow!
+            </span>
+          )}
+          <Button variant="outline" size="sm" onClick={exportCSV} className="gap-1 rounded-pill">
+            <Download className="h-3.5 w-3.5" /> Export CSV
+          </Button>
+        </div>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-wrap gap-2">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -118,7 +132,7 @@ const SellersTab: React.FC = () => {
         </select>
         <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(1); }} className="rounded-input border border-border bg-background px-3 py-2 text-sm">
           <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
+          <option value="pending">Getting Ready</option>
           <option value="live">Live</option>
           <option value="review">Under Review</option>
         </select>
@@ -131,7 +145,6 @@ const SellersTab: React.FC = () => {
         </select>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto rounded-card border border-border bg-card shadow-card">
         <table className="w-full text-sm">
           <thead className="bg-muted/50">
@@ -141,7 +154,7 @@ const SellersTab: React.FC = () => {
               <th className="p-3 text-left font-medium text-muted-foreground hidden lg:table-cell">GST</th>
               <SortHeader label="Products" field="products" />
               <th className="p-3 text-center font-medium text-muted-foreground">Status</th>
-              <th className="p-3 text-center font-medium text-muted-foreground">Tier</th>
+              <th className="p-3 text-center font-medium text-muted-foreground">Trust</th>
               <SortHeader label="Revenue" field="revenue" />
               <th className="p-3 text-center font-medium text-muted-foreground">Actions</th>
             </tr>
@@ -158,9 +171,13 @@ const SellersTab: React.FC = () => {
                 <td className="p-3 text-right notranslate text-foreground">₹{(s.revenue / 100000).toFixed(1)}L</td>
                 <td className="p-3 text-center">
                   <div className="flex items-center justify-center gap-1 flex-wrap">
-                    {s.status === "pending" && <Button size="sm" className="text-[10px] h-7 px-2">Approve</Button>}
-                    <Button size="sm" variant="outline" className="text-[10px] h-7 px-2">View</Button>
-                    <Button size="sm" variant="ghost" className="text-[10px] h-7 px-2 text-destructive">Pause</Button>
+                    {s.status === "pending" && (
+                      <Button size="sm" className="text-[10px] h-7 px-2" onClick={() => toast.success(`Welcome to BazaarHub, ${s.name}!`)}>
+                        Welcome to BazaarHub!
+                      </Button>
+                    )}
+                    <Button size="sm" variant="outline" className="text-[10px] h-7 px-2">Request Details</Button>
+                    <Button size="sm" variant="ghost" className="text-[10px] h-7 px-2 text-muted-foreground">Pause</Button>
                   </div>
                 </td>
               </tr>
@@ -169,7 +186,6 @@ const SellersTab: React.FC = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-xs text-muted-foreground">Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}</p>
         <div className="flex items-center gap-1">

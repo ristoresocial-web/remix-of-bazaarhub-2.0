@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  LayoutDashboard, Users, Package, UserCheck, Tag, CheckSquare, Ticket, Globe, Grid3X3, GitBranch, Image, BarChart3, Search, Settings, CreditCard, Ban, Megaphone, Zap, ShieldAlert, Database,
+  LayoutDashboard, Users, Package, UserCheck, Tag, CheckSquare, Ticket, Globe, Grid3X3, GitBranch, Image, BarChart3, Search, Settings, CreditCard, Ban, Megaphone, Zap, ShieldAlert, Database, Bell,
 } from "lucide-react";
 
 export type AdminTab =
@@ -40,7 +40,7 @@ interface Props {
 
 const AdminSidebar: React.FC<Props> = ({ activeTab, onTabChange }) => (
   <aside className="hidden md:flex md:w-56 flex-col border-r border-border bg-card min-h-[calc(100vh-64px)] sticky top-16">
-    <nav className="flex-1 py-3">
+    <nav className="flex-1 py-3 overflow-y-auto">
       {menuItems.map(({ id, label, icon: Icon }) => {
         const active = activeTab === id;
         return (
@@ -59,6 +59,13 @@ const AdminSidebar: React.FC<Props> = ({ activeTab, onTabChange }) => (
         );
       })}
     </nav>
+    <div className="border-t border-border px-4 py-3 flex items-center gap-2">
+      <div className="relative">
+        <Bell className="h-4 w-4 text-muted-foreground" />
+        <span className="absolute -right-1.5 -top-1.5 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center">5</span>
+      </div>
+      <span className="text-sm font-semibold text-foreground">Admin</span>
+    </div>
   </aside>
 );
 
