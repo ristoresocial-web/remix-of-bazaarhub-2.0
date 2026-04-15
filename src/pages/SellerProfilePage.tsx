@@ -38,7 +38,7 @@ const SellerProfilePage: React.FC = () => {
   const { id } = useParams();
   const seller = mockSeller;
 
-  const tierColor = seller.tier === "Gold" ? "bg-yellow-100 text-yellow-800" : seller.tier === "Silver" ? "bg-gray-100 text-gray-700" : "bg-orange-100 text-orange-800";
+  const tierColor = seller.tier === "Gold" ? "bg-accent text-accent-foreground" : seller.tier === "Silver" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary";
 
   return (
     <>
@@ -65,7 +65,7 @@ const SellerProfilePage: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <h1 className="text-2xl font-bold">{seller.name}</h1>
-                    {seller.verified && <Shield className="h-5 w-5 text-green-400" />}
+                    {seller.verified && <Shield className="h-5 w-5 text-primary" />}
                   </div>
                   <p className="text-secondary-foreground/70">{seller.tagline}</p>
                   <div className="flex items-center gap-3 mt-3 flex-wrap">
@@ -83,7 +83,7 @@ const SellerProfilePage: React.FC = () => {
                   <Button variant="default" size="sm" className="gap-1">
                     <Phone className="h-4 w-4" /> Call
                   </Button>
-                  <Button variant="outline" size="sm" className="gap-1 border-green-400 text-green-400 hover:bg-green-400/10">
+                  <Button variant="outline" size="sm" className="gap-1 border-primary text-primary hover:bg-primary/10">
                     <MessageCircle className="h-4 w-4" /> WhatsApp
                   </Button>
                 </div>
