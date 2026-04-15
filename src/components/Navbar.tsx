@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Menu, X, Search, User } from "lucide-react";
 import BazaarLogo from "./BazaarLogo";
 import AnnouncementTicker from "./AnnouncementTicker";
@@ -11,11 +11,13 @@ import { useAuth } from "@/contexts/AuthContext";
 const Navbar: React.FC = () => {
   const { t, language } = useLanguage();
   const { isLoggedIn, profile } = useAuth();
+  const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState(() => {
     return localStorage.getItem("bazaarhub_city") || "Madurai";
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -48,9 +50,22 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Center: City Selector */}
-        <div className="flex items-center">
+        {/* Center: City Selector + Search */}
+        <div className="flex flex-1 items-center gap-3 px-4">
           <CitySelector selectedCity={selectedCity} onCityChange={handleCityChange} />
+          <form
+            onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`); }}
+            className="relative flex flex-1 max-w-md"
+          >
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products, brands..."
+              className="h-9 w-full rounded-full border border-border bg-background pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          </form>
         </div>
 
         {/* Right: Language + Seller Login */}
