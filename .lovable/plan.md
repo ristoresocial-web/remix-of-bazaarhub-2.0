@@ -1,50 +1,47 @@
 
 
-# Tech Cleanup & Architecture Plan
+# Seller Profile Page Upgrade
 
 ## Current State
-The app already has solid routing (28 routes in App.tsx), contexts (AuthContext with Supabase, LanguageContext), wishlist/recent utilities in `src/lib/wishlist.ts`, and mock data spread across multiple files. The architecture is functional but needs consolidation and performance improvements.
+The page exists at `/seller/:id` with a basic hero card (name, location, trust badge, action buttons) and a flat product list with search. Missing: stats bar, product grid, reviews section, location card, category filter/sort, and guest mode logic.
 
-## What to Do
+## What to Build
 
-### 1. Create AppContext for Global State (`src/contexts/AppContext.tsx`)
-Unified context combining city selection, wishlist, recently viewed, and price alerts into one provider. Wraps existing AuthContext and LanguageContext. Persists wishlist and recently viewed to localStorage (migrating logic from `src/lib/wishlist.ts`). Keeps `wishlist.ts` exports working by delegating to context internally where possible.
+### 1. Expand Mock Data
+Add `since: 2015`, full reviews array (3 reviews with buyer name, rating, comment, product, date), and `onlineBestPrice` per product.
 
-### 2. Clean Up Routes in App.tsx
-- Add missing route aliases: `/offers` pointing to CityOffersPage, `/alerts` pointing to PriceAlertsPage (prompt uses these shorter paths)
-- Add `React.lazy()` + `Suspense` for heavy pages: AdminPage, SellerDashboardPage, ComparePage, SearchPage
-- Hide Navbar/Footer on seller dashboard and admin routes (they have their own sidebars)
+### 2. Stats Bar
+4-stat row below the header: Products count, Rating, Reviews, "Since 2015". Light gray background, centered text.
 
-### 3. Remove Tamil from 404 Page
-The NotFound page has "பக்கம் கிடைக்கவில்லை" — per project memory, no Tamil on homepage/main pages. Replace with just the English text.
+### 3. Product Grid with Filter/Sort
+- Replace flat list with responsive grid (3-col desktop, 2-col tablet, 1-col mobile)
+- Add category dropdown filter (All, Smartphones, TVs, etc.)
+- Add sort dropdown (Price Low to High, Price High to Low, Name)
+- Each card: product image, name, price, "Best in City" badge if applicable, Compare button
 
-### 4. Performance Improvements
-- Wrap `ProductCard` with `React.memo()`
-- Add `React.lazy()` imports for admin, seller dashboard, compare, and search pages
-- Add a `LoadingFallback` component for Suspense boundaries
-- Ensure all product images have `loading="lazy"` (already present in ProductCard)
+### 4. Reviews Section
+- Left: rating summary with star breakdown bars (5-star to 1-star percentages)
+- Right: 3 review cards with avatar initial, name, stars, comment, product purchased, date
+- "Load More" button at bottom
 
-### 5. Consolidate Mock Data
-Create `src/data/mockLocalSellers.ts` with 20 local shops across 7 cities (Pune, Chennai, Coimbatore, Madurai, Trichy, Salem, Erode) and `src/data/mockCityOffers.ts` with 10 active offers — complementing existing mock data files. Keep existing `mockData.ts` as the primary product source.
+### 5. Location Card
+- Gray map placeholder box
+- Full address text
+- "Open in Google Maps" external link button
 
-### 6. Add Reusable StatusBadge and TrustBadge Components
-Create `src/components/StatusBadge.tsx` (variants: live, pending, draft, review, getting-ready, paused) and `src/components/TrustBadge.tsx` (variants: new, established, trusted, under-review). Both seller and admin tabs currently duplicate badge styling — these components will be shared.
-
-## Files to Create
-- `src/contexts/AppContext.tsx` — unified global state (city, wishlist, recent, alerts)
-- `src/components/StatusBadge.tsx` — reusable status badge
-- `src/components/TrustBadge.tsx` — reusable trust badge
-- `src/components/LoadingFallback.tsx` — Suspense loading skeleton
+### 6. Guest Mode Logic
+- Use `useAuth()` to check if buyer is logged in
+- If not logged in: blur/hide phone, WhatsApp, and directions buttons with "Login to contact" overlay
+- Product prices always visible
 
 ## Files to Modify
-- `src/App.tsx` — lazy imports, Suspense, route aliases, hide nav on dashboard routes, wrap with AppProvider
-- `src/pages/NotFound.tsx` — remove Tamil text
-- `src/components/ProductCard.tsx` — wrap with React.memo()
-- `src/components/admin/SellersTab.tsx` — use StatusBadge/TrustBadge
-- `src/components/seller/ProductsTab.tsx` — use StatusBadge
+- `src/pages/SellerProfilePage.tsx` — full rewrite with all 6 sections above
 
 ## Design
-- No visual changes to existing pages
-- Loading fallback uses existing skeleton component styles
-- Badge components match current color scheme (orange/green/blue/gray)
+- Orange gradient banner stays
+- Stats bar: `bg-muted` with 4 centered columns
+- Product cards: `rounded-card border shadow-card` matching ProductCard style
+- Review stars: yellow-400 fill
+- Location card: gray placeholder with MapPin icon
+- Guest mode: semi-transparent overlay with lock icon + login link on contact buttons
 
