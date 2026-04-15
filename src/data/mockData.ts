@@ -63,6 +63,21 @@ export const mockProducts: Product[] = [
     brand: "Samsung",
     image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=400&fit=crop",
     description: "The Samsung Galaxy S24 Ultra features a 6.8-inch Dynamic AMOLED display, Snapdragon 8 Gen 3 processor, 200MP camera, and S Pen support.",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=600&h=600&fit=crop",
+    ],
+    specs: [
+      ["Display", '6.8" Dynamic AMOLED 2X, 120Hz, 2560x1440'],
+      ["Processor", "Snapdragon 8 Gen 3"],
+      ["RAM", "12GB"],
+      ["Storage", "256GB"],
+      ["Camera", "200MP + 12MP + 10MP + 10MP"],
+      ["Battery", "5000mAh"],
+      ["OS", "Android 14, One UI 6.1"],
+      ["Colors", "Titanium Black, Gray, Violet, Yellow"],
+    ],
     variants: {
       sizes: ["128GB", "256GB", "512GB", "1TB"],
       colors: [
