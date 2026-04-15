@@ -94,7 +94,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
           }`}
         >
           <p className="text-lg font-bold">
-            💰 ₹{diff.toLocaleString("en-IN")} cheaper {cheaperSide === "local" ? `locally` : "online"}
+            💰 ₹{diff.toLocaleString("en-IN")} cheaper {cheaperSide === "local" ? `via city partner` : "online"}
           </p>
           <p className="text-sm text-muted-foreground">
             {cheaperSide === "local"
