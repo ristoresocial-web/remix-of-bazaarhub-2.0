@@ -1,47 +1,55 @@
 
 
-# Add Extra Features from HTML Design
+# Comparison Engine Rebuild — Online vs Local Split-Screen
 
-## Features to Add
+## What Changes
 
-Based on the uploaded `01_buyer_homepage.html`, the current Lovable app is missing these sections:
+The current `/compare` page is a spec-comparison tool (model A vs model B). The prompt asks for a fundamentally different feature: a **price comparison engine** that shows the SAME product across online sellers vs local sellers in a split-screen layout.
 
-### 1. Stats Bar (below hero)
-Animated counter strip showing: "12,400+ Local Shops", "8.2L+ Products Listed", "420+ Cities Covered", "180 Cr+ Savings Generated". Uses a count-up animation on scroll.
+Both features are valuable — the existing spec comparison stays, and we add the new price comparison engine alongside it.
 
-### 2. Today's Best Deals carousel
-Horizontal scrollable deal cards for the selected city. Each card shows product name, price, savings vs online, and shop name. Gradient purple-to-cyan background strip.
+## Plan
 
-### 3. Popular Products Grid with Sort Bar
-Product cards showing local vs online price comparison inline, wishlist heart button, "Save X vs Flipkart" tags, and Call/WhatsApp action buttons. Sort bar with Price/Rating/Nearest filters.
+### 1. Create mock data file `src/data/comparisonMockData.ts`
+- Define `ComparisonProduct`, `OnlineSeller`, `LocalSeller`, `ComparisonResult` interfaces per the prompt
+- 5 products with 3 online sellers + 3-4 local sellers each (Pune city data)
+- Samsung Galaxy S24 Ultra, iPhone 15 Pro Max, Samsung 43" Crystal 4K TV, HP Pavilion Laptop 15, LG OLED C3 55" TV
+- Price difference calculations built in
 
-### 4. Map Banner CTA
-"Find Shops Near You on Map" banner with icon, description, and button linking to `/find-sellers`.
+### 2. Create `src/components/compare/ComparisonEngine.tsx`
+- Split-screen layout: Online Sellers (left) | Local Sellers (right)
+- Desktop: side-by-side columns. Mobile: stacked vertically
+- Price Difference Banner between columns showing "X cheaper locally" or "X cheaper online" — no bias language
+- Lowest price badge on each side, absolute winner gets "Lowest Price in {City}"
+- Sort options: Price, Distance (local only), Rating
+- Filter: Platform selector (online), Distance radius (local)
+- WhatsApp / Call / Directions buttons on local seller cards (gated to logged-in buyers per memory rules)
 
-### 5. Navbar Search Bar (desktop)
-Inline search input in the desktop navbar between the city selector and action buttons — matching the HTML layout: `[Logo] [City] [Search bar] [Seller Login]`.
+### 3. Create `src/components/PriceTeaser.tsx`
+- Inline 1-line component for product cards: `₹X local | ₹Y online → ₹Z cheaper locally/online`
+- Used inside `ProductCard.tsx` when local price data is available
 
-### 6. Compare Bar (floating)
-Fixed bottom bar that appears when user selects products to compare, with a "Compare Now" button. Hidden by default, shows when items are added.
+### 4. Update `src/pages/ComparePage.tsx`
+- Add a third mode toggle: "Model vs Model" | "Config Search" | **"Price Compare"**
+- Price Compare mode shows a product search bar, loads `ComparisonEngine` for the selected product
+- Support URL param `?product=samsung-galaxy-s24` to pre-load a product
+- Keep existing spec comparison fully intact
 
----
+### 5. Update `src/components/ProductCard.tsx`
+- Add `PriceTeaser` below the price line showing local vs online comparison
 
-## Technical Plan
+## Files to create
+- `src/data/comparisonMockData.ts` — interfaces + mock data for 5 products
+- `src/components/compare/ComparisonEngine.tsx` — split-screen price comparison
+- `src/components/PriceTeaser.tsx` — inline price teaser for cards
 
-### Files to create:
-- `src/components/StatsBar.tsx` — Animated counter strip with IntersectionObserver
-- `src/components/TodaysBestDeals.tsx` — Horizontal scroll deal cards with mock data
-- `src/components/PopularProductsGrid.tsx` — Product cards grid with sort/filter, wishlist, price comparison, Call/WhatsApp buttons
-- `src/components/MapBanner.tsx` — CTA banner linking to find-sellers
-- `src/components/CompareBar.tsx` — Fixed bottom compare tray (context-driven, hidden until items selected)
+## Files to modify
+- `src/pages/ComparePage.tsx` — add "Price Compare" mode tab + URL param support
+- `src/components/ProductCard.tsx` — add PriceTeaser inline
 
-### Files to modify:
-- `src/pages/Index.tsx` — Add StatsBar after hero, TodaysBestDeals before trending, PopularProductsGrid after city offers, MapBanner before categories
-- `src/components/Navbar.tsx` — Add search input between city selector and action buttons on desktop
-
-### Data:
-All sections use mock data initially (no new database tables needed).
-
-### Design tokens:
-Uses existing brand colors (primary orange, navy). Savings badges use green (`#22C55E`). Cards follow existing `rounded-2xl bg-card shadow-card` pattern.
+## Design
+- Uses existing brand tokens (orange primary, green for best price, navy accents)
+- Cards follow `rounded-card border-border bg-card shadow-card` pattern
+- No bias language — purely price-based ("₹X cheaper", "Lowest Price in Pune")
+- Seller contact buttons gated behind auth per existing rules
 
