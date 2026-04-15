@@ -13,6 +13,10 @@ import CityOffersBanner from "@/components/CityOffersBanner";
 import FeaturedSellers from "@/components/FeaturedSellers";
 import CityOffersFloatingButton from "@/components/CityOffersFloatingButton";
 import CityHeroBanner from "@/components/CityHeroBanner";
+import StatsBar from "@/components/StatsBar";
+import TodaysBestDeals from "@/components/TodaysBestDeals";
+import PopularProductsGrid from "@/components/PopularProductsGrid";
+import MapBanner from "@/components/MapBanner";
 
 // Category images
 import imgMobiles from "@/assets/categories/mobiles.jpg";
@@ -123,7 +127,6 @@ const Index = () => {
             Compare local shop prices in {selectedCity} vs Amazon &amp; 10+ platforms
           </motion.p>
 
-          {/* Search bar with auto-suggest */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -132,7 +135,6 @@ const Index = () => {
             <AISmartSearchBar city={selectedCity} className="mx-auto max-w-2xl" />
           </motion.div>
 
-          {/* Trust badges */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -157,6 +159,12 @@ const Index = () => {
         <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-primary/10" />
       </section>
 
+      {/* ── STATS BAR ── */}
+      <StatsBar />
+
+      {/* ── TODAY'S BEST DEALS ── */}
+      <TodaysBestDeals city={selectedCity} />
+
       {/* ── TRENDING SECTION ── */}
       <TrendingSection city={selectedCity} />
 
@@ -168,6 +176,9 @@ const Index = () => {
 
       {/* ── FEATURED SELLERS ── */}
       <FeaturedSellers city={selectedCity} />
+
+      {/* ── POPULAR PRODUCTS ── */}
+      <PopularProductsGrid city={selectedCity} />
 
       {/* ── 2. HOW IT WORKS ── */}
       <RevealSection>
@@ -226,6 +237,9 @@ const Index = () => {
           </div>
         </section>
       </RevealSection>
+
+      {/* ── MAP BANNER ── */}
+      <MapBanner />
 
       {/* ── 4. CITY COVERAGE STRIP ── */}
       <section className="bg-navy py-8">
@@ -349,7 +363,7 @@ const Index = () => {
           </div>
         </section>
       </RevealSection>
-      {/* Floating city offers button (mobile) */}
+
       <CityOffersFloatingButton />
     </div>
   );
