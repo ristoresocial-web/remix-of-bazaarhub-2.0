@@ -64,7 +64,7 @@ const SettingsTab: React.FC<Props> = ({ holidayMode, setHolidayMode }) => {
             <div className="rounded-card bg-primary/10 p-3 flex items-start gap-2">
               <AlertCircle className="h-4 w-4 text-primary mt-0.5" />
               <p className="text-xs text-foreground">
-                Your listings will show an "On Holiday" badge. Contact buttons will be disabled for buyers. Auto-resumes on end date.
+                Your shop is on holiday. Buyers will see "Currently Unavailable". Auto-resumes on end date.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">

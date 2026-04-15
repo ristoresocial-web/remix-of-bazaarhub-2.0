@@ -494,12 +494,7 @@ const ProductsTab: React.FC<{ isApproved: boolean }> = ({ isApproved }) => {
                   {/* Price Row */}
                   <div className="flex items-baseline justify-between">
                     <span className="text-lg font-bold text-foreground">{formatPrice(p.price)}</span>
-                    {cheaper && (
-                      <span className="text-[10px] font-semibold text-success">
-                        ↓ {formatPrice(p.amazonPrice)} Amazon
-                      </span>
-                    )}
-                    {!cheaper && p.amazonPrice > 0 && (
+                    {p.amazonPrice > 0 && (
                       <span className="text-[10px] text-muted-foreground">
                         Amazon: {formatPrice(p.amazonPrice)}
                       </span>
@@ -515,11 +510,15 @@ const ProductsTab: React.FC<{ isApproved: boolean }> = ({ isApproved }) => {
                     <span>{p.delivery}</span>
                   </div>
 
-                  {cheaper && (
+                  {cheaper ? (
                     <div className="rounded-input bg-success/5 border border-success/20 px-2 py-1">
-                      <p className="text-[10px] font-semibold text-success text-center">✨ You're cheaper than Amazon!</p>
+                      <p className="text-[10px] font-semibold text-success text-center">✅ You're cheaper!</p>
                     </div>
-                  )}
+                  ) : p.amazonPrice > 0 && p.price > p.amazonPrice ? (
+                    <div className="rounded-input bg-primary/5 border border-primary/20 px-2 py-1">
+                      <p className="text-[10px] font-semibold text-primary text-center">⚠ Amazon cheaper</p>
+                    </div>
+                  ) : null}
                 </div>
 
                 {/* Actions */}
@@ -624,9 +623,13 @@ const ProductsTab: React.FC<{ isApproved: boolean }> = ({ isApproved }) => {
                       className="w-16 bg-transparent text-right text-foreground focus:outline-none focus:ring-1 focus:ring-ring rounded px-1"
                     />
                   </td>
-                  <td className={`p-3 text-right text-sm ${cheaper ? "text-success font-semibold" : "text-foreground"}`}>
+                  <td className="p-3 text-right text-sm">
                     {formatPrice(p.amazonPrice)}
-                    {cheaper && <span className="block text-[10px] text-success">You're cheaper!</span>}
+                    {cheaper ? (
+                      <span className="block text-[10px] font-semibold text-success">✅ You're cheaper!</span>
+                    ) : p.amazonPrice > 0 && p.price > p.amazonPrice ? (
+                      <span className="block text-[10px] font-semibold text-primary">⚠ Amazon cheaper</span>
+                    ) : null}
                   </td>
                   <td className="p-3 text-center">
                     <span className="relative inline-flex items-center gap-1.5">
@@ -684,9 +687,11 @@ const ProductsTab: React.FC<{ isApproved: boolean }> = ({ isApproved }) => {
                   <span className="text-xs text-muted-foreground">{p.status}</span>
                 </div>
                 <p className="text-xs text-muted-foreground">Stock: {p.stock} · {p.delivery}</p>
-                {p.price < p.amazonPrice && (
-                  <span className="text-[10px] font-semibold text-success">You're cheaper than Amazon!</span>
-                )}
+                {p.price < p.amazonPrice ? (
+                  <span className="text-[10px] font-semibold text-success">✅ You're cheaper!</span>
+                ) : p.amazonPrice > 0 && p.price > p.amazonPrice ? (
+                  <span className="text-[10px] font-semibold text-primary">⚠ Amazon cheaper</span>
+                ) : null}
               </div>
             </div>
           </div>
