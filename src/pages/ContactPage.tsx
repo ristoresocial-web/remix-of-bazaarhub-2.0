@@ -31,7 +31,8 @@ const ContactPage: React.FC = () => {
 
       <div className="container py-10 space-y-10">
         <motion.div className="text-center space-y-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-3xl font-bold">Get in Touch</h1>
+          <p className="text-sm text-muted-foreground">Priya Kayal Mart LLP</p>
+          <h1 className="text-3xl font-bold">Contact Us</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">Have a question, feedback, or partnership proposal? We'd love to hear from you.</p>
         </motion.div>
 
@@ -39,7 +40,7 @@ const ContactPage: React.FC = () => {
           {/* Contact Info */}
           <motion.div className="space-y-4" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
             {[
-              { icon: Mail, label: "Email", value: "support@bazaarhub.in", href: "mailto:support@bazaarhub.in" },
+              { icon: Mail, label: "Email", value: "bazaarhubcare@gmail.com", href: "mailto:bazaarhubcare@gmail.com" },
               { icon: Phone, label: "Phone", value: "+91 99434 40384", href: "tel:+919943440384" },
               { icon: MessageCircle, label: "WhatsApp", value: "+91 99434 40384", href: "https://wa.me/919943440384" },
               { icon: MapPin, label: "Address", value: "Priya Kayal Mart LLP, Madurai, Tamil Nadu, India", href: undefined },
