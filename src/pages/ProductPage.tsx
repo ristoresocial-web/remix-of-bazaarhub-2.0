@@ -442,7 +442,7 @@ const ProductPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* ── F. SELLER CARD ── */}
+              {/* ── F. CITY PARTNER CARD ── */}
               {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
                   <div className="mb-3 flex items-center gap-3">
