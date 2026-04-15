@@ -32,10 +32,26 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
 const ALL_CATEGORIES = ["Mobiles", "TVs", "Laptops", "ACs", "Refrigerators", "Washing Machines"] as const;
 
 const ComparePage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const city = localStorage.getItem("bazaarhub_city") || "Madurai";
   const [category, setCategory] = useState<CompareCategory>("Mobiles");
   const [selectedModels, setSelectedModels] = useState<ModelSpec[]>([]);
-  const [mode, setMode] = useState<"model" | "config">("model");
+  const [mode, setMode] = useState<"model" | "config" | "price">("model");
+
+  // Price compare state
+  const [priceQuery, setPriceQuery] = useState("");
+  const [priceResults, setPriceResults] = useState<ComparisonResult[]>([]);
+  const [selectedComparison, setSelectedComparison] = useState<ComparisonResult | null>(null);
+
+  // URL param support for price compare
+  useEffect(() => {
+    const productParam = searchParams.get("product");
+    if (productParam) {
+      setMode("price");
+      const found = getComparisonBySlug(productParam);
+      if (found) setSelectedComparison(found);
+    }
+  }, [searchParams]);
 
   const selectedIds = selectedModels.map((m) => m.id);
 
