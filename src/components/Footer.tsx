@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright */}
         <div className="mt-8 border-t border-secondary-foreground/10 pt-6 text-center text-xs text-secondary-foreground/50">
-          <p>© 2026 Bazaar Hub — Priya Kayal Mart LLP | Pan-India</p>
+          <p>© 2025 BazaarHub. Your Town. Your Price.</p>
         </div>
       </div>
     </footer>
