@@ -31,6 +31,13 @@ import ComingSoonPage from "./pages/ComingSoonPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import SellerTermsPage from "./pages/SellerTermsPage";
+import SellerProfilePage from "./pages/SellerProfilePage";
+import BecomeSellerPage from "./pages/BecomeSellerPage";
+import PriceAlertsPage from "./pages/PriceAlertsPage";
+import ContactPage from "./pages/ContactPage";
+import FAQPage from "./pages/FAQPage";
+import BlogPage from "./pages/BlogPage";
+import SitemapPage from "./pages/SitemapPage";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +63,13 @@ const AnimatedRoutes = () => {
           <Route path="/terms" element={<PageTransition><TermsPage /></PageTransition>} />
           <Route path="/privacy" element={<PageTransition><PrivacyPage /></PageTransition>} />
           <Route path="/seller-terms" element={<PageTransition><SellerTermsPage /></PageTransition>} />
+          <Route path="/seller/:id" element={<PageTransition><SellerProfilePage /></PageTransition>} />
+          <Route path="/become-seller" element={<PageTransition><BecomeSellerPage /></PageTransition>} />
+          <Route path="/price-alerts" element={<PageTransition><PriceAlertsPage /></PageTransition>} />
+          <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
+          <Route path="/faq" element={<PageTransition><FAQPage /></PageTransition>} />
+          <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+          <Route path="/sitemap" element={<PageTransition><SitemapPage /></PageTransition>} />
           <Route path="/coming-soon/:feature" element={<PageTransition><ComingSoonPage /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
