@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Bell, ShieldCheck, Clock, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import BazaarLogo from "@/components/BazaarLogo";
 import AdminSidebar, { AdminMobileNav, type AdminTab } from "@/components/admin/AdminSidebar";
 import AdminDashboardTab from "@/components/admin/AdminDashboardTab";
 import ApprovalsTab from "@/components/admin/ApprovalsTab";
@@ -81,10 +82,7 @@ const AdminPage: React.FC = () => {
         <div className="flex items-center justify-between px-4 py-3 md:px-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-5 w-5 text-primary" />
-            <span className="bazaar-logo-text text-lg">
-              <span className="bazaar-logo-navy">Bazaar</span>
-              <span className="bazaar-logo-orange">Hub</span>
-            </span>
+            <BazaarLogo />
             <span className="hidden sm:inline text-sm font-semibold text-foreground">Admin Panel</span>
           </div>
           <div className="flex items-center gap-3">
