@@ -21,8 +21,11 @@ const Footer: React.FC = () => {
             <h4 className="mb-3 text-sm font-bold">Links</h4>
             <ul className="space-y-2 text-sm text-secondary-foreground/70">
               <li><Link to="/about" className="transition-all duration-200 hover:text-primary">About Us</Link></li>
-              <li><Link to="/seller/dashboard" className="transition-all duration-200 hover:text-primary">{t("sellerLogin")}</Link></li>
-              <li><Link to="/about" className="transition-all duration-200 hover:text-primary">{t("help")}</Link></li>
+              <li><Link to="/blog" className="transition-all duration-200 hover:text-primary">Blog</Link></li>
+              <li><Link to="/faq" className="transition-all duration-200 hover:text-primary">FAQ</Link></li>
+              <li><Link to="/contact" className="transition-all duration-200 hover:text-primary">Contact Us</Link></li>
+              <li><Link to="/become-seller" className="transition-all duration-200 hover:text-primary">Become a Seller</Link></li>
+              <li><Link to="/sitemap" className="transition-all duration-200 hover:text-primary">Sitemap</Link></li>
             </ul>
           </div>
 
