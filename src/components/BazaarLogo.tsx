@@ -9,7 +9,7 @@ const BazaarLogo: React.FC<{ className?: string; showTagline?: boolean }> = ({
     <img 
       src={bazaarLogo} 
       alt="Bazaar Hub" 
-      className="h-8 w-auto object-contain"
+      className="h-8 md:h-10 w-auto object-contain"
     />
     {showTagline && (
       <p className="mt-1 text-[11px] font-semibold tracking-wide text-foreground/70 uppercase">
