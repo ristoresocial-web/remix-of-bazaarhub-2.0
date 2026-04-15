@@ -443,54 +443,54 @@ const ProductPage: React.FC = () => {
               </div>
 
               {/* ── F. SELLER CARD ── */}
-              {localSeller && (
+              {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="text-3xl">{localSeller.photo}</span>
+                    <span className="text-3xl">{cityPartner.photo}</span>
                     <div>
-                      <p className="text-sm font-bold text-foreground">{localSeller.name}</p>
+                      <p className="text-sm font-bold text-foreground">{cityPartner.name}</p>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Star className="h-3 w-3 fill-warning text-warning" />
-                        <span>{localSeller.rating}</span>
+                        <span>{cityPartner.rating}</span>
                         <span>·</span>
                         <MapPin className="h-3 w-3" />
-                        <span>{getDistance(localSeller.km)}</span>
+                        <span>{getDistance(cityPartner.km)}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="mb-1 text-lg font-bold text-primary">{formatPrice(localSeller.price)}</p>
-                  <p className="mb-3 text-xs text-muted-foreground">{localSeller.address}</p>
+                  <p className="mb-1 text-lg font-bold text-primary">{formatPrice(cityPartner.price)}</p>
+                  <p className="mb-3 text-xs text-muted-foreground">{cityPartner.address}</p>
 
-                  {localSeller.holiday && (
+                  {cityPartner.holiday && (
                     <div className="mb-3 flex items-center gap-1 rounded-pill bg-[hsl(var(--primary-light))] px-3 py-1.5 text-xs font-medium text-primary">
-                      <Calendar className="h-3.5 w-3.5" /> Shop on holiday until {localSeller.holidayUntil}
+                      <Calendar className="h-3.5 w-3.5" /> Shop on holiday until {cityPartner.holidayUntil}
                     </div>
                   )}
 
                   {isLoggedIn ? (
                     <div className="grid grid-cols-3 gap-2">
                       <a
-                        href={localSeller.holiday ? undefined : `tel:+91${localSeller.phone}`}
+                        href={cityPartner.holiday ? undefined : `tel:+91${cityPartner.phone}`}
                         className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          localSeller.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-secondary text-secondary-foreground hover:opacity-90"
+                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-secondary text-secondary-foreground hover:opacity-90"
                         }`}
-                        onClick={localSeller.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
                       >
                         <Phone className="h-3.5 w-3.5" /> Call
                       </a>
                       <a
-                        href={localSeller.holiday ? undefined : `https://wa.me/91${localSeller.phone}?text=${waMessage}`}
+                        href={cityPartner.holiday ? undefined : `https://wa.me/91${cityPartner.phone}?text=${waMessage}`}
                         target="_blank"
                         rel="nofollow sponsored noopener"
                         className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          localSeller.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-[#25D366] text-white hover:opacity-90"
+                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-[#25D366] text-white hover:opacity-90"
                         }`}
-                        onClick={localSeller.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
                       >
                         <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                       </a>
                       <a
-                        href={`https://maps.google.com/?q=${encodeURIComponent(localSeller.address)}`}
+                        href={`https://maps.google.com/?q=${encodeURIComponent(cityPartner.address)}`}
                         target="_blank"
                         rel="noopener"
                         className="flex items-center justify-center gap-1 rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
