@@ -4,9 +4,11 @@ export interface Product {
   name: string;
   category: string;
   image: string;
+  galleryImages?: string[];
   brand: string;
   description: string;
   variants?: { sizes?: string[]; colors?: { name: string; hex: string }[] };
+  specs?: [string, string][];
   prices: PriceEntry[];
   localAvailable: boolean;
   localShop?: { name: string; address: string; km: number; phone: string };
