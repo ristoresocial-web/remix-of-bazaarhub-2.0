@@ -37,6 +37,7 @@ import PriceAlertsPage from "./pages/PriceAlertsPage";
 import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import SitemapPage from "./pages/SitemapPage";
 import SellerLoginPage from "./pages/SellerLoginPage";
 
