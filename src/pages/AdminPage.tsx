@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import BazaarLogo from "@/components/BazaarLogo";
 import AdminSidebar, { AdminMobileNav, type AdminTab } from "@/components/admin/AdminSidebar";
 import AdminDashboardTab from "@/components/admin/AdminDashboardTab";
+import AdminProductsTab from "@/components/admin/AdminProductsTab";
 import ApprovalsTab from "@/components/admin/ApprovalsTab";
 import SellersTab from "@/components/admin/SellersTab";
 import PromoCodesTab from "@/components/admin/PromoCodesTab";
@@ -46,8 +47,9 @@ const AdminPage: React.FC = () => {
 
   const renderTab = () => {
     switch (activeTab) {
-      case "dashboard": return <AdminDashboardTab />;
+      case "dashboard": return <AdminDashboardTab onTabChange={setActiveTab} />;
       case "sellers": return <SellersTab />;
+      case "products": return <AdminProductsTab />;
       case "approvals": return <ApprovalsTab />;
       case "promo-codes": return <PromoCodesTab />;
       case "platforms": return <PlatformsTab />;
@@ -57,7 +59,6 @@ const AdminPage: React.FC = () => {
       case "product-blocking": return <ProductBlockingTab />;
       case "banned-products": return <BannedProductsTab />;
       case "master-products": return <MasterProductsTab />;
-      case "products": return <ComingSoonPlaceholder title="Products Management" path="/coming-soon/buyer-management" />;
       case "buyers": return <ComingSoonPlaceholder title="Buyers Management" path={COMING_SOON_MAP.buyers} />;
       case "city-offers": return <ComingSoonPlaceholder title="City Offers Management" path={COMING_SOON_MAP["city-offers"]} />;
       case "model-mapping": return <ComingSoonPlaceholder title="Model Mapping" path={COMING_SOON_MAP["model-mapping"]} />;
