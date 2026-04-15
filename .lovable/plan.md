@@ -1,55 +1,38 @@
 
 
-# Comparison Engine Rebuild — Online vs Local Split-Screen
+# Rename "Local Sellers" → "{City} City Partner"
 
-## What Changes
+Replace all user-facing instances of "Local Sellers" / "local sellers" with "{City} City Partner(s)" across the comparison engine and related pages.
 
-The current `/compare` page is a spec-comparison tool (model A vs model B). The prompt asks for a fundamentally different feature: a **price comparison engine** that shows the SAME product across online sellers vs local sellers in a split-screen layout.
+## Changes
 
-Both features are valuable — the existing spec comparison stays, and we add the new price comparison engine alongside it.
+### 1. `src/components/compare/ComparisonEngine.tsx`
+- Line 143: `Local Sellers in {city}` → `{city} City Partners`
+- Line 235 comment: update for clarity
+- Badge text "Best Local" → "Best City Partner"
 
-## Plan
+### 2. `src/pages/FindSellersPage.tsx`
+- Line 244: `Local Sellers in {city}` → `{city} City Partners`
+- Line 346: "No local sellers found" → "No city partners found"
 
-### 1. Create mock data file `src/data/comparisonMockData.ts`
-- Define `ComparisonProduct`, `OnlineSeller`, `LocalSeller`, `ComparisonResult` interfaces per the prompt
-- 5 products with 3 online sellers + 3-4 local sellers each (Pune city data)
-- Samsung Galaxy S24 Ultra, iPhone 15 Pro Max, Samsung 43" Crystal 4K TV, HP Pavilion Laptop 15, LG OLED C3 55" TV
-- Price difference calculations built in
+### 3. `src/pages/SearchPage.tsx`
+- Line 187: `local seller` count text → `city partner`
+- Line 256: "No local sellers in {city}" → "No {city} City Partners"
 
-### 2. Create `src/components/compare/ComparisonEngine.tsx`
-- Split-screen layout: Online Sellers (left) | Local Sellers (right)
-- Desktop: side-by-side columns. Mobile: stacked vertically
-- Price Difference Banner between columns showing "X cheaper locally" or "X cheaper online" — no bias language
-- Lowest price badge on each side, absolute winner gets "Lowest Price in {City}"
-- Sort options: Price, Distance (local only), Rating
-- Filter: Platform selector (online), Distance radius (local)
-- WhatsApp / Call / Directions buttons on local seller cards (gated to logged-in buyers per memory rules)
+### 4. `src/components/PriceTeaser.tsx`
+- Any "local" label text → "city partner" or just keep price labels as-is (they show price values, not "local seller" text)
 
-### 3. Create `src/components/PriceTeaser.tsx`
-- Inline 1-line component for product cards: `₹X local | ₹Y online → ₹Z cheaper locally/online`
-- Used inside `ProductCard.tsx` when local price data is available
+### 5. `src/data/comparisonMockData.ts`
+- Rename the `LocalSeller` interface → `CityPartner`
+- Update `localSellers` field → `cityPartners` in `ComparisonResult`
+- Update `lowestLocalShop` → `lowestCityPartner`
 
-### 4. Update `src/pages/ComparePage.tsx`
-- Add a third mode toggle: "Model vs Model" | "Config Search" | **"Price Compare"**
-- Price Compare mode shows a product search bar, loads `ComparisonEngine` for the selected product
-- Support URL param `?product=samsung-galaxy-s24` to pre-load a product
-- Keep existing spec comparison fully intact
+### 6. Other pages (cosmetic text updates)
+- `MapBanner.tsx` line 13: "local sellers" → "city partners"
+- `BlogPage.tsx` post titles/excerpts mentioning "local sellers"
+- `AboutPage.tsx`, `TermsPage.tsx` — update descriptive text
 
-### 5. Update `src/components/ProductCard.tsx`
-- Add `PriceTeaser` below the price line showing local vs online comparison
-
-## Files to create
-- `src/data/comparisonMockData.ts` — interfaces + mock data for 5 products
-- `src/components/compare/ComparisonEngine.tsx` — split-screen price comparison
-- `src/components/PriceTeaser.tsx` — inline price teaser for cards
-
-## Files to modify
-- `src/pages/ComparePage.tsx` — add "Price Compare" mode tab + URL param support
-- `src/components/ProductCard.tsx` — add PriceTeaser inline
-
-## Design
-- Uses existing brand tokens (orange primary, green for best price, navy accents)
-- Cards follow `rounded-card border-border bg-card shadow-card` pattern
-- No bias language — purely price-based ("₹X cheaper", "Lowest Price in Pune")
-- Seller contact buttons gated behind auth per existing rules
+### Scope
+- Interface/field renames cascade through `ComparisonEngine.tsx`, `ComparePage.tsx`, `PriceTeaser.tsx`
+- No database changes needed — mock data only
 
