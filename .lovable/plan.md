@@ -1,67 +1,48 @@
 
 
-# Homepage Upgrade Plan
+# Product Detail Page Upgrade
 
-## What's Changing
+## Current State
+The existing `ProductPage.tsx` (535 lines) already has: breadcrumb, image gallery, variants, price comparison table, price history chart, city partner card, reviews, similar products, and specs (TV product only). It uses both `mockProducts` and a hardcoded `tvProduct` object with conditional rendering.
 
-The current homepage has a dark navy hero, 21 category cards, and several sections that feel cluttered. The prompt requests a cleaner, more focused layout with a light hero, condensed 6-category grid, "Today's Best Price Differences" comparison cards, and a Become a Seller CTA section.
+## What Needs to Change
 
-## Approach
+### 1. Add Wishlist & Recently Viewed (localStorage)
+- Add `addToWishlist` and `addToRecentlyViewed` helpers in a new `src/lib/wishlist.ts`
+- Add heart icon button below image gallery (toggles filled/outline)
+- Call `addToRecentlyViewed` on page mount
 
-Keep existing components that already work well (Navbar, Footer, AISmartSearchBar, FeaturedSellers, StatsBar). Restructure `Index.tsx` to match the prompt's section order and visual style. Create new focused components where needed.
+### 2. Redesign Product Hero Right Column
+- Show "Best Price in {city}: ₹X at {seller}" prominently
+- Add Online Best vs City Partner Best summary with difference badge ("₹X cheaper via city partner/online")
+- Add [Compare All Prices] and [Set Price Alert] buttons inline
 
-## Plan
+### 3. Upgrade Seller Price Table to Split Layout
+- Create `src/components/SellerPriceTable.tsx` — replaces current `PriceComparisonTable` usage on product page
+- Two sections: "Online Sellers" table (Platform, Price, Delivery, Rating, Buy button) and "{City} City Partners" table (Shop, Price, Distance, Status, WhatsApp/Call)
+- "Prices last updated: X hours ago · Report incorrect price" footer
+- City partner contact buttons still gated behind auth
 
-### 1. Redesign Hero Section in `Index.tsx`
-- Change background from dark navy gradient to light `white → #FFF7ED` gradient
-- Update headline to "Find the Best Price in Your City"
-- Update subtitle to "Compare city partners vs Amazon, Flipkart — in real time."
-- Keep existing `AISmartSearchBar` but make it larger/more prominent
-- Add "Popular searches" links below search bar (Samsung Galaxy S24, LG AC, HP Laptop)
-- Add city context line: "Showing prices in {city} · Change city"
-- Remove trust badges row (replaced by popular searches)
+### 4. Make Specs Work for All Products
+- Add specs data to `mockProducts` in `mockData.ts` (at least for Samsung Galaxy S24 Ultra)
+- Remove `isTVProduct` conditional for specs rendering — show specs for any product that has them
 
-### 2. Create `src/components/CategoryGrid.tsx`
-- 6 focused categories: Mobiles, Televisions, Laptops, Air Conditioners, Refrigerators, Audio
-- 3x2 grid (desktop), 2x3 (mobile)
-- Icon + label cards with orange border hover + lift animation
-- Title: "What are you looking for?"
-- Reuse existing category images from assets
+### 5. Restructure Layout
+- Move specs table and seller price table into the left column below the hero
+- Keep right column sticky with: best price summary, price alert button, top city partner card, description
+- Similar Products section at bottom with "You may also compare:" title
 
-### 3. Create `src/components/BestComparisonCards.tsx`
-- Title: "Today's Best Price Differences in {city}"
-- Subtitle: "Updated 15 mins ago"
-- 3 product cards from comparison mock data showing: product name, city partner price vs online price, "₹X cheaper [via city partner/online]" badge, [Compare Now] button linking to `/product/compare?product=slug`
-- Horizontal scroll on mobile
+## Files to Create
+- `src/lib/wishlist.ts` — localStorage wishlist + recently viewed helpers
+- `src/components/SellerPriceTable.tsx` — split online/city partner table
 
-### 4. Create `src/components/BecomeSeller.tsx`
-- Split card (50/50 on desktop, stacked on mobile)
-- Left side: "Sell More with BazaarHub" + 3-4 benefit bullets
-- Right side: [Get Started] button linking to `/become-seller`
+## Files to Modify
+- `src/pages/ProductPage.tsx` — restructure layout, add wishlist button, use new SellerPriceTable, make specs universal
+- `src/data/mockData.ts` — add specs and gallery images to existing mock products
 
-### 5. Restructure `Index.tsx` section order
-Remove/reorganize to match prompt:
-1. Hero (redesigned — light bg)
-2. StatsBar (keep)
-3. CategoryGrid (new — 6 cards)
-4. BestComparisonCards (new — replaces TodaysBestDeals)
-5. How It Works (keep, update subtitles to use "city partners" language)
-6. FeaturedSellers (keep — "Trusted City Partners in {city}")
-7. Price Alert Banner (keep, restyle to full-width orange)
-8. BecomeSeller (new)
-9. CityOffersFloatingButton (keep)
-
-**Remove from homepage**: TrendingSection, CityHeroBanner, CityOffersBanner, PopularProductsGrid, MapBanner, Live Price Comparison sample, City Coverage Strip, WhatsApp Banner, Why Bazaar Hub section, 21-category grid. These sections still exist as components but are no longer rendered on the homepage.
-
-### 6. Update Footer copyright line
-- Change to: "© 2025 BazaarHub. Your Town. Your Price."
-
-## Files to create
-- `src/components/CategoryGrid.tsx`
-- `src/components/BestComparisonCards.tsx`
-- `src/components/BecomeSeller.tsx`
-
-## Files to modify
-- `src/pages/Index.tsx` — full restructure
-- `src/components/Footer.tsx` — copyright line update
+## Design
+- Follows existing brand tokens (orange primary, green for best price)
+- Cards use `rounded-card border-border bg-card shadow-card`
+- City partner contact gated behind auth per existing rules
+- All affiliate links keep `rel="nofollow sponsored noopener noreferrer"`
 
