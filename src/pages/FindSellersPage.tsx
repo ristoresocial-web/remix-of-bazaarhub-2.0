@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { MODEL_DATABASE, ModelSpec } from "@/data/compareModels";
-import { getLocalSellersForProduct, getOnlinePricesForProduct, ProductSeller, TrustTier, StockStatus } from "@/data/sellerData";
+import { getCityPartnersForProduct, getOnlinePricesForProduct, ProductSeller, TrustTier, StockStatus } from "@/data/sellerData";
 import { formatPrice, getTimestamp } from "@/lib/cityUtils";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 
@@ -54,7 +54,7 @@ const FindSellersPage: React.FC = () => {
 
   // Seller data (memoized once per product)
   const localSellers = useMemo(
-    () => (selectedProduct ? getLocalSellersForProduct(selectedProduct, city) : []),
+    () => (selectedProduct ? getCityPartnersForProduct(selectedProduct, city) : []),
     [selectedProduct, city]
   );
   const onlinePrices = useMemo(
@@ -124,7 +124,7 @@ const FindSellersPage: React.FC = () => {
         <div className="container py-6 md:py-8">
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">Find Sellers</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Search for a product to see all sellers — local shops & online platforms — in{" "}
+            Search for a product to see all sellers — city partners & online platforms — in{" "}
             <button onClick={() => window.dispatchEvent(new Event("open-city-selector"))} className="font-semibold text-primary hover:underline">{city}</button>
           </p>
         </div>

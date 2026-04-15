@@ -22,7 +22,7 @@ const TermsPage: React.FC = () => (
 
         <section>
           <h2 className="mb-2 text-lg font-bold text-foreground">1. Platform Nature</h2>
-          <p>BazaarHub is a price comparison platform, not a seller. We aggregate and display product prices from local sellers and online platforms to help buyers make informed purchase decisions. BazaarHub does not sell, stock, ship, or deliver any products.</p>
+          <p>BazaarHub is a price comparison platform, not a seller. We aggregate and display product prices from city partners and online platforms to help buyers make informed purchase decisions. BazaarHub does not sell, stock, ship, or deliver any products.</p>
         </section>
 
         <section>

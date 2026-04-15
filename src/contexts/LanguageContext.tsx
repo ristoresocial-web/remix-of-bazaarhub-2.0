@@ -38,7 +38,7 @@ export const LANGUAGES: LanguageOption[] = [
 const translations: Record<string, string> = {
   tagline: "Your Market. Your Choice.",
   heroTitle: "Shop Local, Save Big",
-  heroSubtitle: "Compare prices from local shops and online platforms across India",
+  heroSubtitle: "Compare prices from city partners and online platforms across India",
   explore: "Explore Deals",
   home: "Home",
   categories: "Categories",

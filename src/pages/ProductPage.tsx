@@ -61,7 +61,7 @@ const tvProduct = {
     ["Voice Assistant", "Alexa Built-in, Google Assistant"],
     ["Weight", "8.2 kg (without stand)"],
   ],
-  localSellers: [
+  cityPartners: [
     { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9876543210", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
     { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9876512345", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
     { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9876567890", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
@@ -153,7 +153,7 @@ const ProductPage: React.FC = () => {
   const productDesc = isTVProduct ? tvProduct.description : product!.description;
   const productImages = isTVProduct ? tvProduct.images : [product!.image];
   const variants = isTVProduct ? tvProduct.variants : product!.variants;
-  const localSeller = isTVProduct ? tvProduct.localSellers[0] : (product?.localShop ? { ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" } : null);
+  const cityPartner = isTVProduct ? tvProduct.cityPartners[0] : (product?.localShop ? { ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" } : null);
   const priceList = isTVProduct ? cityPrices : product!.prices;
   const isLocalAvailable = isTVProduct ? true : product!.localAvailable;
   const cheapest = Math.min(...priceList.filter(p => p.inStock).map(p => p.price));
@@ -281,7 +281,7 @@ const ProductPage: React.FC = () => {
                   <PriceHistoryChart
                     amazonPrices={amazonHistory}
                     flipkartPrices={flipkartHistory}
-                    localPrice={localSeller?.price || cheapest}
+                    localPrice={cityPartner?.price || cheapest}
                   />
                 </div>
               </Reveal>
@@ -310,12 +310,12 @@ const ProductPage: React.FC = () => {
                 </Reveal>
               )}
 
-              {/* ── I. OTHER LOCAL SELLERS ── */}
+              {/* ── I. OTHER CITY PARTNERS ── */}
               {isTVProduct && (
                 <Reveal>
-                  <h3 className="mb-4 text-base font-bold text-foreground">🏪 Other Local Sellers in {selectedCity}</h3>
+                  <h3 className="mb-4 text-base font-bold text-foreground">🏪 Other {selectedCity} City Partners</h3>
                   <div className="flex gap-4 overflow-x-auto pb-2">
-                    {tvProduct.localSellers.map((seller) => (
+                    {tvProduct.cityPartners.map((seller) => (
                       <div key={seller.name} className="min-w-[260px] flex-shrink-0 rounded-xl border border-border bg-card p-4 shadow-card">
                         <div className="mb-2 flex items-center gap-2">
                           <span className="text-2xl">{seller.photo}</span>
@@ -360,7 +360,7 @@ const ProductPage: React.FC = () => {
                   productReviews={[
                     ...(isTVProduct ? tvProduct.reviews : [{ user: "User", rating: 5, text: "Great product!", date: "Dec 2024" }]),
                     { user: "Lakshmi R.", rating: 4, text: "Very good value for money. Picture quality is excellent for the price.", date: "Jan 2025", helpful: 5 },
-                    { user: "Karthik V.", rating: 5, text: "Bought from local seller via BazaarHub. Saved ₹2,000 and got same-day delivery!", date: "Jan 2025", helpful: 12 },
+                    { user: "Karthik V.", rating: 5, text: "Bought from city partner via BazaarHub. Saved ₹2,000 and got same-day delivery!", date: "Jan 2025", helpful: 12 },
                   ]}
                   sellerReviews={[
                     { user: "Ramesh K.", rating: 5, text: "Sri Murugan Electronics provides excellent service. Free installation!", date: "Dec 2024", helpful: 8 },
@@ -443,54 +443,54 @@ const ProductPage: React.FC = () => {
               </div>
 
               {/* ── F. SELLER CARD ── */}
-              {localSeller && (
+              {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="text-3xl">{localSeller.photo}</span>
+                    <span className="text-3xl">{cityPartner.photo}</span>
                     <div>
-                      <p className="text-sm font-bold text-foreground">{localSeller.name}</p>
+                      <p className="text-sm font-bold text-foreground">{cityPartner.name}</p>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Star className="h-3 w-3 fill-warning text-warning" />
-                        <span>{localSeller.rating}</span>
+                        <span>{cityPartner.rating}</span>
                         <span>·</span>
                         <MapPin className="h-3 w-3" />
-                        <span>{getDistance(localSeller.km)}</span>
+                        <span>{getDistance(cityPartner.km)}</span>
                       </div>
                     </div>
                   </div>
-                  <p className="mb-1 text-lg font-bold text-primary">{formatPrice(localSeller.price)}</p>
-                  <p className="mb-3 text-xs text-muted-foreground">{localSeller.address}</p>
+                  <p className="mb-1 text-lg font-bold text-primary">{formatPrice(cityPartner.price)}</p>
+                  <p className="mb-3 text-xs text-muted-foreground">{cityPartner.address}</p>
 
-                  {localSeller.holiday && (
+                  {cityPartner.holiday && (
                     <div className="mb-3 flex items-center gap-1 rounded-pill bg-[hsl(var(--primary-light))] px-3 py-1.5 text-xs font-medium text-primary">
-                      <Calendar className="h-3.5 w-3.5" /> Shop on holiday until {localSeller.holidayUntil}
+                      <Calendar className="h-3.5 w-3.5" /> Shop on holiday until {cityPartner.holidayUntil}
                     </div>
                   )}
 
                   {isLoggedIn ? (
                     <div className="grid grid-cols-3 gap-2">
                       <a
-                        href={localSeller.holiday ? undefined : `tel:+91${localSeller.phone}`}
+                        href={cityPartner.holiday ? undefined : `tel:+91${cityPartner.phone}`}
                         className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          localSeller.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-secondary text-secondary-foreground hover:opacity-90"
+                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-secondary text-secondary-foreground hover:opacity-90"
                         }`}
-                        onClick={localSeller.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
                       >
                         <Phone className="h-3.5 w-3.5" /> Call
                       </a>
                       <a
-                        href={localSeller.holiday ? undefined : `https://wa.me/91${localSeller.phone}?text=${waMessage}`}
+                        href={cityPartner.holiday ? undefined : `https://wa.me/91${cityPartner.phone}?text=${waMessage}`}
                         target="_blank"
                         rel="nofollow sponsored noopener"
                         className={`flex items-center justify-center gap-1 rounded-pill py-2 text-xs font-semibold transition-all duration-200 ${
-                          localSeller.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-[#25D366] text-white hover:opacity-90"
+                          cityPartner.holiday ? "bg-muted text-muted-foreground cursor-not-allowed" : "bg-[#25D366] text-white hover:opacity-90"
                         }`}
-                        onClick={localSeller.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
+                        onClick={cityPartner.holiday ? (e: React.MouseEvent) => e.preventDefault() : undefined}
                       >
                         <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                       </a>
                       <a
-                        href={`https://maps.google.com/?q=${encodeURIComponent(localSeller.address)}`}
+                        href={`https://maps.google.com/?q=${encodeURIComponent(cityPartner.address)}`}
                         target="_blank"
                         rel="noopener"
                         className="flex items-center justify-center gap-1 rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"

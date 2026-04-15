@@ -39,7 +39,7 @@ export interface OnlinePlatformPrice {
 const TRUST_TIERS: TrustTier[] = ["New", "Established", "Trusted"];
 const STOCK_STATUSES: StockStatus[] = ["In Stock", "In Stock", "In Stock", "Limited Stock", "Out of Stock"];
 
-export function getLocalSellersForProduct(product: ModelSpec, city: string): ProductSeller[] {
+export function getCityPartnersForProduct(product: ModelSpec, city: string): ProductSeller[] {
   const sellers: ProductSeller[] = [
     {
       id: `${product.id}-sangeetha`,

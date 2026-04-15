@@ -61,4 +61,4 @@ export function getActiveCount(): number {
 }
 
 export const DEFAULT_TICKER_TEXT =
-  "Your Market. Your Choice. — Compare prices from local shops and online platforms near you!";
+  "Your Market. Your Choice. — Compare prices from city partners and online platforms near you!";

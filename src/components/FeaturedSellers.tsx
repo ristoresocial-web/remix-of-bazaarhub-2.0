@@ -106,7 +106,7 @@ const FeaturedSellers: React.FC<Props> = ({ city }) => {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-foreground">Featured Sellers in {city}</h2>
-          <p className="text-xs text-muted-foreground">Trusted local shops with great deals</p>
+          <p className="text-xs text-muted-foreground">Trusted city partners with great deals</p>
         </div>
         <Link to="/find-sellers" className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
           View All <ChevronRight className="h-3.5 w-3.5" />

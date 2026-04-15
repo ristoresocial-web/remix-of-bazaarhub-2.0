@@ -316,7 +316,7 @@ const Index = () => {
             <h2 className="mb-2 text-xl font-bold">
               Chat directly with sellers on WhatsApp!
             </h2>
-            <p className="mb-6 text-sm text-white/80">Connect with local sellers via WhatsApp</p>
+            <p className="mb-6 text-sm text-white/80">Connect with city partners via WhatsApp</p>
             <button className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-foreground transition-all duration-200 hover:bg-muted hover:shadow-lg">
               Try WhatsApp Connect
             </button>
