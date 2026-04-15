@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 210 17% 98%;
+    --foreground: 240 50% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 50% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 50% 14%;
+
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 24 100% 45%;
+    --primary-light: 33 100% 94%;
+
+    --secondary: 240 50% 14%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 14% 93%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 24 100% 96%;
+    --accent-foreground: 24 100% 40%;
+
+    --destructive: 6 78% 57%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 6 67% 96%;
+
+    --success: 160 100% 33%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 120 39% 93%;
+
+    --warning: 43 100% 50%;
+    --warning-foreground: 240 50% 14%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 24 100% 50%;
+
+    --radius: 0.75rem;
+    --radius-btn: 1.5rem;
+    --radius-input: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 24 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 24 100% 50%;
+
+    --navy: 240 50% 14%;
+    --navy-deep: 210 56% 11%;
+    --orange: 24 100% 50%;
+    --orange-light: 33 100% 94%;
+    --orange-dark: 24 100% 45%;
+    --orange-deep: 24 100% 31%;
+    --logo-purple: 24 100% 50%;
+    --logo-cyan: 160 100% 33%;
+
+    --shadow-md: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 24px rgba(255,107,0,0.15);
+  }
+
+  .dark {
+    --background: 240 50% 6%;
+    --foreground: 210 17% 98%;
+    --card: 240 50% 10%;
+    --card-foreground: 210 17% 98%;
+    --popover: 240 50% 10%;
+    --popover-foreground: 210 17% 98%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 24 100% 45%;
+    --primary-light: 24 80% 15%;
+    --secondary: 240 40% 20%;
+    --secondary-foreground: 210 17% 98%;
+    --muted: 240 30% 16%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 24 80% 15%;
+    --accent-foreground: 24 100% 70%;
+    --destructive: 6 78% 57%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 6 50% 15%;
+    --success: 160 100% 33%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 160 40% 15%;
+    --warning: 43 100% 50%;
+    --warning-foreground: 240 50% 14%;
+    --border: 240 30% 20%;
+    --input: 240 30% 20%;
+    --ring: 24 100% 50%;
+    --sidebar-background: 240 50% 8%;
+    --sidebar-foreground: 210 17% 90%;
+    --sidebar-primary: 24 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 30% 14%;
+    --sidebar-accent-foreground: 210 17% 90%;
+    --sidebar-border: 240 30% 18%;
+    --sidebar-ring: 24 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body {
+    font-family: 'Poppins', sans-serif;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .bazaar-logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .bazaar-logo-navy {
+    color: hsl(var(--logo-purple));
+  }
+  .bazaar-logo-orange {
+    color: hsl(var(--logo-cyan));
+  }
+  .hover-scale {
+    @apply transition-all duration-200 hover:scale-105;
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-md);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* Hide Google Translate top banner and frame */
+  .goog-te-banner-frame,
+  .skiptranslate,
+  #google_translate_element {
+    display: none !important;
+  }
+  body {
+    top: 0 !important;
+  }
+}
