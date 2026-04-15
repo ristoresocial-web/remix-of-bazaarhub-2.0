@@ -38,6 +38,7 @@ import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
 import SitemapPage from "./pages/SitemapPage";
+import SellerLoginPage from "./pages/SellerLoginPage";
 
 const queryClient = new QueryClient();
 
