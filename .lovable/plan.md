@@ -1,55 +1,53 @@
 
 
-# Admin Panel Upgrade Plan
+# Seller Registration & Login Upgrade
 
 ## Current State
-The admin panel already has a light sidebar with 21 tabs, a dashboard with 5 stats and quick action pills, a robust sellers table (30 rows, sorting, filters, pagination, CSV export), platforms management with full CRUD, categories with tree view, and phase settings. Several tabs are "Coming Soon" placeholders.
 
-## Changes Needed
+- **Seller Registration** (`/seller/register`): 5-step form (Info, Location, Shop, WhatsApp, Review) with 457 lines. Has OTP, GST/PAN validation, photo uploads, category selection, promo codes. Currently uses a 4-digit OTP and has no success animation screen.
+- **Buyer Login** (`/buyer/login`): Centered card with Email OTP (Supabase), WhatsApp OTP (mock), and Google OAuth. Has 6-digit OTP boxes. No `/login` route exists — only `/buyer/login`.
+- No dedicated seller login page exists. No `/login` route in App.tsx.
 
-### 1. Make Quick Actions Clickable (`AdminDashboardTab.tsx`)
-- Pass `onTabChange` prop so clicking pills navigates to the relevant tab (Sellers, Platforms, Phase Settings)
-- Update `AdminPage.tsx` to pass `onTabChange` to dashboard tab
+## What to Build
 
-### 2. Update Sellers Tab Labels (`SellersTab.tsx`)
-- Rename status "Pending" → "Getting Ready", keep "Live" and "Under Review"
-- Update action buttons: "Approve" → "Welcome to BazaarHub!" (orange filled, only for Getting Ready), "View" → "Request Details" (orange outline), keep "Pause" (ghost)
-- Add header callout: "2 sellers ready to join — approve to grow! →"
+### 1. Create Seller Login Page (`src/pages/SellerLoginPage.tsx`)
+New page at `/login` — centered card (max-w-md):
+- BazaarHub logo + "Your Town. Your Price." tagline
+- Phone input with `+91` prefix
+- [Send OTP] button → transitions to 6-box OTP input (reuse shadcn InputOTP)
+- [Change number] link, countdown timer for resend
+- After OTP verified → redirect to `/seller/dashboard`
+- Footer links: "New seller? Register here" → `/seller/register`, "Buyer? Continue as Buyer" → `/buyer/login`
+- Mock OTP verification (like existing WhatsApp OTP flow)
 
-### 3. Build Products Management Tab (new `AdminProductsTab.tsx`)
-- Replace the "Coming Soon" placeholder with a functional table
-- Columns: Product, Category, Brand, Listed By, City, Status, Price Range, Actions
-- Filters: Category dropdown, City dropdown, Status dropdown, Search bar
-- Actions per row: View, Edit, Approve, Remove
-- Use mock data from existing `mockProducts`
+### 2. Simplify Seller Registration to 3 Steps (`src/pages/SellerRegisterPage.tsx`)
+Condense current 5 steps into 3 per the prompt:
 
-### 4. Upgrade Approvals Tab (`ApprovalsTab.tsx`)
-- Add two sub-tabs: "Sellers (pending)" and "Products (pending)"
-- Each shows approval cards with: name, city, submitted date, View Details / Approve / Reject buttons
-- Keep existing approval settings below as a collapsible "Settings" section
+**Step 1 — Shop Details**: Shop Name, City dropdown, Phone with +91 (keep existing validation). Remove Owner Name, GST, PAN from step 1.
 
-### 5. Upgrade Phase Settings (`PhaseSettingsTab.tsx`)
-- Add individual feature toggle switches per the prompt spec (Buyer Homepage, Seller Dashboard, Price Intel, Live Price API, WhatsApp Bot, Mobile App)
-- Each row: Feature name, Phase badge, Status toggle switch
-- Keep existing phase upgrade UI as summary at top
+**Step 2 — Business Details**: GST Number (required, keep existing regex), Category checkboxes (Mobiles, TVs, Laptops, ACs, Refrigerators, Audio), "Approx products" radio pills (1-10, 11-50, 51-200, 200+). Remove photo uploads and location detection.
 
-### 6. Add Admin Profile to Sidebar Bottom (`AdminSidebar.tsx`)
-- Add notification badge (🔔 5) and "Admin" label at the bottom of sidebar nav
+**Step 3 — Connect WhatsApp**: WhatsApp number with "Same as phone" checkbox, Language preference radio (English, Tamil, Hindi, Telugu, Kannada), Terms checkbox, [Register My Shop] button.
+
+**Success Screen**: Animated checkmark, "Shop Registered!" message, review within 24 hours notice, [Go to Seller Dashboard] button. Replace the current review step.
+
+### 3. Add Route in App.tsx
+Add `/login` route pointing to new `SellerLoginPage`.
+
+### 4. Update Progress Bar
+Change from 5 steps (Info, Location, Shop, WhatsApp, Review) to 3 steps (Shop Details, Business Details, Connect WhatsApp).
 
 ## Files to Create
-- `src/components/admin/AdminProductsTab.tsx` — functional products management table
+- `src/pages/SellerLoginPage.tsx` — phone + OTP login flow
 
 ## Files to Modify
-- `src/components/admin/AdminDashboardTab.tsx` — accept `onTabChange`, make pills clickable
-- `src/components/admin/AdminSidebar.tsx` — add bottom profile section
-- `src/components/admin/SellersTab.tsx` — update status labels and action buttons
-- `src/components/admin/ApprovalsTab.tsx` — add pending approval cards with sub-tabs
-- `src/components/admin/PhaseSettingsTab.tsx` — add per-feature toggle switches
-- `src/pages/AdminPage.tsx` — pass `onTabChange` to dashboard, wire AdminProductsTab
+- `src/pages/SellerRegisterPage.tsx` — condense to 3 steps + success screen
+- `src/App.tsx` — add `/login` route
 
 ## Design
-- Light sidebar stays as-is (matches prompt spec)
-- Status badges: Getting Ready = orange, Live = green, Under Review = orange outline, Paused = gray
-- Trust badges: New = orange outline, Established = blue, Trusted = green, Under Review = yellow outline
-- All existing functionality preserved, only upgraded
+- Login card: `max-w-md rounded-2xl border bg-card shadow-card` (matches buyer login)
+- OTP: use 6-box input like buyer login (upgrade from current 4-digit)
+- Progress bar: 3 circles with connecting lines, orange fill for active/complete
+- Success screen: green checkmark with scale animation, confetti-style feel
+- Mobile-first: all inputs full-width, large touch targets
 
