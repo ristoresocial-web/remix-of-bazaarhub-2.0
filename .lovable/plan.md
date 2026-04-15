@@ -1,64 +1,62 @@
 
 
-# Search Results Page Upgrade
+# Seller Dashboard Upgrade Plan
 
 ## Current State
-The existing `SearchPage.tsx` (486 lines) has: search bar, filter chips (All/Local/Under30k/4Stars+), sort pills, product card grid, zero-results state with online platform links, and a compare bar. It's a single-column layout with no sidebar filters, no price range slider, no brand/category checkboxes, no grid/list toggle, and no pagination.
 
-## What to Build
+The seller dashboard is already well-built with:
+- Dark sidebar (`SellerSidebar.tsx`) with 10 tabs
+- Top bar with logo, notification badge, seller name
+- Orange onboarding banner (dismissible)
+- Dashboard home with stats, WhatsApp setup, recent activity
+- Products tab with table/grid views, inline edit, undo/redo, add product wizard, banned content scanning
+- Price Intel, Notifications, Settings, PromoCode, Boost, Advertise tabs all exist
+- Mobile bottom tabs
 
-### 1. Add More Mock Products (`src/data/mockData.ts`)
-Add 6-8 more Samsung products across categories (TVs, Laptops, Audio) to reach ~12 searchable items. This enables meaningful filtering by category and brand.
+The prompt asks to **upgrade, not rebuild**. Most sections already match the spec closely.
 
-### 2. Create `src/components/search/FilterPanel.tsx`
-Left sidebar (260px, collapsible on mobile via sheet/drawer):
-- **Category** checkboxes with counts (Mobiles, Televisions, Laptops, Audio)
-- **Brand** checkboxes with counts (Samsung, Apple, Sony, LG)
-- **Price Range** dual-thumb slider (₹10,000–₹2,00,000) using shadcn Slider
-- **City Partners Only** toggle switch
-- **Sort By** radio group: Price Low→High, Price High→Low, Best Price Difference, Most Compared
-- [Apply Filters] and [Reset] buttons
-- On mobile: trigger via floating filter button, render in a Sheet
+## Changes Needed
 
-### 3. Create `src/components/search/ProductSearchCard.tsx`
-Enhanced product card showing:
-- Product image + name + brand + rating stars
-- **LOCAL** price vs **ONLINE** price side by side
-- "₹X cheaper locally/online" green badge
-- [Compare] checkbox + [♥] wishlist heart button
-- Compact affiliate disclaimer
+### 1. Update Sidebar Styling (`src/components/seller/SellerSidebar.tsx`)
+- Change background from `bg-secondary` to explicit dark navy `bg-[#0F172A]`
+- Add seller name + notification badge at the bottom of the sidebar (above logout)
+- Active tab: orange left border (already has `border-primary`, just ensure orange)
+- Remove "Boost My Listing" and "Advertise in My City" tabs from sidebar (not in the prompt's sidebar spec) — or keep them but they're not in the prompt list
 
-### 4. Create `src/components/search/SortBar.tsx`
-Horizontal bar above results:
-- Grid/List view toggle icons (grid default)
-- Sort dropdown matching filter panel sort
-- Result count: "52 results found"
+Actually the prompt sidebar lists: Dashboard, My Products, Price Intel, City Offers, Analytics, Notifications, Promo Code, Settings — that's 8 tabs. Current has 10 (adds Boost, Advertise). Keep all 10 since they're existing features, just reorder to match prompt priority.
 
-### 5. Rewrite `src/pages/SearchPage.tsx`
-- **Title bar**: `Search Results for "{query}" in {city}` + result count + active filter chips with "Clear All" button
-- **2-column layout**: FilterPanel (left, 260px) + results grid (right)
-- **Filter logic**: URL params sync (`category`, `brand`, `minPrice`, `maxPrice`, `sort`, `localOnly`)
-- **Grid/List toggle**: 3-col grid (desktop) / 1-col list view
-- **Pagination**: 12 items per page, Previous/Next + page numbers using existing shadcn Pagination component
-- **Empty state**: "No results for X in {city}" with suggestions
-- **Compare bar**: Keep existing floating compare bar at bottom
+### 2. Update Sidebar Bottom Section
+- Show seller name "Poorvika Mobiles" and city
+- Show notification badge count (🔔 3)
+- Keep Logout button
 
-### 6. Add Wishlist Integration
-Import `toggleWishlist`, `isInWishlist` from `src/lib/wishlist.ts` (already created in Step 5). Wire heart button in ProductSearchCard.
+### 3. Update WhatsApp Number in `DashboardTab.tsx`
+- Change phone number from `+91 98765 00000` to `+91 9943440384` per prompt spec
 
-## Files to Create
-- `src/components/search/FilterPanel.tsx`
-- `src/components/search/ProductSearchCard.tsx`
-- `src/components/search/SortBar.tsx`
+### 4. Update Products Tab Price Column
+- Add color coding: Green text + "You're cheaper!" when seller price < Amazon price
+- Orange text + "Amazon cheaper" when Amazon price < seller price
+- This is partially there but needs explicit badge text in both table and grid views
+
+### 5. Minor Polish
+- Ensure onboarding banner shows `[×]` dismiss button once approved (currently shows Contact Support, needs dismiss for approved state)
+- Settings holiday mode message: update to "Your shop is on holiday. Buyers will see 'Currently Unavailable'" (currently says "On Holiday")
 
 ## Files to Modify
-- `src/data/mockData.ts` — add 6-8 more products
-- `src/pages/SearchPage.tsx` — full rewrite with 2-column layout, pagination, URL param sync
 
-## Design
-- Follows brand tokens: orange primary, green for savings badges
-- Filter panel uses `bg-card border-border rounded-card` styling
-- Mobile: filter panel in Sheet, results full-width, 1-col grid
-- All affiliate links maintain `rel="nofollow sponsored noopener noreferrer"`
-- "Local" labels use "City Partner" terminology per project memory
+1. **`src/components/seller/SellerSidebar.tsx`** — Dark navy bg, add seller info + notification badge at bottom
+2. **`src/components/seller/DashboardTab.tsx`** — Update WhatsApp number to +91 9943440384
+3. **`src/components/seller/ProductsTab.tsx`** — Add explicit "You're cheaper!" / "Amazon cheaper" badges with color coding in both table and grid views
+4. **`src/pages/SellerDashboardPage.tsx`** — Add dismiss button to onboarding banner when approved, pass seller name to sidebar
+
+## No New Files Needed
+
+All components already exist. This is purely an upgrade pass.
+
+## Technical Details
+
+- Sidebar bg change: `bg-secondary` → `bg-[#0F172A] text-white`
+- Seller info block: new `<div>` above logout showing shop name, city, and bell icon with count badge
+- Price badges in ProductsTab: compare `p.price` vs `p.amazonPrice`, render green/orange `<span>` accordingly
+- WhatsApp link href: `https://wa.me/919943440384?text=Hi`
 
