@@ -1,71 +1,67 @@
 
 
-# Complete "Local Sellers" → "City Partners" Rename — Remaining Files
+# Homepage Upgrade Plan
 
-The previous rename covered comparison engine, search pages, price teaser, map banner, blog, and price winner components. These files still contain "local seller/shop" text that needs updating.
+## What's Changing
 
-## Files to Update
+The current homepage has a dark navy hero, 21 category cards, and several sections that feel cluttered. The prompt requests a cleaner, more focused layout with a light hero, condensed 6-category grid, "Today's Best Price Differences" comparison cards, and a Become a Seller CTA section.
 
-### 1. `src/pages/ProductPage.tsx`
-- Line 64: `localSellers` property key → `cityPartners`
-- Line 156: `localSeller` variable → `cityPartner`, `localSellers[0]` → `cityPartners[0]`, `localShop` → `cityPartner`
-- Line 313-316: Comment and heading "Other Local Sellers in {city}" → "Other {city} City Partners"
-- Line 318: `tvProduct.localSellers` → `tvProduct.cityPartners`
-- Line 363: Review text "Bought from local seller" → "Bought from city partner"
-- Lines 446-500: All `localSeller.xxx` variable references → `cityPartner.xxx`
+## Approach
 
-### 2. `src/pages/AboutPage.tsx`
-- Line 24: meta description "local seller discovery" → "city partner discovery"
-- Line 33: "Connecting buyers and local sellers" → "Connecting buyers and city partners"
-- Line 43: "local seller discovery" → "city partner discovery"
-- Line 47: "every local shop" → "every city partner shop"
-- Line 72: "local shops and 10+ online platforms" → "city partners and 10+ online platforms"
-- Line 73: "local sellers via WhatsApp" → "city partners via WhatsApp"
+Keep existing components that already work well (Navbar, Footer, AISmartSearchBar, FeaturedSellers, StatsBar). Restructure `Index.tsx` to match the prompt's section order and visual style. Create new focused components where needed.
 
-### 3. `src/pages/FAQPage.tsx`
-- Line 10: "local city sellers" → "city partners"
-- Line 12: "How do I find local sellers?" → "How do I find city partners?" + answer text
-- Line 13: "Local seller prices" → "City partner prices"
+## Plan
 
-### 4. `src/pages/TermsPage.tsx`
-- Line 25: "local sellers and online platforms" → "city partners and online platforms"
+### 1. Redesign Hero Section in `Index.tsx`
+- Change background from dark navy gradient to light `white → #FFF7ED` gradient
+- Update headline to "Find the Best Price in Your City"
+- Update subtitle to "Compare city partners vs Amazon, Flipkart — in real time."
+- Keep existing `AISmartSearchBar` but make it larger/more prominent
+- Add "Popular searches" links below search bar (Samsung Galaxy S24, LG AC, HP Laptop)
+- Add city context line: "Showing prices in {city} · Change city"
+- Remove trust badges row (replaced by popular searches)
 
-### 5. `src/pages/Index.tsx`
-- Line 319: "Connect with local sellers via WhatsApp" → "Connect with city partners via WhatsApp"
+### 2. Create `src/components/CategoryGrid.tsx`
+- 6 focused categories: Mobiles, Televisions, Laptops, Air Conditioners, Refrigerators, Audio
+- 3x2 grid (desktop), 2x3 (mobile)
+- Icon + label cards with orange border hover + lift animation
+- Title: "What are you looking for?"
+- Reuse existing category images from assets
 
-### 6. `src/pages/FindSellersPage.tsx`
-- Line 127: "local shops & online platforms" → "city partners & online platforms"
+### 3. Create `src/components/BestComparisonCards.tsx`
+- Title: "Today's Best Price Differences in {city}"
+- Subtitle: "Updated 15 mins ago"
+- 3 product cards from comparison mock data showing: product name, city partner price vs online price, "₹X cheaper [via city partner/online]" badge, [Compare Now] button linking to `/product/compare?product=slug`
+- Horizontal scroll on mobile
 
-### 7. `src/components/StatsBar.tsx`
-- Line 4: "Local Shops" → "City Partners"
+### 4. Create `src/components/BecomeSeller.tsx`
+- Split card (50/50 on desktop, stacked on mobile)
+- Left side: "Sell More with BazaarHub" + 3-4 benefit bullets
+- Right side: [Get Started] button linking to `/become-seller`
 
-### 8. `src/components/FeaturedSellers.tsx`
-- Line 109: "Trusted local shops with great deals" → "Trusted city partners with great deals"
+### 5. Restructure `Index.tsx` section order
+Remove/reorganize to match prompt:
+1. Hero (redesigned — light bg)
+2. StatsBar (keep)
+3. CategoryGrid (new — 6 cards)
+4. BestComparisonCards (new — replaces TodaysBestDeals)
+5. How It Works (keep, update subtitles to use "city partners" language)
+6. FeaturedSellers (keep — "Trusted City Partners in {city}")
+7. Price Alert Banner (keep, restyle to full-width orange)
+8. BecomeSeller (new)
+9. CityOffersFloatingButton (keep)
 
-### 9. `src/components/PopularProductsGrid.tsx`
-- Lines 5-10: `localPrice` property name stays (internal), but any user-facing labels if present
-- No user-facing "local" text in this component — prices display as numbers only. No changes needed.
+**Remove from homepage**: TrendingSection, CityHeroBanner, CityOffersBanner, PopularProductsGrid, MapBanner, Live Price Comparison sample, City Coverage Strip, WhatsApp Banner, Why Bazaar Hub section, 21-category grid. These sections still exist as components but are no longer rendered on the homepage.
 
-### 10. `src/components/PriceHistoryChart.tsx`
-- Line 50: Chart reference line label `Local ₹${...}` → `City Partner ₹${...}`
+### 6. Update Footer copyright line
+- Change to: "© 2025 BazaarHub. Your Town. Your Price."
 
-### 11. `src/components/AIScoreBadge.tsx`
-- Lines 12-13: Props `localSellersCount` → `cityPartnersCount`, `lowestLocalPrice` stays (internal, sent to edge function)
-- Line 52: Edge function body key `local_sellers_count` stays (API contract)
-- No user-facing text changes needed — props are internal
+## Files to create
+- `src/components/CategoryGrid.tsx`
+- `src/components/BestComparisonCards.tsx`
+- `src/components/BecomeSeller.tsx`
 
-### 12. `src/contexts/LanguageContext.tsx`
-- Line 41: "local shops and online platforms" → "city partners and online platforms"
-
-### 13. `src/data/tickerData.ts`
-- Line 64: "local shops and online platforms" → "city partners and online platforms"
-
-### 14. `src/data/sellerData.ts`
-- Line 42: Function name `getLocalSellersForProduct` → `getCityPartnersForProduct` (+ update all call sites in FindSellersPage)
-
-## Scope
-- ~14 files with user-facing text updates
-- Internal variable names (like `localPrice` in PopularProductsGrid) stay unchanged where they don't appear in UI
-- Edge function API keys (`local_sellers_count`) stay unchanged to avoid breaking the deployed function
-- No database changes needed
+## Files to modify
+- `src/pages/Index.tsx` — full restructure
+- `src/components/Footer.tsx` — copyright line update
 
