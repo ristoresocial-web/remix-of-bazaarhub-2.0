@@ -47,7 +47,7 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ amazonPrices, fli
             stroke="hsl(var(--success))"
             strokeDasharray="6 4"
             strokeWidth={2}
-            label={{ value: `Local ₹${(localPrice / 1000).toFixed(1)}k`, position: "right", fontSize: 10, fill: "hsl(var(--success))" }}
+            label={{ value: `City Partner ₹${(localPrice / 1000).toFixed(1)}k`, position: "right", fontSize: 10, fill: "hsl(var(--success))" }}
           />
           <Line type="monotone" dataKey="Amazon" stroke="#3B82F6" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="Flipkart" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />

@@ -21,7 +21,7 @@ const AboutPage: React.FC = () => (
   <div className="pb-20 md:pb-0">
     <Helmet>
       <title>About Bazaar Hub — India's Hyperlocal Price Comparison Platform</title>
-      <meta name="description" content="BazaarHub empowers Indian buyers with transparent price comparison and local seller discovery across 4000+ cities in 22 languages." />
+      <meta name="description" content="BazaarHub empowers Indian buyers with transparent price comparison and city partner discovery across 4000+ cities in 22 languages." />
     </Helmet>
 
     {/* Hero */}
@@ -30,7 +30,7 @@ const AboutPage: React.FC = () => (
         <BazaarLogo className="mb-4 text-5xl" showTagline={false} />
         <h1 className="text-3xl font-bold text-white">India's Hyperlocal Price Comparison Platform</h1>
         <p className="mx-auto mt-3 max-w-2xl text-white/70">
-          Connecting buyers and local sellers across 4000+ Indian cities — transparently, in every language.
+          Connecting buyers and city partners across 4000+ Indian cities — transparently, in every language.
         </p>
       </div>
     </section>
@@ -40,11 +40,11 @@ const AboutPage: React.FC = () => (
       <div className="mx-auto max-w-3xl rounded-card bg-gradient-to-br from-[hsl(var(--navy-deep))] to-[hsl(var(--navy))] p-8 text-center text-white">
         <h2 className="text-xl font-bold mb-2">Our Mission</h2>
         <p className="text-sm leading-relaxed text-white/80 mb-6">
-          To empower every Indian buyer with transparent price comparison and local seller discovery — connecting 4000+ cities, all 22 Indian languages, every product category.
+          To empower every Indian buyer with transparent price comparison and city partner discovery — connecting 4000+ cities, all 22 Indian languages, every product category.
         </p>
         <h2 className="text-xl font-bold mb-2">Our Vision</h2>
         <p className="text-sm leading-relaxed text-white/80">
-          A future where every local shop in India is as discoverable as the biggest online marketplace.
+          A future where every city partner shop in India is as discoverable as the biggest online marketplace.
         </p>
       </div>
 
@@ -69,8 +69,8 @@ const AboutPage: React.FC = () => (
         <h2 className="text-xl font-bold text-foreground text-center mb-6">What We Do</h2>
         <div className="grid gap-6 md:grid-cols-3">
           {[
-            { icon: Search, title: "Compare", desc: "Compare prices across local shops and 10+ online platforms instantly" },
-            { icon: Handshake, title: "Connect", desc: "Connect buyers directly with local sellers via WhatsApp" },
+            { icon: Search, title: "Compare", desc: "Compare prices across city partners and 10+ online platforms instantly" },
+            { icon: Handshake, title: "Connect", desc: "Connect buyers directly with city partners via WhatsApp" },
             { icon: PiggyBank, title: "Save", desc: "Save money with transparent pricing and price alerts" },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="rounded-card border border-border bg-card p-6 shadow-card text-center hover-scale">

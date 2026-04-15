@@ -61,7 +61,7 @@ const tvProduct = {
     ["Voice Assistant", "Alexa Built-in, Google Assistant"],
     ["Weight", "8.2 kg (without stand)"],
   ],
-  localSellers: [
+  cityPartners: [
     { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9876543210", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
     { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9876512345", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
     { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9876567890", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
@@ -153,7 +153,7 @@ const ProductPage: React.FC = () => {
   const productDesc = isTVProduct ? tvProduct.description : product!.description;
   const productImages = isTVProduct ? tvProduct.images : [product!.image];
   const variants = isTVProduct ? tvProduct.variants : product!.variants;
-  const localSeller = isTVProduct ? tvProduct.localSellers[0] : (product?.localShop ? { ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" } : null);
+  const cityPartner = isTVProduct ? tvProduct.cityPartners[0] : (product?.localShop ? { ...product.localShop, price: Math.min(...product.prices.filter(p => !p.isAffiliate && p.inStock).map(p => p.price)), rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" } : null);
   const priceList = isTVProduct ? cityPrices : product!.prices;
   const isLocalAvailable = isTVProduct ? true : product!.localAvailable;
   const cheapest = Math.min(...priceList.filter(p => p.inStock).map(p => p.price));
@@ -281,7 +281,7 @@ const ProductPage: React.FC = () => {
                   <PriceHistoryChart
                     amazonPrices={amazonHistory}
                     flipkartPrices={flipkartHistory}
-                    localPrice={localSeller?.price || cheapest}
+                    localPrice={cityPartner?.price || cheapest}
                   />
                 </div>
               </Reveal>
@@ -310,12 +310,12 @@ const ProductPage: React.FC = () => {
                 </Reveal>
               )}
 
-              {/* ── I. OTHER LOCAL SELLERS ── */}
+              {/* ── I. OTHER CITY PARTNERS ── */}
               {isTVProduct && (
                 <Reveal>
-                  <h3 className="mb-4 text-base font-bold text-foreground">🏪 Other Local Sellers in {selectedCity}</h3>
+                  <h3 className="mb-4 text-base font-bold text-foreground">🏪 Other {selectedCity} City Partners</h3>
                   <div className="flex gap-4 overflow-x-auto pb-2">
-                    {tvProduct.localSellers.map((seller) => (
+                    {tvProduct.cityPartners.map((seller) => (
                       <div key={seller.name} className="min-w-[260px] flex-shrink-0 rounded-xl border border-border bg-card p-4 shadow-card">
                         <div className="mb-2 flex items-center gap-2">
                           <span className="text-2xl">{seller.photo}</span>
@@ -360,7 +360,7 @@ const ProductPage: React.FC = () => {
                   productReviews={[
                     ...(isTVProduct ? tvProduct.reviews : [{ user: "User", rating: 5, text: "Great product!", date: "Dec 2024" }]),
                     { user: "Lakshmi R.", rating: 4, text: "Very good value for money. Picture quality is excellent for the price.", date: "Jan 2025", helpful: 5 },
-                    { user: "Karthik V.", rating: 5, text: "Bought from local seller via BazaarHub. Saved ₹2,000 and got same-day delivery!", date: "Jan 2025", helpful: 12 },
+                    { user: "Karthik V.", rating: 5, text: "Bought from city partner via BazaarHub. Saved ₹2,000 and got same-day delivery!", date: "Jan 2025", helpful: 12 },
                   ]}
                   sellerReviews={[
                     { user: "Ramesh K.", rating: 5, text: "Sri Murugan Electronics provides excellent service. Free installation!", date: "Dec 2024", helpful: 8 },

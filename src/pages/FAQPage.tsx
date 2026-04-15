@@ -7,10 +7,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const faqs = [
-  { q: "What is Bazaar Hub?", a: "Bazaar Hub is India's local price comparison platform. We help you find the best prices for products by comparing rates from local city sellers and major online platforms like Amazon, Flipkart, and more." },
+  { q: "What is Bazaar Hub?", a: "Bazaar Hub is India's local price comparison platform. We help you find the best prices for products by comparing rates from city partners and major online platforms like Amazon, Flipkart, and more." },
   { q: "Is Bazaar Hub free to use?", a: "Yes! Bazaar Hub is completely free for buyers. You can search, compare prices, set alerts, and contact sellers at no cost." },
-  { q: "How do I find local sellers?", a: "Use the 'Find Sellers' feature — enter a product name and your city, and we'll show you nearby sellers with their prices, ratings, and contact details." },
-  { q: "How are prices updated?", a: "Online prices are fetched via affiliate APIs from Amazon, Flipkart, and other platforms. Local seller prices are updated by the sellers themselves through their dashboards." },
+  { q: "How do I find city partners?", a: "Use the 'Find Sellers' feature — enter a product name and your city, and we'll show you nearby city partners with their prices, ratings, and contact details." },
+  { q: "How are prices updated?", a: "Online prices are fetched via affiliate APIs from Amazon, Flipkart, and other platforms. City partner prices are updated by the sellers themselves through their dashboards." },
   { q: "Can I set price drop alerts?", a: "Absolutely! On any product page, click 'Set Alert' and enter your target price. We'll notify you via email or WhatsApp when the price drops." },
   { q: "How do I become a seller?", a: "Visit our 'Become a Seller' page and complete the 5-step registration. You can list your first 10 products for free. No GST required to get started." },
   { q: "Is my data safe?", a: "Yes. We use industry-standard encryption and never share your personal data with third parties. See our Privacy Policy for details." },
