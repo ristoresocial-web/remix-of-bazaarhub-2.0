@@ -47,6 +47,60 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          brand: string
+          category: string
+          created_at: string
+          description: string | null
+          gallery_images: Json | null
+          id: string
+          image_url: string | null
+          mrp: number
+          name: string
+          prices: Json | null
+          slug: string
+          specs: Json | null
+          status: string
+          updated_at: string
+          variants: Json | null
+        }
+        Insert: {
+          brand?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          gallery_images?: Json | null
+          id?: string
+          image_url?: string | null
+          mrp?: number
+          name: string
+          prices?: Json | null
+          slug: string
+          specs?: Json | null
+          status?: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Update: {
+          brand?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          gallery_images?: Json | null
+          id?: string
+          image_url?: string | null
+          mrp?: number
+          name?: string
+          prices?: Json | null
+          slug?: string
+          specs?: Json | null
+          status?: string
+          updated_at?: string
+          variants?: Json | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           city: string
