@@ -24,7 +24,7 @@ const PriceTeaser: React.FC<PriceTeaserProps> = ({ productSlug, localPrice, onli
   if (!local || !online || !isFinite(local) || !isFinite(online)) return null;
 
   const diff = Math.abs(online - local);
-  const cheaper = local < online ? "locally" : "online";
+  const cheaper = local < online ? "via city partner" : "online";
 
   if (diff < 100) return null;
 

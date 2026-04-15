@@ -111,7 +111,7 @@ const ComparePage: React.FC = () => {
                   ? "Head-to-head specs comparison — pick models to compare side by side"
                   : mode === "config"
                   ? "Search by configuration — find products that match your requirements"
-                  : "Compare online vs local prices for the same product"}
+                  : "Compare online vs city partner prices for the same product"}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ const ComparePage: React.FC = () => {
             {!selectedComparison && !priceQuery && (
               <div className="rounded-card border-2 border-dashed border-border bg-muted/20 py-12 text-center">
                 <DollarSign className="mx-auto mb-3 h-10 w-10 text-primary/40" />
-                <p className="text-sm text-muted-foreground">Search for a product above to compare online vs local prices</p>
+                <p className="text-sm text-muted-foreground">Search for a product above to compare online vs city partner prices</p>
               </div>
             )}
 

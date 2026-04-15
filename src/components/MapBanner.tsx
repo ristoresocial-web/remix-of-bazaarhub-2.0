@@ -9,8 +9,8 @@ const MapBanner: React.FC = () => (
         <MapPin className="h-7 w-7 text-primary" />
       </div>
       <div className="flex-1">
-        <h2 className="text-lg font-bold text-foreground">Find Shops Near You on Map</h2>
-        <p className="text-sm text-muted-foreground">Discover verified local sellers, compare prices, and visit the nearest store.</p>
+        <h2 className="text-lg font-bold text-foreground">Find City Partners Near You on Map</h2>
+        <p className="text-sm text-muted-foreground">Discover verified city partners, compare prices, and visit the nearest store.</p>
       </div>
       <Link
         to="/find-sellers"
