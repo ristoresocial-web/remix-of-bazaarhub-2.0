@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { formatPrice } from "@/lib/cityUtils";
 import type { Product } from "@/data/mockData";
+import PriceTeaser from "@/components/PriceTeaser";
 
 interface ProductCardProps {
   product: Product;
@@ -33,6 +34,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <h3 className="notranslate mb-1 text-sm font-semibold text-foreground line-clamp-2">{product.name}</h3>
         <p className="notranslate text-lg font-bold text-success">{formatPrice(cheapest)}</p>
         <p className="text-[10px] text-muted-foreground">{product.prices.length} prices compared</p>
+        <PriceTeaser productSlug={product.slug} />
       </div>
     </Link>
   );

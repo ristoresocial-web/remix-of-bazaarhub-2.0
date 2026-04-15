@@ -1,16 +1,20 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   Share2, RotateCcw, Plus, Smartphone, Tv, Laptop,
-  Snowflake, Fan, SlidersHorizontal, Search, WashingMachine,
+  Snowflake, Fan, SlidersHorizontal, Search, WashingMachine, DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import ModelSearchBox from "@/components/compare/ModelSearchBox";
 import ComparisonTable from "@/components/compare/ComparisonTable";
 import ConfigSearchPanel from "@/components/compare/ConfigSearchPanel";
+import ComparisonEngine from "@/components/compare/ComparisonEngine";
 import { MODEL_DATABASE, ModelSpec, CATEGORIES, CompareCategory } from "@/data/compareModels";
+import { searchComparisonProducts, getComparisonBySlug, type ComparisonResult } from "@/data/comparisonMockData";
 import AffiliateDisclaimer from "@/components/AffiliateDisclaimer";
 import AIScoreBadge from "@/components/AIScoreBadge";
 import AIVerdictStrip from "@/components/AIVerdictStrip";
