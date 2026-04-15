@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import type { ComparisonResult, OnlineSeller, LocalSeller } from "@/data/comparisonMockData";
+import type { ComparisonResult, OnlineSeller, CityPartner } from "@/data/comparisonMockData";
 
 interface ComparisonEngineProps {
   data: ComparisonResult;
@@ -35,7 +35,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
   const [sortOnline, setSortOnline] = useState<SortOnline>("price");
   const [sortLocal, setSortLocal] = useState<SortLocal>("price");
 
-  const { product, onlineSellers, localSellers, lowestOnlinePrice, lowestLocalPrice, priceDifference } = data;
+  const { product, onlineSellers, cityPartners, lowestOnlinePrice, lowestLocalPrice, priceDifference } = data;
 
   const absoluteLowest = Math.min(lowestOnlinePrice, lowestLocalPrice);
   const diff = Math.abs(priceDifference);
@@ -49,12 +49,12 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
   }, [onlineSellers, sortOnline]);
 
   const sortedLocal = useMemo(() => {
-    const arr = [...localSellers];
+    const arr = [...cityPartners];
     if (sortLocal === "price") arr.sort((a, b) => a.price - b.price);
     else if (sortLocal === "distance") arr.sort((a, b) => a.distanceKm - b.distanceKm);
     else arr.sort((a, b) => b.rating - a.rating);
     return arr;
-  }, [localSellers, sortLocal]);
+  }, [cityPartners, sortLocal]);
 
   const handleGatedAction = (action: string) => {
     if (!isLoggedIn) {
@@ -98,7 +98,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
           </p>
           <p className="text-sm text-muted-foreground">
             {cheaperSide === "local"
-              ? `at ${data.lowestLocalShop}, ${city}`
+              ? `at ${data.lowestCityPartner}, ${city}`
               : `on ${data.lowestOnlinePlatform} with delivery`}
           </p>
         </motion.div>
@@ -140,7 +140,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
-              <MapPin className="h-4 w-4" /> Local Sellers in {city}
+              <MapPin className="h-4 w-4" /> {city} City Partners
             </h3>
             <div className="flex items-center gap-1">
               <ArrowDownUp className="h-3 w-3 text-muted-foreground" />
@@ -156,12 +156,12 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
             </div>
           </div>
 
-          {sortedLocal.map((seller) => (
-            <LocalSellerCard
-              key={seller.id}
-              seller={seller}
-              isLowest={seller.price === lowestLocalPrice}
-              isAbsoluteLowest={seller.price === absoluteLowest}
+          {sortedLocal.map((partner) => (
+            <CityPartnerCard
+              key={partner.id}
+              partner={partner}
+              isLowest={partner.price === lowestLocalPrice}
+              isAbsoluteLowest={partner.price === absoluteLowest}
               city={city}
               isLoggedIn={isLoggedIn}
               onGatedAction={handleGatedAction}
@@ -206,6 +206,7 @@ function OnlineSellerCard({
             )}
             {isLowest && !isAbsoluteLowest && (
               <Badge variant="secondary" className="text-[10px]">Best Online</Badge>
+
             )}
           </div>
           <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
@@ -232,24 +233,24 @@ function OnlineSellerCard({
   );
 }
 
-/* ── Local seller card ── */
-function LocalSellerCard({
-  seller,
+/* ── City Partner card ── */
+function CityPartnerCard({
+  partner,
   isLowest,
   isAbsoluteLowest,
   city,
   isLoggedIn,
   onGatedAction,
 }: {
-  seller: LocalSeller;
+  partner: CityPartner;
   isLowest: boolean;
   isAbsoluteLowest: boolean;
   city: string;
   isLoggedIn: boolean;
   onGatedAction: (action: string) => boolean;
 }) {
-  const TrustIcon = TRUST_ICONS[seller.trustLevel] || Shield;
-  const trustColor = TRUST_COLORS[seller.trustLevel] || "text-muted-foreground";
+  const TrustIcon = TRUST_ICONS[partner.trustLevel] || Shield;
+  const trustColor = TRUST_COLORS[partner.trustLevel] || "text-muted-foreground";
 
   return (
     <motion.div
@@ -262,30 +263,30 @@ function LocalSellerCard({
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">{seller.shopName}</span>
+            <span className="font-semibold text-foreground">{partner.shopName}</span>
             {isAbsoluteLowest && (
               <Badge className="bg-success text-success-foreground text-[10px] gap-1">
                 <Trophy className="h-3 w-3" /> Lowest Price in {city}
               </Badge>
             )}
             {isLowest && !isAbsoluteLowest && (
-              <Badge variant="secondary" className="text-[10px]">Best Local</Badge>
+              <Badge variant="secondary" className="text-[10px]">Best City Partner</Badge>
             )}
           </div>
           <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <TrustIcon className={`h-3 w-3 ${trustColor}`} />
-              {seller.trustLevel.charAt(0).toUpperCase() + seller.trustLevel.slice(1)}
+              {partner.trustLevel.charAt(0).toUpperCase() + partner.trustLevel.slice(1)}
             </span>
             <span className="flex items-center gap-1">
-              <Star className="h-3 w-3 fill-primary text-primary" /> {seller.rating}
+              <Star className="h-3 w-3 fill-primary text-primary" /> {partner.rating}
             </span>
-            <span>📍 {seller.distanceKm.toFixed(1)} km</span>
+            <span>📍 {partner.distanceKm.toFixed(1)} km</span>
           </div>
         </div>
         <div className="text-right">
-          <p className="notranslate text-lg font-bold text-foreground">₹{seller.price.toLocaleString("en-IN")}</p>
-          {seller.inStock ? (
+          <p className="notranslate text-lg font-bold text-foreground">₹{partner.price.toLocaleString("en-IN")}</p>
+          {partner.inStock ? (
             <span className="text-[10px] text-success">🟢 In Stock</span>
           ) : (
             <span className="text-[10px] text-destructive">Out of Stock</span>
@@ -293,7 +294,7 @@ function LocalSellerCard({
         </div>
       </div>
 
-      <p className="mt-1 text-[10px] text-muted-foreground">{seller.address}</p>
+      <p className="mt-1 text-[10px] text-muted-foreground">{partner.address}</p>
 
       {/* Contact buttons — gated */}
       <div className="mt-2 flex items-center gap-2">
@@ -303,7 +304,7 @@ function LocalSellerCard({
           className="h-7 gap-1 text-[10px]"
           onClick={() => {
             if (!onGatedAction("call this seller")) return;
-            window.open(`tel:${seller.phone}`);
+            window.open(`tel:${partner.phone}`);
           }}
         >
           <Phone className="h-3 w-3" /> Call
@@ -314,7 +315,7 @@ function LocalSellerCard({
           className="h-7 gap-1 text-[10px] border-success/30 text-success hover:bg-success/10"
           onClick={() => {
             if (!onGatedAction("WhatsApp this seller")) return;
-            window.open(`https://wa.me/91${seller.whatsapp}?text=${encodeURIComponent(`Hi, I found your shop on BazaarHub. Is ${""} available?`)}`);
+            window.open(`https://wa.me/91${partner.whatsapp}?text=${encodeURIComponent(`Hi, I found your shop on BazaarHub. Is ${""} available?`)}`);
           }}
         >
           <MessageCircle className="h-3 w-3" /> WhatsApp
@@ -325,7 +326,7 @@ function LocalSellerCard({
           className="h-7 gap-1 text-[10px]"
           onClick={() => {
             if (!onGatedAction("get directions")) return;
-            window.open(seller.googleMapsUrl);
+            window.open(partner.googleMapsUrl);
           }}
         >
           <Navigation className="h-3 w-3" /> Directions

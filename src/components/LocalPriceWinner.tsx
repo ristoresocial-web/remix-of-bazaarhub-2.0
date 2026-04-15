@@ -20,8 +20,8 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
         animate={{ opacity: 1, x: 0 }}
         className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm"
       >
-        <span className="font-semibold">⚖️ Same price locally and online</span>
-        <span className="text-muted-foreground ml-1">— buy local for instant pickup!</span>
+        <span className="font-semibold">⚖️ Same price via city partner and online</span>
+        <span className="text-muted-foreground ml-1">— visit your city partner for instant pickup!</span>
       </motion.div>
     );
   }
@@ -34,7 +34,7 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
         className="rounded-lg bg-[hsl(var(--success))]/10 border border-[hsl(var(--success))]/20 p-3 text-sm"
       >
         <span className="font-semibold text-[hsl(var(--success))]">
-          💚 Local shops in {city} beat online by {formattedDiff}!
+          💚 {city} City Partners beat online by {formattedDiff}!
         </span>
       </motion.div>
     );
@@ -49,7 +49,7 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
       <span className="font-semibold text-[hsl(var(--warning-foreground))]">
         🌐 Online is cheaper by {formattedDiff}.
       </span>
-      <span className="text-muted-foreground ml-1">Check local shops for faster delivery!</span>
+      <span className="text-muted-foreground ml-1">Check city partners for faster delivery!</span>
     </motion.div>
   );
 };

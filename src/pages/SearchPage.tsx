@@ -184,7 +184,7 @@ const SearchPage: React.FC = () => {
             </div>
             {!zeroResults && (
               <p className="text-xs text-muted-foreground">
-                {localCount} local seller{localCount !== 1 ? "s" : ""} + online in {city}
+                {localCount} {city} City Partner{localCount !== 1 ? "s" : ""} + online
               </p>
             )}
           </div>
@@ -253,7 +253,7 @@ const SearchPage: React.FC = () => {
               <SearchIcon className="h-8 w-8 text-primary" />
             </div>
             <h2 className="mb-1 text-lg font-bold text-foreground">
-              No local sellers in {city} for "{query || "your search"}"
+              No {city} City Partners for "{query || "your search"}"
             </h2>
             <p className="mb-4 text-sm text-muted-foreground">Almost there! Check online platforms below.</p>
 

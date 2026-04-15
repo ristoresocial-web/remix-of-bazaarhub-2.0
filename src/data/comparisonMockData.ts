@@ -21,7 +21,7 @@ export interface OnlineSeller {
   color: string; // brand HSL
 }
 
-export interface LocalSeller {
+export interface CityPartner {
   id: string;
   shopName: string;
   ownerName: string;
@@ -38,33 +38,36 @@ export interface LocalSeller {
   googleMapsUrl: string;
 }
 
+/** @deprecated Use CityPartner instead */
+export type LocalSeller = CityPartner;
+
 export interface ComparisonResult {
   product: ComparisonProduct;
   onlineSellers: OnlineSeller[];
-  localSellers: LocalSeller[];
+  cityPartners: CityPartner[];
   lowestOnlinePrice: number;
   lowestLocalPrice: number;
-  priceDifference: number; // negative = local cheaper
+  priceDifference: number; // negative = city partner cheaper
   lowestOnlinePlatform: string;
-  lowestLocalShop: string;
+  lowestCityPartner: string;
 }
 
 function buildResult(
   product: ComparisonProduct,
   onlineSellers: OnlineSeller[],
-  localSellers: LocalSeller[],
+  cityPartners: CityPartner[],
 ): ComparisonResult {
   const lowestOnline = Math.min(...onlineSellers.filter((s) => s.inStock).map((s) => s.price));
-  const lowestLocal = Math.min(...localSellers.filter((s) => s.inStock).map((s) => s.price));
+  const lowestLocal = Math.min(...cityPartners.filter((s) => s.inStock).map((s) => s.price));
   return {
     product,
     onlineSellers,
-    localSellers,
+    cityPartners,
     lowestOnlinePrice: lowestOnline,
     lowestLocalPrice: lowestLocal,
-    priceDifference: lowestOnline - lowestLocal, // positive = local cheaper
+    priceDifference: lowestOnline - lowestLocal,
     lowestOnlinePlatform: onlineSellers.find((s) => s.price === lowestOnline)?.platform ?? "",
-    lowestLocalShop: localSellers.find((s) => s.price === lowestLocal)?.shopName ?? "",
+    lowestCityPartner: cityPartners.find((s) => s.price === lowestLocal)?.shopName ?? "",
   };
 }
 

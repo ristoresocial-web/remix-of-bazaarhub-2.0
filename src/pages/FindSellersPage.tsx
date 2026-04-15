@@ -241,7 +241,7 @@ const FindSellersPage: React.FC = () => {
         {selectedProduct && (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-lg font-bold text-foreground">
-              Local Sellers in {city} ({filteredSellers.length})
+              {city} City Partners ({filteredSellers.length})
             </h3>
             <div className="flex items-center gap-2">
               <div className="flex rounded-pill border border-border bg-background p-0.5">
@@ -343,7 +343,7 @@ const FindSellersPage: React.FC = () => {
         {selectedProduct && filteredSellers.length === 0 && (
           <div className="rounded-card border-2 border-dashed border-border bg-muted/20 py-12 text-center">
             <MapPin className="mx-auto mb-3 h-10 w-10 text-muted-foreground/40" />
-            <p className="text-sm font-semibold text-foreground">No local sellers found for this product in {city}</p>
+            <p className="text-sm font-semibold text-foreground">No {city} City Partners found for this product</p>
             <p className="mt-1 text-xs text-muted-foreground">Click below to notify nearby sellers about your interest.</p>
             <Button variant="outline" className="mt-4 gap-1" onClick={handleNotifySellers}>
               <Bell className="h-4 w-4" /> Notify Nearby Sellers
