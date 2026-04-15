@@ -7,30 +7,30 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const faqs = [
-  { q: "What is Bazaar Hub?", a: "Bazaar Hub is India's local price comparison platform. We help you find the best prices for products by comparing rates from city partners and major online platforms like Amazon, Flipkart, and more." },
-  { q: "Is Bazaar Hub free to use?", a: "Yes! Bazaar Hub is completely free for buyers. You can search, compare prices, set alerts, and contact sellers at no cost." },
-  { q: "How do I find city partners?", a: "Use the 'Find Sellers' feature — enter a product name and your city, and we'll show you nearby city partners with their prices, ratings, and contact details." },
-  { q: "How are prices updated?", a: "Online prices are fetched via affiliate APIs from Amazon, Flipkart, and other platforms. City partner prices are updated by the sellers themselves through their dashboards." },
-  { q: "Can I set price drop alerts?", a: "Absolutely! On any product page, click 'Set Alert' and enter your target price. We'll notify you via email or WhatsApp when the price drops." },
-  { q: "How do I become a seller?", a: "Visit our 'Become a Seller' page and complete the 5-step registration. You can list your first 10 products for free. No GST required to get started." },
-  { q: "Is my data safe?", a: "Yes. We use industry-standard encryption and never share your personal data with third parties. See our Privacy Policy for details." },
-  { q: "Does Bazaar Hub sell products directly?", a: "No. Bazaar Hub is a comparison and discovery platform. We connect buyers with sellers — all transactions happen directly between you and the seller." },
-  { q: "What cities are supported?", a: "Bazaar Hub supports 4,000+ Indian cities across all 28 states and 8 Union Territories. We auto-detect your city using GPS or you can select it manually." },
-  { q: "How do I contact support?", a: "Visit our Contact page or reach us via WhatsApp at +91 99434 40384. We typically respond within 24 hours." },
+  { q: "What is BazaarHub?", a: "BazaarHub is India's hyperlocal price comparison platform. We help you find the best prices by comparing rates from city partners and major online platforms like Amazon, Flipkart, and more." },
+  { q: "Is BazaarHub free for buyers?", a: "Yes! BazaarHub is completely free for buyers. You can search, compare prices, set alerts, and contact sellers at no cost." },
+  { q: "How do I set a price alert?", a: "On any product page, click 'Set Alert' and enter your target price. We'll notify you via WhatsApp when the price drops to your target." },
+  { q: "How does the comparison work?", a: "We aggregate prices from local city partners and 10+ online platforms. Our AI engine ranks them by price, availability, and seller trust — showing you the best deal instantly." },
+  { q: "Are local prices accurate?", a: "City partner prices are updated by the sellers themselves through their dashboards. We encourage daily updates and flag stale prices automatically." },
+  { q: "How often are prices updated?", a: "Online prices are fetched via affiliate APIs in near real-time. City partner prices are updated by sellers — typically daily or when prices change." },
+  { q: "How do I register as a seller?", a: "Visit our 'Become a Seller' page and complete the 3-step registration. List up to 50 products for free. No credit card required to get started." },
+  { q: "Is BazaarHub available in my city?", a: "BazaarHub supports 4,000+ Indian cities across all 28 states and 8 Union Territories. We auto-detect your city using GPS or you can select it manually." },
+  { q: "How do I get WhatsApp notifications?", a: "Save your WhatsApp number in your profile or when setting a price alert. We send notifications for price drops, deal alerts, and order updates directly to your WhatsApp." },
+  { q: "How do I report an incorrect price?", a: "On any product page, click the 'Report' button and select 'Incorrect Price'. Our team reviews reports within 24 hours and corrects any discrepancies." },
 ];
 
 const FAQPage: React.FC = () => (
   <>
     <Helmet>
       <title>Frequently Asked Questions — Bazaar Hub</title>
-      <meta name="description" content="Find answers to common questions about Bazaar Hub — pricing, sellers, alerts, and more." />
+      <meta name="description" content="Find answers to common questions about BazaarHub — pricing, sellers, alerts, comparisons, and more." />
     </Helmet>
 
     <div className="container py-10 max-w-3xl space-y-8">
       <motion.div className="text-center space-y-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <HelpCircle className="h-10 w-10 text-primary mx-auto" />
         <h1 className="text-3xl font-bold">Frequently Asked Questions</h1>
-        <p className="text-muted-foreground">Everything you need to know about Bazaar Hub</p>
+        <p className="text-muted-foreground">Everything you need to know about BazaarHub</p>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>

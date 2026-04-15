@@ -37,6 +37,7 @@ import PriceAlertsPage from "./pages/PriceAlertsPage";
 import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import SitemapPage from "./pages/SitemapPage";
 import SellerLoginPage from "./pages/SellerLoginPage";
 
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
           <Route path="/contact" element={<PageTransition><ContactPage /></PageTransition>} />
           <Route path="/faq" element={<PageTransition><FAQPage /></PageTransition>} />
           <Route path="/blog" element={<PageTransition><BlogPage /></PageTransition>} />
+          <Route path="/blog/:slug" element={<PageTransition><BlogPostPage /></PageTransition>} />
           <Route path="/sitemap" element={<PageTransition><SitemapPage /></PageTransition>} />
           <Route path="/coming-soon/:feature" element={<PageTransition><ComingSoonPage /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
