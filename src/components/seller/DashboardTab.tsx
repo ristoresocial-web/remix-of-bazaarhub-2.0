@@ -1,6 +1,7 @@
 import React from "react";
 import { Package, Eye, MessageCircle, Bell, MessageSquare, TrendingUp, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import TrustScoreCard from "@/components/seller/TrustScoreCard";
 
 interface Props {
   whatsappSetup: boolean;
@@ -49,6 +50,9 @@ const DashboardTab: React.FC<Props> = ({ whatsappSetup, setWhatsappSetup }) => (
         </div>
       ))}
     </div>
+
+    {/* AI Trust Score */}
+    <TrustScoreCard />
 
     {/* WhatsApp Setup */}
     {!whatsappSetup && (
