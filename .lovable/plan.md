@@ -1,54 +1,84 @@
 
-User provided a pre-generated long-lived auth token (expires 2031). Clean approach — no email/password storage needed.
+User clarification: OTP only at **registration** (one-time phone verification). For **login**, just use email/mobile + password — no OTP. This simplifies things significantly and changes the auth model.
 
-# Message Central OTP Integration Plan
+Current state:
+- `SellerLoginPage.tsx` — uses mock OTP login (needs replacement)
+- `BuyerLoginPage.tsx` — has Email/Google/WhatsApp OTP tabs
+- `SellerRegisterPage.tsx` — exists (need to check current flow)
+- Supabase profile table exists with email, mobile fields
+- Message Central credentials provided (CUSTOMER_ID + AUTH_TOKEN, valid until 2031)
 
-## Secrets to Store
-1. `MESSAGECENTRAL_CUSTOMER_ID` = `C-14FECF8C95FD4F4`
-2. `MESSAGECENTRAL_AUTH_TOKEN` = the long-lived JWT you provided (valid until 2031)
+Revised approach:
+- **Registration**: collect name + email + mobile + password → send OTP to mobile via Message Central → verify OTP → create Supabase user with email+password → mark phone as verified
+- **Login**: simple email-or-mobile + password → standard `supabase.auth.signInWithPassword()`. If user enters mobile, look up email by mobile from profiles, then sign in with that email.
 
-## Edge Functions
+# Revised Auth Plan — OTP only at Registration
 
-### `send-otp`
-- Input: `{ phone: string }` (10 digits)
-- Calls `POST https://cpaas.messagecentral.com/verification/v3/send?countryCode=91&mobileNumber={phone}&flowType=SMS&otpLength=6`
-- Headers: `authToken: {AUTH_TOKEN}`
-- Returns: `{ verificationId }` to client
+## Auth Model
+- **Sign up**: Name + Email + Mobile + Password → OTP sent to mobile → verify → account created
+- **Login**: Email OR Mobile + Password (no OTP)
+- Mobile number stored in `profiles.mobile` and marked verified
+
+## Secrets Needed
+- `MESSAGECENTRAL_CUSTOMER_ID`
+- `MESSAGECENTRAL_AUTH_TOKEN`
+
+(I'll request these once via the secret prompt.)
+
+## Database
+Add to `profiles` table:
+- `mobile_verified boolean default false`
+- Unique index on `mobile` (so login-by-mobile works and prevents duplicates)
+
+## Edge Functions (2)
+
+### `send-registration-otp`
+- Input: `{ phone }` (10 digits)
+- Checks no existing verified user has this mobile
+- Calls Message Central `POST /verification/v3/send?countryCode=91&mobileNumber={phone}&flowType=SMS&otpLength=6`
+- Returns `{ verificationId }`
 - `verify_jwt = false`
 
-### `verify-otp`
-- Input: `{ phone, verificationId, code }`
-- Calls `GET https://cpaas.messagecentral.com/verification/v3/validateOtp?verificationId={id}&code={code}`
-- On `verificationStatus === "VERIFICATION_COMPLETED"`:
-  1. Use Supabase Admin API to find user by phone (synthetic email: `91{phone}@phone.bazaarhub.in`)
-  2. Create user if new (auto-confirmed), else fetch existing
-  3. Generate session via `admin.generateLink({ type: 'magiclink' })` → extract tokens
-  4. Return `{ access_token, refresh_token }` to client
+### `verify-registration-otp`
+- Input: `{ name, email, mobile, password, verificationId, code, role: 'buyer' | 'seller' }`
+- Verifies OTP via Message Central `GET /verification/v3/validateOtp`
+- On success: creates Supabase user via Admin API (`createUser` with email, password, `email_confirm: true`, metadata `{ full_name, mobile, role }`)
+- Existing `handle_new_user()` trigger creates profile row; we then update it with `mobile`, `mobile_verified=true`
+- Returns success → frontend signs in normally with email+password
 - `verify_jwt = false`
 
 ## Frontend Changes
 
-### `src/pages/SellerLoginPage.tsx`
-- `sendOTP()` → `supabase.functions.invoke('send-otp', { body: { phone } })`, store returned `verificationId` in state
-- `verifyOTP()` → `supabase.functions.invoke('verify-otp', { body: { phone, verificationId, code: otp } })`, then `supabase.auth.setSession({ access_token, refresh_token })`, then navigate to `/seller/dashboard`
-- Use toast for errors with positive tone ("Almost there!")
+### `SellerRegisterPage.tsx` & buyer signup
+- Form: Name, Email, Mobile (10 digits), Password, Confirm Password
+- Click "Send OTP" → calls `send-registration-otp`
+- OTP input appears → click "Verify & Create Account" → calls `verify-registration-otp`
+- On success: `supabase.auth.signInWithPassword({ email, password })` → redirect to dashboard
 
-### `src/pages/BuyerLoginPage.tsx`
-- Same pattern for the WhatsApp/phone OTP tab only (Email + Google flows untouched)
-- After login, navigate based on `registration_complete` flag
+### `SellerLoginPage.tsx` (rewrite)
+- Replace OTP UI with: Email-or-Mobile field + Password field + "Login" button
+- If input matches `^[6-9]\d{9}$` (mobile): query `profiles` table to get email by mobile → then `signInWithPassword({ email, password })`
+- Else: treat input as email → `signInWithPassword({ email, password })`
+- "Forgot Password?" link → `/forgot-password` page (uses `resetPasswordForEmail`)
 
-## Config
-- `supabase/config.toml`: add 2 function blocks with `verify_jwt = false`
+### `BuyerLoginPage.tsx`
+- Same single email/mobile + password flow (drop the WhatsApp OTP tab; keep Google sign-in if present)
 
-## Testing
-1. Enter phone `9876543210` → real SMS arrives
-2. Enter 6-digit code → session set → redirect to dashboard
-3. Profile auto-created via existing `handle_new_user()` trigger
-4. Admin phone `9943440384` flagged as admin in profile
+### New page: `/forgot-password`
+- Enter email → `supabase.auth.resetPasswordForEmail(email, { redirectTo: origin + '/reset-password' })`
+
+### New page: `/reset-password`
+- Reads recovery token from URL → `supabase.auth.updateUser({ password })`
 
 ## Files
-- **Create**: `supabase/functions/send-otp/index.ts`
-- **Create**: `supabase/functions/verify-otp/index.ts`
-- **Modify**: `supabase/config.toml`
-- **Modify**: `src/pages/SellerLoginPage.tsx`
-- **Modify**: `src/pages/BuyerLoginPage.tsx`
+- **Create**: `supabase/functions/send-registration-otp/index.ts`
+- **Create**: `supabase/functions/verify-registration-otp/index.ts`
+- **Create**: `src/pages/ForgotPasswordPage.tsx`, `src/pages/ResetPasswordPage.tsx`
+- **Modify**: `src/pages/SellerLoginPage.tsx`, `src/pages/BuyerLoginPage.tsx`, `src/pages/SellerRegisterPage.tsx`, `src/App.tsx` (routes)
+- **Migration**: add `mobile_verified` column + unique index on `profiles.mobile`
+
+## Testing Flow
+1. Go to `/seller/register` → fill form → click Send OTP → real SMS arrives
+2. Enter 6-digit code → account created → auto-logged in → redirected to `/seller/dashboard`
+3. Logout → go to `/seller/login` → enter mobile (or email) + password → logged in
+4. "Forgot Password?" → enter email → reset link arrives → set new password
