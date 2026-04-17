@@ -13,6 +13,15 @@ export interface BuyerProfile {
   language: string;
   is_admin: boolean;
   registration_complete: boolean;
+  role: "buyer" | "seller" | "admin";
+  mobile_verified: boolean;
+  business_owner_name: string | null;
+  gst_number: string | null;
+  pan_number: string | null;
+  msme_number: string | null;
+  business_address: string | null;
+  pin_code: string | null;
+  shop_category: string | null;
   created_at: string;
   updated_at: string;
 }
