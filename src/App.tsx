@@ -25,6 +25,9 @@ import CityOffersPage from "./pages/CityOffersPage";
 import FindSellersPage from "./pages/FindSellersPage";
 import BuyerLoginPage from "./pages/BuyerLoginPage";
 import BuyerDashboardPage from "./pages/BuyerDashboardPage";
+import AuthPage from "./pages/AuthPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import TermsPage from "./pages/TermsPage";
@@ -70,6 +73,9 @@ const AnimatedRoutes = () => {
               <Route path="/offers" element={<PageTransition><CityOffersPage /></PageTransition>} />
               <Route path="/city-offers/food" element={<PageTransition><CityOffersPage /></PageTransition>} />
               <Route path="/find-sellers" element={<PageTransition><FindSellersPage /></PageTransition>} />
+              <Route path="/auth" element={<PageTransition><AuthPage /></PageTransition>} />
+              <Route path="/forgot-password" element={<PageTransition><ForgotPasswordPage /></PageTransition>} />
+              <Route path="/reset-password" element={<PageTransition><ResetPasswordPage /></PageTransition>} />
               <Route path="/seller/register" element={<PageTransition><SellerRegisterPage /></PageTransition>} />
               <Route path="/login" element={<PageTransition><SellerLoginPage /></PageTransition>} />
               <Route path="/seller/dashboard" element={<PageTransition><SellerDashboardPage /></PageTransition>} />
