@@ -368,6 +368,39 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
             </div>
           )}
 
+          {/* AI Auto-fill banner */}
+          <div className="rounded-card border border-primary/30 bg-primary/5 p-3 space-y-2">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <p className="text-xs font-semibold text-foreground">AI Auto-fill — title, description, price & keywords</p>
+              </div>
+              <Button size="sm" onClick={runAiAutofill} disabled={aiLoading || !form.name.trim()} className="gap-1 h-8">
+                {aiLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                {aiLoading ? "Generating..." : "Auto-fill with AI"}
+              </Button>
+            </div>
+            {aiResult && (
+              <div className="space-y-2 pt-2 border-t border-primary/20 text-xs">
+                <p className="text-foreground"><span className="font-semibold">English:</span> {aiResult.description}</p>
+                <p className="text-foreground"><span className="font-semibold">தமிழ்:</span> {aiResult.tamil_description}</p>
+                <p className="text-muted-foreground">
+                  <span className="font-semibold text-foreground">Price range:</span>{" "}
+                  <span className="notranslate">{formatPrice(aiResult.price_range_low)} – {formatPrice(aiResult.price_range_high)}</span>
+                  {" · "}{aiResult.reason}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {aiResult.keywords_en.map((k) => (
+                    <span key={`en-${k}`} className="rounded-pill bg-background border border-border px-2 py-0.5 text-[10px]">{k}</span>
+                  ))}
+                  {aiResult.keywords_ta.map((k) => (
+                    <span key={`ta-${k}`} className="rounded-pill bg-background border border-border px-2 py-0.5 text-[10px] notranslate">{k}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             {isManual && (
               <>
