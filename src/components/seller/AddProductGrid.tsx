@@ -46,6 +46,18 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
   const [selectedMaster, setSelectedMaster] = useState<MasterProduct | null>(null);
   const [isManual, setIsManual] = useState(false);
   const [expandedSpecs, setExpandedSpecs] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<null | {
+    title: string;
+    description: string;
+    tamil_description: string;
+    keywords_en: string[];
+    keywords_ta: string[];
+    suggested_price: number;
+    price_range_low: number;
+    price_range_high: number;
+    reason: string;
+  }>(null);
   const [form, setForm] = useState({
     name: "",
     brand: "",
@@ -55,6 +67,48 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
     delivery: "Same Day",
     specs: {} as Record<string, string | number | boolean>,
   });
+
+  const runAiAutofill = async () => {
+    if (!form.name.trim()) {
+      toast.error("Enter a product name first");
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-seller-assistant", {
+        body: { product_name: form.name, category },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) {
+        toast.error((data as any).error);
+        return;
+      }
+      const r = data as any;
+      setAiResult({
+        title: r.title,
+        description: r.description,
+        tamil_description: r.tamil_description,
+        keywords_en: r.keywords_en || [],
+        keywords_ta: r.keywords_ta || [],
+        suggested_price: r.suggested_price,
+        price_range_low: r.price_range_low,
+        price_range_high: r.price_range_high,
+        reason: r.reason,
+      });
+      setForm((p) => ({
+        ...p,
+        name: r.title || p.name,
+        brand: r.brand || p.brand,
+        price: p.price || r.suggested_price || 0,
+        condition: (r.condition as any) || p.condition,
+      }));
+      toast.success("✨ AI auto-filled! Review and adjust as needed.");
+    } catch (e: any) {
+      toast.error(e?.message || "AI is taking a quick break — try again");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Get products for selected category
   const categoryProducts = useMemo(() => {
