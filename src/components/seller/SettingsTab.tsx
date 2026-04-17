@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Calendar, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Calendar, AlertCircle, KeyRound, ChevronRight } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { allCities } from "@/lib/cityUtils";
@@ -83,6 +84,23 @@ const SettingsTab: React.FC<Props> = ({ holidayMode, setHolidayMode }) => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Security */}
+      <div className="rounded-card border border-border bg-card p-5 shadow-card">
+        <div className="mb-2 flex items-center gap-2">
+          <KeyRound className="h-5 w-5 text-primary" />
+          <h3 className="font-semibold text-foreground">Security</h3>
+        </div>
+        <p className="mb-3 text-xs text-muted-foreground">
+          Update your password — verified by mobile OTP for safety.
+        </p>
+        <Link
+          to="/account/change-password"
+          className="inline-flex items-center gap-1 rounded-pill border border-primary px-4 py-2 text-xs font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground"
+        >
+          Change Password <ChevronRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
     </div>
   );
