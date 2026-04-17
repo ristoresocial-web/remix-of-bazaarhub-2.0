@@ -103,43 +103,70 @@ export type Database = {
       }
       profiles: {
         Row: {
+          business_address: string | null
+          business_owner_name: string | null
           city: string
           created_at: string
           email: string | null
+          gst_number: string | null
           id: string
           is_admin: boolean
           language: string
           mobile: string | null
+          mobile_verified: boolean
+          msme_number: string | null
           name: string
+          pan_number: string | null
+          pin_code: string | null
           registration_complete: boolean
+          role: string
+          shop_category: string | null
           updated_at: string
           user_id: string
           username: string | null
         }
         Insert: {
+          business_address?: string | null
+          business_owner_name?: string | null
           city?: string
           created_at?: string
           email?: string | null
+          gst_number?: string | null
           id?: string
           is_admin?: boolean
           language?: string
           mobile?: string | null
+          mobile_verified?: boolean
+          msme_number?: string | null
           name?: string
+          pan_number?: string | null
+          pin_code?: string | null
           registration_complete?: boolean
+          role?: string
+          shop_category?: string | null
           updated_at?: string
           user_id: string
           username?: string | null
         }
         Update: {
+          business_address?: string | null
+          business_owner_name?: string | null
           city?: string
           created_at?: string
           email?: string | null
+          gst_number?: string | null
           id?: string
           is_admin?: boolean
           language?: string
           mobile?: string | null
+          mobile_verified?: boolean
+          msme_number?: string | null
           name?: string
+          pan_number?: string | null
+          pin_code?: string | null
           registration_complete?: boolean
+          role?: string
+          shop_category?: string | null
           updated_at?: string
           user_id?: string
           username?: string | null
