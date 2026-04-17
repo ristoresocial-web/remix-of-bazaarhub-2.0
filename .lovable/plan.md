@@ -1,75 +1,79 @@
 
-User echoed my previous plan back with one critical change: **"PAN/GST/MSME any one compulsory"** — so seller registration requires at least one of those three IDs, not all three. Everything else stays the same.
+User echoed back my previous OTP plan and added one new requirement at the end:
+> "add one more after click terms and privacy policy user register"
 
-Let me lock the plan in tightly and present.
+This means: a mandatory **Terms & Privacy Policy checkbox** must be checked before the user can register (both Buyer and Seller forms). They must click/check it to enable the Register button.
 
-# Comprehensive Auth System for Bazaar Hub
+Let me confirm what needs to change vs the previous declined plan — same 7 sections + add T&C consent.
 
-## 1. Database Migration
-Add to `profiles` table:
-- `role text default 'buyer'` (buyer | seller | admin)
-- `mobile_verified boolean default false`
-- `business_owner_name text`
-- `gst_number text` + unique partial index
-- `pan_number text`
-- `msme_number text`
-- `business_address text`
-- `pin_code text`
-- `shop_category text`
-- Unique partial index on `mobile`
+# Add OTP Password Flows + T&C Consent on Registration
 
-Update `handle_new_user()` trigger to read all new fields from `raw_user_meta_data`.
+## 1. Forgot Password — Add Mobile OTP Option
+Update `ForgotPasswordPage.tsx`:
+- Tab toggle: **Email Link** | **Mobile OTP**
+- Mobile OTP flow: enter mobile → Send OTP → enter 6-digit + new password + confirm → submit to `reset-password-otp` → toast → redirect `/auth`
 
-## 2. Edge Functions (Message Central — secrets already set)
-- **`send-otp`** — `POST { mobile }` → calls `https://cpaas.messagecentral.com/verification/v3/send` → returns `verificationId`
-- **`verify-otp`** — `POST { mobile, verificationId, code, signupData }` → validates OTP → creates user via Admin API with full metadata → sets `mobile_verified=true` → admin bypass for `9943440384`
+## 2. Logged-In Password Change (NEW)
+Create `src/pages/ChangePasswordPage.tsx` at `/account/change-password`:
+- Auth-required (redirect to `/auth` if not logged in)
+- Step A: current password + new + confirm → re-auth via `signInWithPassword` → call `send-otp` to registered mobile
+- Step B: OTP → submit to `change-password-otp` → toast → sign out → redirect `/auth`
+- Add "Change Password" link in buyer dashboard + seller `SettingsTab`
 
-Both functions use stored secrets `MESSAGECENTRAL_CUSTOMER_ID` + `MESSAGECENTRAL_AUTH_TOKEN`.
+## 3. T&C / Privacy Consent on Registration (NEW)
+Update `BuyerRegisterForm.tsx` and `SellerRegisterForm.tsx`:
+- Add a required checkbox above the submit button:
+  > ☐ I agree to the [Terms of Service](/terms) and [Privacy Policy](/privacy)
+- Links open in new tab (`target="_blank"`)
+- "Send OTP" / submit button stays **disabled** until checkbox is checked
+- Add to zod schema: `acceptedTerms: z.literal(true, { errorMap: () => ({ message: "You must accept the Terms and Privacy Policy" }) })`
+- Inline error if user tries to submit without checking
+- For Seller form: also link Seller Terms (`/seller-terms`) — `I agree to Terms, Privacy Policy, and Seller Terms`
 
-## 3. New Files
-- `src/pages/AuthPage.tsx` — unified `/auth` with Login | Register tabs (Register has Buyer | Seller sub-toggle)
-- `src/components/auth/LoginForm.tsx` — email-or-mobile + password, show/hide eye icon, forgot link, "Login with OTP" disabled placeholder
-- `src/components/auth/BuyerRegisterForm.tsx` — Name, Email, Mobile, Password, City + OTP step
-- `src/components/auth/SellerRegisterForm.tsx` — Owner Name, Email, Mobile, Password, GST, PAN, MSME, Address, PIN, Shop Category + OTP step
-- `src/components/auth/OtpVerifyStep.tsx` — 6-digit input + 30s resend timer
-- `src/components/auth/PriceTagLogo.tsx` — clean price-tag SVG (orange #FF6B00, no trolley/arrow)
-- `src/pages/ForgotPasswordPage.tsx` + `src/pages/ResetPasswordPage.tsx`
-- `src/lib/authValidation.ts` — zod schemas
+## 4. New Edge Function: `reset-password-otp` (no JWT)
+- Body: `{ mobile, verificationId, code, newPassword }`
+- Zod-validate inputs (mobile `^[6-9]\d{9}$`, code 6 digits, password min 8 + letter + digit)
+- Admin bypass: mobile `9943440384` + code `999999` → skip Message Central
+- Otherwise validate via MC `GET /validateOtp`
+- Lookup `user_id` in `profiles` by mobile → if not found, return generic success (don't leak account existence)
+- If found, use Service Role: `supabaseAdmin.auth.admin.updateUserById(user_id, { password: newPassword })`
+- Return `{ success: true }`
 
-## 4. Files Modified
-- `src/App.tsx` — new routes `/auth`, `/forgot-password`, `/reset-password`. Redirect `/login`, `/buyer/login`, `/seller/login`, `/seller/register` → `/auth`
-- `src/contexts/AuthContext.tsx` — add `role` to context
-- Old login/register pages → thin redirect wrappers
+## 5. New Edge Function: `change-password-otp` (validates JWT in code)
+- Body: `{ verificationId, code, newPassword }`
+- Validate JWT via `getClaims()` → get `user_id`
+- Lookup mobile from profiles for that user_id
+- Validate OTP (with admin bypass)
+- Update password via Admin API for that user_id
+- Return `{ success: true }`
 
-## 5. Validation (zod)
-- Email: standard
-- Mobile: `^[6-9]\d{9}$`
-- Password: min 8, ≥1 letter + ≥1 digit
-- PIN: `^\d{6}$`
-- GST: `^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$`
-- PAN: `^[A-Z]{5}[0-9]{4}[A-Z]{1}$`
-- MSME: `^UDYAM-[A-Z]{2}-\d{2}-\d{7}$`
-- **Seller rule (NEW)**: at least ONE of GST / PAN / MSME must be filled and valid. Form-level superRefine error: "Please provide at least one of GST, PAN, or MSME."
+## 6. Files
+**Created:**
+- `supabase/functions/reset-password-otp/index.ts`
+- `supabase/functions/change-password-otp/index.ts`
+- `src/pages/ChangePasswordPage.tsx`
 
-## 6. UX Flow
-- **Register Buyer**: form → Send OTP → real SMS → verify → auto-login → `/buyer/dashboard`
-- **Register Seller**: form (GST/PAN/MSME any one required) → Send OTP → verify → auto-login → `/seller/dashboard`
-- **Login**: email or mobile + password → on submit, mobile pattern queries profile for email → `signInWithPassword` → role-based redirect (admin → `/admin`)
-- **Forgot Password**: email → `resetPasswordForEmail` redirect to `/reset-password` → set new password
-- **Login with OTP**: button shown but disabled, tooltip "Coming soon"
+**Modified:**
+- `src/pages/ForgotPasswordPage.tsx` — add Email/OTP tab toggle + OTP reset flow
+- `src/components/auth/BuyerRegisterForm.tsx` — add T&C checkbox + validation
+- `src/components/auth/SellerRegisterForm.tsx` — add T&C + Seller Terms checkbox + validation
+- `src/lib/authValidation.ts` — add `acceptedTerms` to buyer + seller schemas
+- `src/App.tsx` — add route `/account/change-password`
+- `src/components/seller/SettingsTab.tsx` — add "Change Password" link
+- `src/pages/BuyerDashboardPage.tsx` — add "Change Password" link
 
-## 7. Design
-- Centered card on muted bg, price-tag SVG logo
-- Shadcn Tabs for Login | Register; 2-button toggle for Buyer | Seller
-- Show/hide password = Eye / EyeOff icon
-- Mobile-first: `h-11` inputs, 16px font (no iOS zoom)
-- Framer-motion fade between tabs
-- Inline destructive-color validation errors
+**Reused as-is:** `send-otp`, `OtpVerifyStep.tsx`
+
+## 7. UX
+- Reuse 30s resend timer + admin bypass hint on OTP step
+- Show/hide password eye on all password fields
+- T&C checkbox uses shadcn `Checkbox` with linked text
+- Submit button disabled state when checkbox unchecked (visible affordance)
+- Friendly inline errors
 
 ## 8. Test Flow
-1. `/auth` → Register → Buyer → fill → real SMS → verify → buyer dashboard
-2. Logout → Register → Seller → fill (only GST or only PAN or only MSME) → SMS → verify → seller dashboard
-3. Logout → Login with mobile + password → role-based redirect
-4. Login with email + password → same
-5. Forgot password → email link → reset → login
-6. Mobile `9943440384` → admin role → `/admin`
+1. `/auth` → Register Buyer → fill form → notice Send OTP disabled → tick T&C → Send OTP works
+2. Register Seller → tick combined T&C + Seller Terms → Send OTP
+3. `/forgot-password` → Mobile OTP tab → enter `9943440384` → `999999` → new password → login works
+4. Login → Settings → Change Password → enter current + new → OTP to registered mobile → submit → re-login works
+5. Real mobile: real SMS arrives for both reset and change flows
