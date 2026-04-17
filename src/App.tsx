@@ -28,6 +28,7 @@ import BuyerDashboardPage from "./pages/BuyerDashboardPage";
 import AuthPage from "./pages/AuthPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 import NotFound from "./pages/NotFound";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import TermsPage from "./pages/TermsPage";
@@ -76,6 +77,7 @@ const AnimatedRoutes = () => {
               <Route path="/auth" element={<PageTransition><AuthPage /></PageTransition>} />
               <Route path="/forgot-password" element={<PageTransition><ForgotPasswordPage /></PageTransition>} />
               <Route path="/reset-password" element={<PageTransition><ResetPasswordPage /></PageTransition>} />
+              <Route path="/account/change-password" element={<PageTransition><ChangePasswordPage /></PageTransition>} />
               <Route path="/seller/register" element={<PageTransition><SellerRegisterPage /></PageTransition>} />
               <Route path="/login" element={<PageTransition><SellerLoginPage /></PageTransition>} />
               <Route path="/seller/dashboard" element={<PageTransition><SellerDashboardPage /></PageTransition>} />

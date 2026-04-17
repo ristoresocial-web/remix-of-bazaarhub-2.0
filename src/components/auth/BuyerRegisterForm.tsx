@@ -16,6 +16,7 @@ const BuyerRegisterForm: React.FC = () => {
     mobile: "",
     password: "",
     city: localStorage.getItem("bazaarhub_city") || "Madurai",
+    acceptedTerms: false as unknown as true,
   });
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const BuyerRegisterForm: React.FC = () => {
   const [verificationId, setVerificationId] = useState("");
   const [adminBypass, setAdminBypass] = useState(false);
 
-  const update = (key: keyof BuyerRegisterInput, val: string) =>
+  const update = <K extends keyof BuyerRegisterInput>(key: K, val: BuyerRegisterInput[K]) =>
     setForm((f) => ({ ...f, [key]: val }));
 
   const sendOtp = async () => {
@@ -191,6 +192,30 @@ const BuyerRegisterForm: React.FC = () => {
         />
       </Field>
 
+      <div>
+        <label className="flex cursor-pointer items-start gap-2 text-xs text-foreground">
+          <input
+            type="checkbox"
+            checked={!!form.acceptedTerms}
+            onChange={(e) => update("acceptedTerms", e.target.checked as unknown as true)}
+            className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[hsl(var(--primary))]"
+          />
+          <span className="leading-snug">
+            I agree to the{" "}
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline">
+              Privacy Policy
+            </a>
+          </span>
+        </label>
+        {errors.acceptedTerms && (
+          <p className="mt-1 text-xs text-destructive">{errors.acceptedTerms}</p>
+        )}
+      </div>
+
       {errors.form && (
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-xs text-destructive">
           {errors.form}
@@ -199,7 +224,7 @@ const BuyerRegisterForm: React.FC = () => {
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !form.acceptedTerms}
         className="h-11 w-full rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-[hsl(var(--primary-dark))] disabled:opacity-50"
       >
         {loading ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : "Send OTP"}
