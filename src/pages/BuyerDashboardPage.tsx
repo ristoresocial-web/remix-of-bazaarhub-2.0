@@ -218,6 +218,16 @@ const BuyerDashboardPage: React.FC = () => {
               <label className="mt-2 flex items-center gap-2 text-sm text-foreground"><input type="checkbox" defaultChecked className="accent-[hsl(var(--primary))]" /> New seller in your city</label>
               <label className="mt-2 flex items-center gap-2 text-sm text-foreground"><input type="checkbox" className="accent-[hsl(var(--primary))]" /> Weekly deals digest</label>
             </div>
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
+              <h3 className="mb-1 text-sm font-bold text-foreground">Security</h3>
+              <p className="mb-3 text-xs text-muted-foreground">Update your password — verified by mobile OTP.</p>
+              <Link
+                to="/account/change-password"
+                className="inline-flex items-center gap-1 rounded-pill border border-primary px-4 py-2 text-xs font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground"
+              >
+                Change Password <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </div>
         )}
       </div>
