@@ -1,45 +1,54 @@
 
+User provided a pre-generated long-lived auth token (expires 2031). Clean approach — no email/password storage needed.
 
-# Price Alerts Page — Full Rebuild
+# Message Central OTP Integration Plan
 
-## Current State
-Basic page with a flat alert list, search bar, and a simple "How It Works" section. Missing: Set Alert form, guest mode gate, triggered alert styling, alert history, pro tips, detailed alert cards with seller/difference info, pause/edit functionality.
+## Secrets to Store
+1. `MESSAGECENTRAL_CUSTOMER_ID` = `C-14FECF8C95FD4F4`
+2. `MESSAGECENTRAL_AUTH_TOKEN` = the long-lived JWT you provided (valid until 2031)
 
-## What to Build
+## Edge Functions
 
-### 1. Set New Alert Form (top of page)
-Card with product search input, target price field, notification toggles (WhatsApp checkbox, Email checkbox), WhatsApp number input. Guest users see a lock overlay with "Login to set alerts" + login button instead of the form.
+### `send-otp`
+- Input: `{ phone: string }` (10 digits)
+- Calls `POST https://cpaas.messagecentral.com/verification/v3/send?countryCode=91&mobileNumber={phone}&flowType=SMS&otpLength=6`
+- Headers: `authToken: {AUTH_TOKEN}`
+- Returns: `{ verificationId }` to client
+- `verify_jwt = false`
 
-### 2. Enhanced Alert Cards
-Each card shows: product image, name, category, city, target price, current best price + seller name, price difference ("₹4,990 above your target"), notification status, last checked time. Action buttons: Edit Target, Pause, Delete.
+### `verify-otp`
+- Input: `{ phone, verificationId, code }`
+- Calls `GET https://cpaas.messagecentral.com/verification/v3/validateOtp?verificationId={id}&code={code}`
+- On `verificationStatus === "VERIFICATION_COMPLETED"`:
+  1. Use Supabase Admin API to find user by phone (synthetic email: `91{phone}@phone.bazaarhub.in`)
+  2. Create user if new (auto-confirmed), else fetch existing
+  3. Generate session via `admin.generateLink({ type: 'magiclink' })` → extract tokens
+  4. Return `{ access_token, refresh_token }` to client
+- `verify_jwt = false`
 
-### 3. Triggered Alert Card (green variant)
-Green top border/badge with "PRICE DROPPED!" banner, shows price below target with celebration emoji, "View Deal" primary button.
+## Frontend Changes
 
-### 4. Alert History (collapsible)
-Collapsible section using existing `Collapsible` component. Shows past triggered/expired alerts as a simple list with product name, date, and outcome.
+### `src/pages/SellerLoginPage.tsx`
+- `sendOTP()` → `supabase.functions.invoke('send-otp', { body: { phone } })`, store returned `verificationId` in state
+- `verifyOTP()` → `supabase.functions.invoke('verify-otp', { body: { phone, verificationId, code: otp } })`, then `supabase.auth.setSession({ access_token, refresh_token })`, then navigate to `/seller/dashboard`
+- Use toast for errors with positive tone ("Almost there!")
 
-### 5. Pro Tips Section
-Card with lightbulb icon and 3 bullet points about setting realistic targets, sale seasons, and local price drops.
+### `src/pages/BuyerLoginPage.tsx`
+- Same pattern for the WhatsApp/phone OTP tab only (Email + Google flows untouched)
+- After login, navigate based on `registration_complete` flag
 
-### 6. Updated Mock Data
-2 alerts: 1 active (Samsung Galaxy S24 Ultra, ₹125,000 target, ₹129,990 current, Kumar Electronics) and 1 triggered (iPhone 15 Pro Max, ₹150,000 target, ₹148,500 current, Amazon). Plus 3 past alerts for history.
+## Config
+- `supabase/config.toml`: add 2 function blocks with `verify_jwt = false`
 
-### 7. Guest Mode Logic
-Use `useAuth()` to check login state. If not logged in, the Set Alert form shows a blurred overlay with login prompt. Existing alerts list still visible (from localStorage mock).
+## Testing
+1. Enter phone `9876543210` → real SMS arrives
+2. Enter 6-digit code → session set → redirect to dashboard
+3. Profile auto-created via existing `handle_new_user()` trigger
+4. Admin phone `9943440384` flagged as admin in profile
 
-## Files to Modify
-- `src/pages/PriceAlertsPage.tsx` — full rewrite with all sections above
-
-## Files to Add
-- `src/App.tsx` — add `/price-alerts` route (already exists, no change needed)
-
-## Design
-- Page header: BellRing icon + city name from AppContext
-- Set Alert card: white card with orange "Set Alert" button
-- Active alerts: white cards with subtle left border
-- Triggered alerts: green-50 background, green left border, green "PRICE DROPPED" badge
-- How It Works: 3 horizontal steps with Search/Target/Phone icons in orange circles
-- Pro Tips: amber/yellow tinted card with Lightbulb icon
-- Guest lock: semi-transparent overlay with Lock icon + login link
-
+## Files
+- **Create**: `supabase/functions/send-otp/index.ts`
+- **Create**: `supabase/functions/verify-otp/index.ts`
+- **Modify**: `supabase/config.toml`
+- **Modify**: `src/pages/SellerLoginPage.tsx`
+- **Modify**: `src/pages/BuyerLoginPage.tsx`
