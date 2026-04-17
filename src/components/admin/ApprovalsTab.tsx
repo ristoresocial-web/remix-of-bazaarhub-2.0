@@ -197,6 +197,15 @@ const ApprovalsTab: React.FC = () => {
           </div>
         </div>
       )}
+
+      {verifyTarget && (
+        <AiDocVerifyDialog
+          open={!!verifyTarget}
+          onClose={() => setVerifyTarget(null)}
+          expectedName={verifyTarget.name}
+          defaultDocType="gst"
+        />
+      )}
     </div>
   );
 };
