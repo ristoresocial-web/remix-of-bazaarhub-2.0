@@ -3,6 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, AlertCircle, CheckCircle, XCircle, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
+import AiDocVerifyDialog from "@/components/admin/AiDocVerifyDialog";
 
 const categories = ["Electronics", "Mobiles", "Appliances", "Fashion", "Beauty", "Furniture"];
 
@@ -30,6 +31,7 @@ const ApprovalsTab: React.FC = () => {
   const [productToggles, setProductToggles] = useState<Record<string, boolean>>(Object.fromEntries(categories.map((c) => [c, true])));
   const [cityOffers, setCityOffers] = useState(true);
   const [buyerReviews, setBuyerReviews] = useState(true);
+  const [verifyTarget, setVerifyTarget] = useState<{ name: string } | null>(null);
 
   const toggleCat = (cat: string) => setProductToggles((p) => ({ ...p, [cat]: !p[cat] }));
 
@@ -69,7 +71,9 @@ const ApprovalsTab: React.FC = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button size="sm" variant="outline" className="text-xs h-8">View Details</Button>
+                <Button size="sm" variant="outline" className="text-xs h-8 gap-1" onClick={() => setVerifyTarget({ name: s.name })}>
+                  <ShieldCheck className="h-3.5 w-3.5" /> AI Verify
+                </Button>
                 <Button size="sm" className="text-xs h-8 gap-1" onClick={() => toast.success(`Welcome to BazaarHub, ${s.name}!`)}>
                   <CheckCircle className="h-3.5 w-3.5" /> Approve
                 </Button>
