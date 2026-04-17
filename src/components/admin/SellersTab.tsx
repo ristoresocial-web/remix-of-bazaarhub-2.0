@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles } from "lucide-react";
+import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import StatusBadge, { type StatusVariant } from "@/components/StatusBadge";
 import TrustBadge, { type TrustVariant } from "@/components/TrustBadge";
+import AiDocVerifyDialog from "@/components/admin/AiDocVerifyDialog";
 
 interface Seller {
   name: string; city: string; state: string; gst: string; products: number; status: string; trust: string; joinedDays: number; revenue: number;
