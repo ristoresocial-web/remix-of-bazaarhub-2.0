@@ -92,7 +92,7 @@ const ChatbotWidget: React.FC = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ messages: apiMessages, city: selectedCity?.name || "Madurai", language: "en" }),
+        body: JSON.stringify({ messages: apiMessages, city: selectedCity || "Madurai", language: "en" }),
       });
 
       if (!resp.ok || !resp.body) {
@@ -200,7 +200,7 @@ const ChatbotWidget: React.FC = () => {
               <div>
                 <p className="text-sm font-bold text-primary-foreground">BazaarBot AI</p>
                 <p className="text-[10px] text-primary-foreground/70">
-                  Powered by Bazaar Hub · {selectedCity?.name || "Madurai"}
+                  Powered by Bazaar Hub · {selectedCity || "Madurai"}
                 </p>
               </div>
             </div>
