@@ -60,6 +60,7 @@ const SellersTab: React.FC = () => {
   const [page, setPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
+  const [verifyTarget, setVerifyTarget] = useState<Seller | null>(null);
 
   const pendingCount = allSellers.filter(s => s.status === "pending").length;
 
