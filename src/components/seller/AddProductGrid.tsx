@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { ArrowLeft, Search, Plus, Database, Check, ChevronDown, Package, Zap, Tv, Headphones, Laptop, WashingMachine } from "lucide-react";
+import { ArrowLeft, Search, Plus, Database, Check, ChevronDown, Package, Zap, Tv, Headphones, Laptop, WashingMachine, Sparkles, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/cityUtils";
 import {
@@ -44,6 +46,18 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
   const [selectedMaster, setSelectedMaster] = useState<MasterProduct | null>(null);
   const [isManual, setIsManual] = useState(false);
   const [expandedSpecs, setExpandedSpecs] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<null | {
+    title: string;
+    description: string;
+    tamil_description: string;
+    keywords_en: string[];
+    keywords_ta: string[];
+    suggested_price: number;
+    price_range_low: number;
+    price_range_high: number;
+    reason: string;
+  }>(null);
   const [form, setForm] = useState({
     name: "",
     brand: "",
@@ -53,6 +67,48 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
     delivery: "Same Day",
     specs: {} as Record<string, string | number | boolean>,
   });
+
+  const runAiAutofill = async () => {
+    if (!form.name.trim()) {
+      toast.error("Enter a product name first");
+      return;
+    }
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-seller-assistant", {
+        body: { product_name: form.name, category },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) {
+        toast.error((data as any).error);
+        return;
+      }
+      const r = data as any;
+      setAiResult({
+        title: r.title,
+        description: r.description,
+        tamil_description: r.tamil_description,
+        keywords_en: r.keywords_en || [],
+        keywords_ta: r.keywords_ta || [],
+        suggested_price: r.suggested_price,
+        price_range_low: r.price_range_low,
+        price_range_high: r.price_range_high,
+        reason: r.reason,
+      });
+      setForm((p) => ({
+        ...p,
+        name: r.title || p.name,
+        brand: r.brand || p.brand,
+        price: p.price || r.suggested_price || 0,
+        condition: (r.condition as any) || p.condition,
+      }));
+      toast.success("✨ AI auto-filled! Review and adjust as needed.");
+    } catch (e: any) {
+      toast.error(e?.message || "AI is taking a quick break — try again");
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Get products for selected category
   const categoryProducts = useMemo(() => {
@@ -311,6 +367,39 @@ const AddProductGrid: React.FC<Props> = ({ onClose, onProductAdded }) => {
               <p className="text-xs font-semibold text-warning">⚠️ Manual entry — will be pending spec verification</p>
             </div>
           )}
+
+          {/* AI Auto-fill banner */}
+          <div className="rounded-card border border-primary/30 bg-primary/5 p-3 space-y-2">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <p className="text-xs font-semibold text-foreground">AI Auto-fill — title, description, price & keywords</p>
+              </div>
+              <Button size="sm" onClick={runAiAutofill} disabled={aiLoading || !form.name.trim()} className="gap-1 h-8">
+                {aiLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                {aiLoading ? "Generating..." : "Auto-fill with AI"}
+              </Button>
+            </div>
+            {aiResult && (
+              <div className="space-y-2 pt-2 border-t border-primary/20 text-xs">
+                <p className="text-foreground"><span className="font-semibold">English:</span> {aiResult.description}</p>
+                <p className="text-foreground"><span className="font-semibold">தமிழ்:</span> {aiResult.tamil_description}</p>
+                <p className="text-muted-foreground">
+                  <span className="font-semibold text-foreground">Price range:</span>{" "}
+                  <span className="notranslate">{formatPrice(aiResult.price_range_low)} – {formatPrice(aiResult.price_range_high)}</span>
+                  {" · "}{aiResult.reason}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {aiResult.keywords_en.map((k) => (
+                    <span key={`en-${k}`} className="rounded-pill bg-background border border-border px-2 py-0.5 text-[10px]">{k}</span>
+                  ))}
+                  {aiResult.keywords_ta.map((k) => (
+                    <span key={`ta-${k}`} className="rounded-pill bg-background border border-border px-2 py-0.5 text-[10px] notranslate">{k}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             {isManual && (

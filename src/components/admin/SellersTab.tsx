@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles } from "lucide-react";
+import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, Sparkles, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import StatusBadge, { type StatusVariant } from "@/components/StatusBadge";
 import TrustBadge, { type TrustVariant } from "@/components/TrustBadge";
+import AiDocVerifyDialog from "@/components/admin/AiDocVerifyDialog";
 
 interface Seller {
   name: string; city: string; state: string; gst: string; products: number; status: string; trust: string; joinedDays: number; revenue: number;
@@ -59,6 +60,7 @@ const SellersTab: React.FC = () => {
   const [page, setPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
+  const [verifyTarget, setVerifyTarget] = useState<Seller | null>(null);
 
   const pendingCount = allSellers.filter(s => s.status === "pending").length;
 
@@ -173,7 +175,9 @@ const SellersTab: React.FC = () => {
                         Welcome to BazaarHub!
                       </Button>
                     )}
-                    <Button size="sm" variant="outline" className="text-[10px] h-7 px-2">Request Details</Button>
+                    <Button size="sm" variant="outline" className="text-[10px] h-7 px-2 gap-1" onClick={() => setVerifyTarget(s)}>
+                      <ShieldCheck className="h-3 w-3" /> AI Verify
+                    </Button>
                     <Button size="sm" variant="ghost" className="text-[10px] h-7 px-2 text-muted-foreground">Pause</Button>
                   </div>
                 </td>
@@ -193,6 +197,15 @@ const SellersTab: React.FC = () => {
           <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)} className="h-8 w-8 p-0"><ChevronRight className="h-4 w-4" /></Button>
         </div>
       </div>
+
+      {verifyTarget && (
+        <AiDocVerifyDialog
+          open={!!verifyTarget}
+          onClose={() => setVerifyTarget(null)}
+          expectedName={verifyTarget.name}
+          defaultDocType="gst"
+        />
+      )}
     </div>
   );
 };
