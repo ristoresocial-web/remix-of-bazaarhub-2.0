@@ -116,6 +116,11 @@ const SellerProfilePage: React.FC = () => {
                           <ShieldCheck className="h-3.5 w-3.5" /> Verified Seller
                         </Badge>
                       )}
+                      {seller.topSeller && (
+                        <Badge className="gap-1 bg-primary/10 text-primary border-primary/30 hover:bg-primary/15">
+                          <Award className="h-3.5 w-3.5" /> Top Seller
+                        </Badge>
+                      )}
                     </div>
                     <div className="mt-1.5 flex items-center gap-3 flex-wrap text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
