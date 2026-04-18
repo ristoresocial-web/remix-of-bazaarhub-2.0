@@ -46,14 +46,14 @@ const DEFAULT_SLOTS: AdSlot[] = [
     id: "g1", tier: "gold", city: "Madurai", sellerId: "s1", shopName: "Sri Murugan Electronics",
     bannerImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=200&fit=crop",
     topProduct: 'Samsung 43" Crystal 4K TV', topProductPrice: 28500, category: "TVs",
-    rating: 4.8, distance: "2.1 km", phone: "9876543210", address: "East Masi St, Madurai",
+    rating: 4.8, distance: "2.1 km", phone: "9943440384", address: "East Masi St, Madurai",
     active: true, startDate: "2025-03-01", endDate: "2025-03-31", amountPaid: 2000,
   },
   {
     id: "g2", tier: "gold", city: "Madurai", sellerId: "s2", shopName: "Poorvika Electronics",
     bannerImage: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=200&fit=crop",
     topProduct: "iPhone 15 Pro Max", topProductPrice: 149900, category: "Mobiles",
-    rating: 4.6, distance: "3.5 km", phone: "9876501234", address: "Bypass Road, Madurai",
+    rating: 4.6, distance: "3.5 km", phone: "9943440384", address: "Bypass Road, Madurai",
     active: true, startDate: "2025-03-01", endDate: "2025-03-31", amountPaid: 2000,
   },
   {

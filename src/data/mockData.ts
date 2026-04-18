@@ -88,7 +88,7 @@ export const mockProducts: Product[] = [
       ],
     },
     localAvailable: true,
-    localShop: { name: "Poorvika Mobiles", address: "123 Main Bazaar, Madurai", km: 1.2, phone: "+91 98765 43210" },
+    localShop: { name: "Poorvika Mobiles", address: "123 Main Bazaar, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
       { platform: "Poorvika (Local)", price: 129990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 131999, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -116,7 +116,7 @@ export const mockProducts: Product[] = [
       ],
     },
     localAvailable: true,
-    localShop: { name: "iStore Madurai", address: "45 East Masi St, Madurai", km: 2.5, phone: "+91 98765 12345" },
+    localShop: { name: "iStore Madurai", address: "45 East Masi St, Madurai", km: 2.5, phone: "+91 99434 40384" },
     prices: [
       { platform: "iStore (Local)", price: 159900, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 156900, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -157,7 +157,7 @@ export const mockProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop",
     description: "LG OLED evo C3 Series 55-Inch Class 4K Processor Smart Flat Screen TV with Dolby Atmos and webOS.",
     localAvailable: true,
-    localShop: { name: "Sangeetha Electronics", address: "78 KK Nagar, Madurai", km: 3.1, phone: "+91 98765 67890" },
+    localShop: { name: "Sangeetha Electronics", address: "78 KK Nagar, Madurai", km: 3.1, phone: "+91 99434 40384" },
     prices: [
       { platform: "Sangeetha (Local)", price: 119990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 116990, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -208,7 +208,7 @@ export const mockProducts: Product[] = [
       ],
     },
     localAvailable: true,
-    localShop: { name: "Poorvika Mobiles", address: "123 Main Bazaar, Madurai", km: 1.2, phone: "+91 98765 43210" },
+    localShop: { name: "Poorvika Mobiles", address: "123 Main Bazaar, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
       { platform: "Poorvika (Local)", price: 11999, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 11499, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -250,7 +250,7 @@ export const mockSamsungTV: Product = {
   image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop",
   description: "Samsung 43-inch Crystal 4K UHD Smart TV with Dynamic Crystal Color, Crystal Processor 4K, and SmartThings.",
   localAvailable: true,
-  localShop: { name: "Sangeetha Electronics", address: "78 KK Nagar, Madurai", km: 2.4, phone: "+91 98765 67890" },
+  localShop: { name: "Sangeetha Electronics", address: "78 KK Nagar, Madurai", km: 2.4, phone: "+91 99434 40384" },
   prices: [
     { platform: "Sangeetha (Local)", price: 29990, url: "#", isAffiliate: false, inStock: true },
     { platform: "Amazon", price: 29999, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -273,7 +273,7 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=400&fit=crop",
     description: "Samsung Galaxy A55 5G with Super AMOLED display, Exynos 1480 processor, and 50MP triple camera.",
     localAvailable: true,
-    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 98765 11111" },
+    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 99434 40384" },
     prices: [
       { platform: "Kumar Electronics (Local)", price: 32990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 34999, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -304,7 +304,7 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=400&fit=crop",
     description: "Samsung 55-inch Crystal 4K UHD Smart TV with Dynamic Crystal Color and SmartThings.",
     localAvailable: true,
-    localShop: { name: "Raja Electronics", address: "45 FC Road, Pune", km: 1.2, phone: "+91 98765 22222" },
+    localShop: { name: "Raja Electronics", address: "45 FC Road, Pune", km: 1.2, phone: "+91 99434 40384" },
     prices: [
       { platform: "Raja Electronics (Local)", price: 44990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 46999, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -335,7 +335,7 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=400&fit=crop",
     description: "Samsung Galaxy Buds FE with ANC, 30-hour battery, and IPX2 water resistance.",
     localAvailable: true,
-    localShop: { name: "Smart Store", address: "78 JM Road, Pune", km: 2.1, phone: "+91 98765 33333" },
+    localShop: { name: "Smart Store", address: "78 JM Road, Pune", km: 2.1, phone: "+91 99434 40384" },
     prices: [
       { platform: "Smart Store (Local)", price: 6999, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 7499, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -351,7 +351,7 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop",
     description: "Samsung Galaxy Tab S9 with Snapdragon 8 Gen 2, 11-inch AMOLED, and S Pen included.",
     localAvailable: true,
-    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 98765 11111" },
+    localShop: { name: "Kumar Electronics", address: "12 MG Road, Pune", km: 0.8, phone: "+91 99434 40384" },
     prices: [
       { platform: "Kumar Electronics (Local)", price: 67990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 69999, url: "https://amazon.in", isAffiliate: true, inStock: true },
@@ -367,7 +367,7 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop",
     description: "iPhone 15 with A16 Bionic chip, 48MP camera, Dynamic Island, and USB-C.",
     localAvailable: true,
-    localShop: { name: "iWorld Pune", address: "23 Bund Garden Rd, Pune", km: 1.5, phone: "+91 98765 44444" },
+    localShop: { name: "iWorld Pune", address: "23 Bund Garden Rd, Pune", km: 1.5, phone: "+91 99434 40384" },
     prices: [
       { platform: "iWorld (Local)", price: 74990, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 72999, url: "https://amazon.in", isAffiliate: true, inStock: true },

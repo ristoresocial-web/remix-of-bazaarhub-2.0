@@ -83,7 +83,7 @@ export const mockFoodStalls: FoodStall[] = [
     startDate: d(-3), endDate: d(4),
     todaysMenu: "Classic Jigarthanda, Rose Jigarthanda, Badam Milk, Paruthi Paal, Filter Coffee Special",
     menuPhoto: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=400&fit=crop",
-    whatsappNumber: "9876501001",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=600&h=400&fit=crop",
@@ -101,7 +101,7 @@ export const mockFoodStalls: FoodStall[] = [
     lat: 9.9312, lng: 78.1125,
     startDate: d(-1), endDate: d(5),
     todaysMenu: "Ghee Roast Dosa, Podi Dosa, Uthappam Combo, Idli Sambar Set, Kothu Parotta",
-    whatsappNumber: "9876501002",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&h=400&fit=crop",
@@ -119,7 +119,7 @@ export const mockFoodStalls: FoodStall[] = [
     festivalName: "Street Food Carnival",
     startDate: d(0), endDate: d(0), // today only
     todaysMenu: "Pani Puri, Bhel Puri, Aloo Tikki, Chole Bhature, Dahi Vada, Golgappa Special",
-    whatsappNumber: "9876501003",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?w=600&h=400&fit=crop",
     ],
@@ -136,7 +136,7 @@ export const mockFoodStalls: FoodStall[] = [
     startDate: d(1), endDate: d(6), // starts tomorrow
     todaysMenu: "Mysore Pak, Gulab Jamun, Ras Malai, Jalebi, Custom Cakes, French Pastries",
     menuPhoto: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&h=400&fit=crop",
-    whatsappNumber: "9876501004",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600&h=400&fit=crop",
@@ -155,7 +155,7 @@ export const mockFoodStalls: FoodStall[] = [
     festivalName: "Madurai Food Carnival 2025",
     startDate: d(-2), endDate: d(3),
     todaysMenu: "Chicken Biryani, Mutton Biryani, Egg Biryani, Veg Biryani, Chicken 65, Shawarma Plate",
-    whatsappNumber: "9876501005",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&h=400&fit=crop",
@@ -173,7 +173,7 @@ export const mockFoodStalls: FoodStall[] = [
     lat: 9.9252, lng: 78.1198,
     startDate: d(-5), endDate: d(2),
     todaysMenu: "Masala Chai, Bun Butter, Bajji, Bonda, Egg Puff, Vada Pav, Cutting Chai",
-    whatsappNumber: "9876501006",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
     ],
@@ -190,7 +190,7 @@ export const mockFoodStalls: FoodStall[] = [
     festivalName: "Summer Fest",
     startDate: d(2), endDate: d(7),
     todaysMenu: "Fresh Mango Juice, Watermelon Cooler, Sugarcane Juice, Tender Coconut, Mixed Fruit Smoothie",
-    whatsappNumber: "9876501007",
+    whatsappNumber: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&h=400&fit=crop",
     ],

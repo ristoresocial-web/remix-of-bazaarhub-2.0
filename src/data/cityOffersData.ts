@@ -72,8 +72,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-5), endDate: d(3),
     productDescription: "Samsung 43\" Crystal 4K Smart TV — Festival clearance with free wall mount and 2-year warranty.",
     category: "Electronics",
-    contactPhone: "+91 98765 67890",
-    contactWhatsapp: "9876567890",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&h=400&fit=crop",
@@ -90,8 +90,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-2), endDate: d(0), // ending today
     productDescription: "Samsung Galaxy S24 Ultra — Exchange bonus ₹10,000 extra + free Galaxy Buds.",
     category: "Mobiles",
-    contactPhone: "+91 98765 43210",
-    contactWhatsapp: "9876543210",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600&h=400&fit=crop",
     ],
@@ -107,8 +107,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-1), endDate: d(5),
     productDescription: "LG 55\" OLED C3 TV — Live demo unit, best-in-class contrast. Free soundbar with purchase.",
     category: "Electronics",
-    contactPhone: "+91 98765 11111",
-    contactWhatsapp: "9876511111",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop",
@@ -125,8 +125,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(2), endDate: d(8), // upcoming
     productDescription: "iPhone 15 Pro Max — Pongal special with free AirPods Pro and AppleCare+.",
     category: "Mobiles",
-    contactPhone: "+91 98765 12345",
-    contactWhatsapp: "9876512345",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&h=400&fit=crop",
     ],
@@ -142,8 +142,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-3), endDate: d(1),
     productDescription: "Sony WH-1000XM5 headphones — Last stock clearance. All colors available. Box-open discount extra.",
     category: "Electronics",
-    contactPhone: "+91 98765 22222",
-    contactWhatsapp: "9876522222",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=600&h=400&fit=crop",
     ],
@@ -159,8 +159,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-1), endDate: d(4),
     productDescription: "Premium branded kurtas & sarees — Wedding collection 2025. Alteration available on-site.",
     category: "Fashion",
-    contactPhone: "+91 98765 33333",
-    contactWhatsapp: "9876533333",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=400&fit=crop",
       "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&h=400&fit=crop",
@@ -177,8 +177,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(1), endDate: d(3), // upcoming
     productDescription: "Authentic Madurai jigardhanda, banana chips & spice hampers — Festival special packs.",
     category: "Food",
-    contactPhone: "+91 98765 44444",
-    contactWhatsapp: "9876544444",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=400&fit=crop",
     ],
@@ -194,8 +194,8 @@ export const mockCityOffers: CityOffer[] = [
     startDate: d(-4), endDate: d(0), // ending today
     productDescription: "Handcrafted wooden furniture & decor — Direct from artisans. Custom orders accepted.",
     category: "Home & Living",
-    contactPhone: "+91 98765 55555",
-    contactWhatsapp: "9876555555",
+    contactPhone: "+91 99434 40384",
+    contactWhatsapp: "9943440384",
     photos: [
       "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=400&fit=crop",
     ],

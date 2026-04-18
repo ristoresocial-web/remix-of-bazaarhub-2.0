@@ -155,7 +155,7 @@ const FoodStallForm: React.FC<Props> = ({ onClose }) => {
           {/* WhatsApp */}
           <div>
             <Label className="text-xs font-semibold">WhatsApp Number *</Label>
-            <Input value={form.whatsappNumber} onChange={(e) => set("whatsappNumber", e.target.value)} placeholder="e.g., 9876543210" />
+            <Input value={form.whatsappNumber} onChange={(e) => set("whatsappNumber", e.target.value)} placeholder="e.g., 9943440384" />
             {errors.whatsappNumber && <p className="mt-1 text-xs text-destructive">{errors.whatsappNumber}</p>}
           </div>
 

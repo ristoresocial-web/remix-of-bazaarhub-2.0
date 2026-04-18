@@ -175,7 +175,7 @@ const PriceAlertsPage: React.FC = () => {
                     <Label>WhatsApp Number</Label>
                     <div className="flex gap-2 mt-1">
                       <span className="flex items-center px-3 bg-muted rounded-md text-sm font-medium">+91</span>
-                      <Input placeholder="9876543210" value={whatsappNum} onChange={e => setWhatsappNum(e.target.value)} />
+                      <Input placeholder="9942440384" value={whatsappNum} onChange={e => setWhatsappNum(e.target.value)} />
                     </div>
                   </div>
                 )}
