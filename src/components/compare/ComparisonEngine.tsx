@@ -194,42 +194,43 @@ function OnlineSellerCard({
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`rounded-card border bg-card p-3 transition-all ${
-        isAbsoluteLowest ? "border-success shadow-md" : "border-border"
+      className={`rounded-xl border bg-white p-3 transition-all ${
+        isAbsoluteLowest ? "border-bh-orange ring-2 ring-bh-orange ring-offset-1 shadow-price" : "border-white hover:shadow-bh-sm"
       }`}
     >
       <div className="flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground" style={{ color: `hsl(${seller.color})` }}>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-display font-bold text-bh-text" style={{ color: `hsl(${seller.color})` }}>
               {seller.platform}
             </span>
             {isAbsoluteLowest && (
-              <Badge className="bg-success text-success-foreground text-[10px] gap-1">
-                <Trophy className="h-3 w-3" /> Lowest Price in {city}
+              <Badge className="bg-bh-orange text-white text-[10px] gap-1 shadow-price">
+                <Trophy className="h-3 w-3" /> Lowest in {city}
               </Badge>
             )}
             {isLowest && !isAbsoluteLowest && (
-              <Badge variant="secondary" className="text-[10px]">Best Online</Badge>
-
+              <Badge variant="secondary" className="text-[10px] bg-bh-blue-light text-bh-blue border border-bh-blue/20">Best Online</Badge>
             )}
           </div>
-          <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-            <Star className="h-3 w-3 fill-primary text-primary" /> {seller.rating} ({seller.reviewCount.toLocaleString("en-IN")})
+          <div className="mt-1 flex items-center gap-2 text-xs text-bh-text-muted">
+            <Star className="h-3 w-3 fill-warning text-warning" /> {seller.rating} ({seller.reviewCount.toLocaleString("en-IN")})
           </div>
         </div>
         <div className="text-right">
-          <p className="notranslate text-lg font-bold text-foreground">₹{seller.price.toLocaleString("en-IN")}</p>
+          <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-blue"}`}>
+            ₹{seller.price.toLocaleString("en-IN")}
+          </p>
           {!seller.inStock && <span className="text-[10px] text-destructive">Out of stock</span>}
         </div>
       </div>
-      <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-        <span>⚡ Delivery: {seller.delivery}</span>
+      <div className="mt-2 flex items-center justify-between text-xs text-bh-text-muted">
+        <span>⚡ {seller.delivery}</span>
         <a
           href={seller.url}
           target="_blank"
           rel="nofollow sponsored noopener noreferrer"
-          className="flex items-center gap-1 text-primary hover:underline"
+          className="flex items-center gap-1 text-bh-orange font-semibold hover:underline"
         >
           Visit <ExternalLink className="h-3 w-3" />
         </a>
