@@ -349,6 +349,47 @@ const SellerProfilePage: React.FC = () => {
             </Card>
           </motion.section>
         </div>
+
+        {/* Phase 9 — Mobile fixed seller CTA bar */}
+        {!isLocked && (
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-bh-border shadow-[0_-8px_32px_rgba(0,0,0,0.08)] px-4 py-3">
+            <div className="flex items-center gap-2">
+              <a
+                href={`tel:${seller.phone}`}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-bh-orange text-white font-semibold text-sm py-2.5 shadow-price transition-all duration-200 active:scale-[0.98]"
+              >
+                <Phone className="h-4 w-4" /> Call
+              </a>
+              <a
+                href={`https://wa.me/${seller.whatsapp.replace(/[^0-9]/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#25D366] text-white font-semibold text-sm py-2.5 shadow-[0_4px_16px_rgba(37,211,102,0.25)] transition-all duration-200 active:scale-[0.98]"
+              >
+                <MessageCircle className="h-4 w-4" /> WhatsApp
+              </a>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(seller.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full border-2 border-bh-border text-bh-text-secondary p-2.5 transition-all duration-200 active:scale-[0.98]"
+                aria-label="Directions"
+              >
+                <Navigation className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        )}
+        {isLocked && (
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-bh-border shadow-[0_-8px_32px_rgba(0,0,0,0.08)] px-4 py-3">
+            <Link
+              to="/buyer/login"
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-full bg-bh-orange text-white font-semibold text-sm py-2.5 shadow-price transition-all duration-200 active:scale-[0.98]"
+            >
+              <Lock className="h-4 w-4" /> Login to contact seller
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

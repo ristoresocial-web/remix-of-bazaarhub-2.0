@@ -398,81 +398,95 @@ const ProductPage: React.FC = () => {
             {/* ════════════ RIGHT COLUMN (STICKY) ════════════ */}
             <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
 
-              {/* ── BEST PRICE SUMMARY ── */}
-              <div className="rounded-3xl border border-bh-border bg-gradient-to-br from-bh-surface-2 to-white p-5 shadow-bh">
-                <div className="mb-1 flex items-center justify-between">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-bh-orange">
-                    🏆 Best Price in {selectedCity}
-                  </p>
-                  <Link to="/" className="text-xs font-medium text-bh-orange transition-all duration-200 hover:underline">
-                    Change City
-                  </Link>
-                </div>
+              {/* ── BEST PRICE SUMMARY (Phase 8 polished) ── */}
+              <div className="rounded-3xl border border-bh-border bg-gradient-to-br from-bh-orange-light/40 via-bh-surface-2 to-white p-6 shadow-bh relative overflow-hidden">
+                {/* Decorative glow */}
+                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-bh-orange/10 blur-3xl pointer-events-none" />
 
-                <p className="notranslate font-mono text-4xl font-medium text-bh-text price-animate tracking-tight">
-                  {formatPrice(cheapest)}
-                </p>
-                <p className="text-sm text-bh-text-secondary mb-4">
-                  at <span className="font-display font-bold text-bh-text">{cheapestSeller}</span>
-                </p>
-
-                {/* Online vs City Partner comparison */}
-                <div className="rounded-2xl bg-white border border-bh-border p-3 space-y-2 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-bh-text-secondary flex items-center gap-1">🌐 Online Best</span>
-                    <span className="notranslate font-mono font-medium text-bh-blue">{formatPrice(onlineBest)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="h-px flex-1 bg-bh-border" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-bh-text-muted">vs</span>
-                    <div className="h-px flex-1 bg-bh-border" />
-                  </div>
-                  {localBest !== null && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-bh-text-secondary flex items-center gap-1">🏪 City Partner Best</span>
-                      <span className="notranslate font-mono font-medium text-bh-green-dark">{formatPrice(localBest)}</span>
-                    </div>
-                  )}
-                  {priceDiff > 0 && (
-                    <div className="mt-2 flex items-center justify-between rounded-xl border border-bh-orange/20 bg-bh-orange-light p-2.5 animate-savings-pop">
-                      <span className="text-xs font-bold text-bh-orange-dark flex items-center gap-1">
-                        💰 You save
-                      </span>
-                      <span className="font-mono notranslate text-lg font-medium text-bh-orange-dark">
-                        {formatPrice(priceDiff)}
-                      </span>
-                    </div>
-                  )}
-                  {priceDiff > 0 && (
-                    <p className="text-[10px] text-bh-text-muted text-center">
-                      cheaper via <span className="font-bold text-bh-orange-dark">{cheaperSource}</span>
+                <div className="relative">
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-bh-orange flex items-center gap-1.5">
+                      <span className="text-base leading-none">🏆</span>
+                      Best Price in <span className="notranslate">{selectedCity}</span>
                     </p>
-                  )}
-                </div>
+                    <Link to="/" className="text-[11px] font-semibold text-bh-orange hover:underline transition-all duration-200">
+                      Change City
+                    </Link>
+                  </div>
 
-                {/* Action buttons */}
-                <div className="grid grid-cols-2 gap-2">
-                  <a href="#sellers" className="flex items-center justify-center gap-1 rounded-full bg-bh-orange py-2.5 text-sm font-bold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark hover:scale-[1.02] active:scale-[0.98]">
-                    Compare All Prices
-                  </a>
-                  <button className="flex items-center justify-center gap-1 rounded-full border-2 border-bh-orange py-2.5 text-sm font-bold text-bh-orange transition-all duration-200 hover:bg-bh-orange-light">
-                    <Bell className="h-4 w-4" /> Price Alert
-                  </button>
-                </div>
+                  <p className="notranslate font-mono text-[2.75rem] leading-none font-medium text-bh-text price-animate tracking-[-0.03em]">
+                    {formatPrice(cheapest)}
+                  </p>
+                  <p className="text-sm text-bh-text-secondary mt-1.5 mb-4">
+                    from <span className="font-display font-bold text-bh-text">{cheapestSeller}</span>
+                  </p>
 
-                {/* Refresh */}
-                <div className="mt-3 flex items-center justify-between">
-                  <p className="text-[11px] text-muted-foreground">Last updated: {lastRefreshed}</p>
-                  <button
-                    onClick={handleRefresh}
-                    disabled={refreshCooldown > 0}
-                    className={`flex items-center gap-1 rounded-pill px-3 py-1 text-[11px] font-medium transition-all duration-200 ${
-                      refreshCooldown > 0 ? "text-muted-foreground cursor-not-allowed" : "text-primary hover:bg-accent"
-                    }`}
-                  >
-                    <RefreshCw className={`h-3 w-3 ${refreshing ? "animate-spin" : ""}`} />
-                    {refreshCooldown > 0 ? `${Math.floor(refreshCooldown / 60)}:${String(refreshCooldown % 60).padStart(2, "0")}` : "Refresh"}
-                  </button>
+                  {/* Online vs City Partner — clean divider */}
+                  <div className="rounded-2xl bg-white/80 backdrop-blur-sm border border-bh-border p-4 space-y-3 mb-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-bh-text-muted flex items-center gap-1.5">
+                        <span className="text-sm leading-none">🌐</span> Online Best
+                      </span>
+                      <span className="notranslate font-mono text-base font-medium text-bh-blue">{formatPrice(onlineBest)}</span>
+                    </div>
+
+                    {/* vs divider line */}
+                    <div className="flex items-center gap-2">
+                      <div className="h-px flex-1 bg-gradient-to-r from-transparent via-bh-border to-bh-border" />
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-bh-text-muted px-1">vs</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-transparent via-bh-border to-bh-border" />
+                    </div>
+
+                    {localBest !== null && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-bh-text-muted flex items-center gap-1.5">
+                          <span className="text-sm leading-none">🏪</span> City Partner Best
+                        </span>
+                        <span className="notranslate font-mono text-base font-medium text-bh-green-dark">{formatPrice(localBest)}</span>
+                      </div>
+                    )}
+
+                    {priceDiff > 0 && (
+                      <div className="mt-1 flex items-center justify-between rounded-xl border border-bh-orange/25 bg-bh-orange-light p-3 animate-savings-pop">
+                        <span className="text-xs font-bold text-bh-orange-dark flex items-center gap-1.5">
+                          <span className="text-sm leading-none">💰</span> You save
+                        </span>
+                        <span className="font-mono notranslate text-xl font-medium text-bh-orange-dark">
+                          {formatPrice(priceDiff)}
+                        </span>
+                      </div>
+                    )}
+                    {priceDiff > 0 && (
+                      <p className="text-[10px] text-bh-text-muted text-center -mt-1">
+                        cheaper via <span className="font-bold text-bh-orange-dark">{cheaperSource}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <a href="#sellers" className="flex items-center justify-center gap-1 rounded-full bg-bh-orange py-3 text-sm font-bold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark hover:scale-[1.02] active:scale-[0.98]">
+                      Compare All Prices
+                    </a>
+                    <button className="flex items-center justify-center gap-1 rounded-full border-2 border-bh-orange py-3 text-sm font-bold text-bh-orange transition-all duration-200 hover:bg-bh-orange-light">
+                      <Bell className="h-4 w-4" /> Price Alert
+                    </button>
+                  </div>
+
+                  {/* Refresh */}
+                  <div className="mt-3 flex items-center justify-between">
+                    <p className="text-[11px] text-bh-text-muted">Last updated: <span className="notranslate">{lastRefreshed}</span></p>
+                    <button
+                      onClick={handleRefresh}
+                      disabled={refreshCooldown > 0}
+                      className={`flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold transition-all duration-200 ${
+                        refreshCooldown > 0 ? "text-bh-text-muted cursor-not-allowed" : "text-bh-orange hover:bg-bh-orange-light"
+                      }`}
+                    >
+                      <RefreshCw className={`h-3 w-3 ${refreshing ? "animate-spin" : ""}`} />
+                      {refreshCooldown > 0 ? `${Math.floor(refreshCooldown / 60)}:${String(refreshCooldown % 60).padStart(2, "0")}` : "Refresh"}
+                    </button>
+                  </div>
                 </div>
               </div>
 
