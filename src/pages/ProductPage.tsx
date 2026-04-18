@@ -570,6 +570,41 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* ── SHARE ROW (with QR) ── */}
+              <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-3 shadow-card">
+                <p className="flex-1 text-xs font-semibold text-muted-foreground">Share this product</p>
+                <button
+                  onClick={() => {
+                    if (navigator.share) navigator.share({ title: productName, url: productUrl }).catch(() => {});
+                    else { navigator.clipboard?.writeText(productUrl); }
+                  }}
+                  aria-label="Share"
+                  className="flex items-center gap-1 rounded-pill border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
+                >
+                  <Share2 className="h-3.5 w-3.5" /> Share
+                </button>
+                <button
+                  onClick={() => setQrOpen(true)}
+                  aria-label="Show QR code"
+                  className="flex items-center gap-1 rounded-pill border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-all duration-200 hover:bg-primary-light"
+                >
+                  <QrCode className="h-3.5 w-3.5" /> QR
+                </button>
+              </div>
+
+              {/* ── SELLER'S NOTE ── */}
+              {cityPartner && (cityPartner as any).sellerNote && (
+                <div className="rounded-2xl border-l-4 border-primary bg-primary-light/60 p-4 shadow-card">
+                  <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                    <span className="text-sm leading-none">📝</span> Seller's Note
+                  </p>
+                  <p className="text-sm leading-relaxed text-foreground">
+                    “{(cityPartner as any).sellerNote}”
+                  </p>
+                  <p className="mt-2 text-[10px] text-muted-foreground notranslate">— {cityPartner.name}</p>
+                </div>
+              )}
+
               {/* ── TOP CITY PARTNER CARD ── */}
               {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
