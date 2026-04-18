@@ -65,13 +65,13 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Product Header */}
-      <div className="flex items-center gap-4 rounded-card border border-border bg-card p-4">
-        <img src={product.image} alt={product.name} className="h-20 w-20 rounded-lg object-contain bg-background" loading="lazy" />
+      <div className="flex items-center gap-4 rounded-2xl border border-bh-border bg-bh-surface p-4 shadow-bh-sm">
+        <img src={product.image} alt={product.name} className="h-20 w-20 rounded-xl object-contain bg-bh-surface-2" loading="lazy" />
         <div>
-          <p className="text-xs font-medium text-muted-foreground">{product.brand}</p>
-          <h2 className="notranslate text-lg font-bold text-foreground">{product.name}</h2>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-bh-text-muted">{product.brand}</p>
+          <h2 className="notranslate font-display text-lg font-bold text-bh-text">{product.name}</h2>
           <div className="mt-1 flex flex-wrap gap-2">
             {product.specs.slice(0, 3).map((s) => (
               <Badge key={s.key} variant="secondary" className="text-[10px]">
@@ -82,42 +82,20 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
         </div>
       </div>
 
-      {/* Price Difference Banner */}
-      {diff > 100 && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`rounded-card border p-4 text-center ${
-            cheaperSide === "local"
-              ? "border-success/30 bg-success/10"
-              : "border-primary/30 bg-primary/10"
-          }`}
-        >
-          <p className="text-lg font-bold">
-            💰 ₹{diff.toLocaleString("en-IN")} cheaper {cheaperSide === "local" ? `via city partner` : "online"}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {cheaperSide === "local"
-              ? `at ${data.lowestCityPartner}, ${city}`
-              : `on ${data.lowestOnlinePlatform} with delivery`}
-          </p>
-        </motion.div>
-      )}
-
-      {/* Split Screen */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Online Sellers */}
-        <div className="space-y-3">
+      {/* Split Screen with center savings pill */}
+      <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-0 items-stretch">
+        {/* Online column (left) */}
+        <div className="rounded-3xl md:rounded-r-none border border-bh-blue/20 bg-bh-blue-light/40 p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
-              <Globe className="h-4 w-4" /> Online Sellers
+            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-blue">
+              🌐 Online Sellers
             </h3>
             <div className="flex items-center gap-1">
-              <ArrowDownUp className="h-3 w-3 text-muted-foreground" />
+              <ArrowDownUp className="h-3 w-3 text-bh-text-muted" />
               <select
                 value={sortOnline}
                 onChange={(e) => setSortOnline(e.target.value as SortOnline)}
-                className="rounded border border-border bg-card px-2 py-1 text-xs"
+                className="rounded-md border border-bh-border bg-white px-2 py-1 text-xs"
               >
                 <option value="price">Price</option>
                 <option value="rating">Rating</option>
@@ -136,18 +114,45 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
           ))}
         </div>
 
-        {/* Local Sellers */}
-        <div className="space-y-3">
+        {/* Center savings pill divider — the star */}
+        {diff > 100 ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            className="flex md:flex-col items-center justify-center md:px-2 md:-mx-px z-10"
+          >
+            <div className="bg-bh-orange text-white rounded-2xl px-4 py-3 shadow-price text-center whitespace-nowrap border-4 border-white">
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-90">Save</p>
+              <p className="font-mono notranslate text-xl font-medium leading-tight">
+                ₹{diff.toLocaleString("en-IN")}
+              </p>
+              <p className="text-[10px] font-semibold opacity-95">
+                {cheaperSide === "local" ? "locally" : "online"}
+              </p>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="hidden md:flex flex-col items-center justify-center px-2">
+            <div className="rounded-2xl border-2 border-dashed border-bh-border bg-white px-3 py-2 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-bh-text-muted">Same</p>
+              <p className="font-mono text-xs text-bh-text-secondary">price</p>
+            </div>
+          </div>
+        )}
+
+        {/* Local column (right) */}
+        <div className="rounded-3xl md:rounded-l-none border border-bh-green/20 bg-bh-green-light/40 p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
-              <MapPin className="h-4 w-4" /> {city} City Partners
+            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-green-dark">
+              🏪 {city} City Partners
             </h3>
             <div className="flex items-center gap-1">
-              <ArrowDownUp className="h-3 w-3 text-muted-foreground" />
+              <ArrowDownUp className="h-3 w-3 text-bh-text-muted" />
               <select
                 value={sortLocal}
                 onChange={(e) => setSortLocal(e.target.value as SortLocal)}
-                className="rounded border border-border bg-card px-2 py-1 text-xs"
+                className="rounded-md border border-bh-border bg-white px-2 py-1 text-xs"
               >
                 <option value="price">Price</option>
                 <option value="distance">Distance</option>
