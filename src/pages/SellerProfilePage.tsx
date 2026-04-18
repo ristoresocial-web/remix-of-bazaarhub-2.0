@@ -195,100 +195,141 @@ const SellerProfilePage: React.FC = () => {
           </motion.div>
         </section>
 
-        {/* ── Products Grid ── */}
-        <section className="container mt-10">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-foreground">
-              Products by <span className="notranslate">{seller.shopName}</span>
-            </h2>
-            <span className="text-sm text-muted-foreground">{sellerProducts.length} listed</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {sellerProducts.map((p, i) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-              >
-                <ProductCard product={p} />
-              </motion.div>
-            ))}
-          </div>
-        </section>
+        {/* ── Tabbed Sections: Products / Reviews / About ── */}
+        <section className="container mt-8">
+          <Tabs defaultValue="products" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 max-w-md mb-6">
+              <TabsTrigger value="products" className="gap-1.5">
+                <Package className="h-4 w-4" /> Products
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="gap-1.5">
+                <Star className="h-4 w-4" /> Reviews
+              </TabsTrigger>
+              <TabsTrigger value="about" className="gap-1.5">
+                <Info className="h-4 w-4" /> About
+              </TabsTrigger>
+            </TabsList>
 
-        {/* ── Reviews Section ── */}
-        <section className="container mt-10">
-          <h2 className="text-xl font-bold mb-4 text-foreground">Customer Reviews</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Rating Summary + Breakdown */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-center">
-                  <p className="text-5xl font-bold text-primary notranslate">{seller.rating}</p>
-                  <div className="flex justify-center gap-0.5 my-2">
-                    {[1, 2, 3, 4, 5].map(s => (
-                      <Star
-                        key={s}
-                        className={`h-5 w-5 ${
-                          s <= Math.floor(seller.rating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : s === Math.ceil(seller.rating)
-                              ? "fill-yellow-400/50 text-yellow-400"
-                              : "text-muted-foreground/30"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted-foreground">Based on {seller.reviewCount.toLocaleString("en-IN")} reviews</p>
-                </div>
-                <div className="mt-5 space-y-2">
-                  {seller.ratingBreakdown.map(r => (
-                    <div key={r.stars} className="flex items-center gap-2 text-sm">
-                      <span className="w-6 text-right font-medium">{r.stars}★</span>
-                      <Progress value={r.pct} className="h-2 flex-1" />
-                      <span className="w-10 text-right text-muted-foreground notranslate">{r.pct}%</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {/* Products Tab */}
+            <TabsContent value="products" className="mt-0">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-foreground">
+                  Products by <span className="notranslate">{seller.shopName}</span>
+                </h2>
+                <span className="text-sm text-muted-foreground">{sellerProducts.length} listed</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                {sellerProducts.map((p, i) => (
+                  <motion.div
+                    key={p.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                  >
+                    <ProductCard product={p} />
+                  </motion.div>
+                ))}
+              </div>
+            </TabsContent>
 
-            {/* Review Cards */}
-            <div className="md:col-span-2 space-y-3">
-              {(showAllReviews ? seller.reviews : seller.reviews.slice(0, 3)).map(r => (
-                <Card key={r.id}>
-                  <CardContent className="p-4 flex gap-3">
-                    <Avatar className="h-10 w-10 flex-shrink-0">
-                      <AvatarFallback className="bg-primary/10 text-primary text-sm font-bold">
-                        {r.buyerName.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <span className="font-semibold text-sm text-foreground">{r.buyerName}</span>
-                        <span className="text-xs text-muted-foreground">{r.date}</span>
-                      </div>
-                      <div className="flex gap-0.5 mt-0.5">
+            {/* Reviews Tab */}
+            <TabsContent value="reviews" className="mt-0">
+              <h2 className="text-xl font-bold mb-4 text-foreground">Customer Reviews</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="text-center">
+                      <p className="text-5xl font-bold text-primary notranslate">{seller.rating}</p>
+                      <div className="flex justify-center gap-0.5 my-2">
                         {[1, 2, 3, 4, 5].map(s => (
                           <Star
                             key={s}
-                            className={`h-3.5 w-3.5 ${s <= r.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}`}
+                            className={`h-5 w-5 ${
+                              s <= Math.floor(seller.rating)
+                                ? "fill-yellow-400 text-yellow-400"
+                                : s === Math.ceil(seller.rating)
+                                  ? "fill-yellow-400/50 text-yellow-400"
+                                  : "text-muted-foreground/30"
+                            }`}
                           />
                         ))}
                       </div>
-                      <p className="text-sm mt-2 text-foreground/90">"{r.comment}"</p>
+                      <p className="text-sm text-muted-foreground">Based on {seller.reviewCount.toLocaleString("en-IN")} reviews</p>
+                    </div>
+                    <div className="mt-5 space-y-2">
+                      {seller.ratingBreakdown.map(r => (
+                        <div key={r.stars} className="flex items-center gap-2 text-sm">
+                          <span className="w-6 text-right font-medium">{r.stars}★</span>
+                          <Progress value={r.pct} className="h-2 flex-1" />
+                          <span className="w-10 text-right text-muted-foreground notranslate">{r.pct}%</span>
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-              {seller.reviews.length > 3 && !showAllReviews && (
-                <Button variant="outline" className="w-full" onClick={() => setShowAllReviews(true)}>
-                  Load More Reviews
-                </Button>
-              )}
-            </div>
-          </div>
+
+                <div className="md:col-span-2 space-y-3">
+                  {(showAllReviews ? seller.reviews : seller.reviews.slice(0, 3)).map(r => (
+                    <Card key={r.id}>
+                      <CardContent className="p-4 flex gap-3">
+                        <Avatar className="h-10 w-10 flex-shrink-0">
+                          <AvatarFallback className="bg-primary/10 text-primary text-sm font-bold">
+                            {r.buyerName.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <span className="font-semibold text-sm text-foreground">{r.buyerName}</span>
+                            <span className="text-xs text-muted-foreground">{r.date}</span>
+                          </div>
+                          <div className="flex gap-0.5 mt-0.5">
+                            {[1, 2, 3, 4, 5].map(s => (
+                              <Star
+                                key={s}
+                                className={`h-3.5 w-3.5 ${s <= r.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}`}
+                              />
+                            ))}
+                          </div>
+                          <p className="text-sm mt-2 text-foreground/90">"{r.comment}"</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                  {seller.reviews.length > 3 && !showAllReviews && (
+                    <Button variant="outline" className="w-full" onClick={() => setShowAllReviews(true)}>
+                      Load More Reviews
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* About Tab */}
+            <TabsContent value="about" className="mt-0">
+              <h2 className="text-xl font-bold mb-4 text-foreground">About <span className="notranslate">{seller.shopName}</span></h2>
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  <p className="text-sm text-foreground/90 leading-relaxed">{seller.about}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-border">
+                    <div className="flex items-start gap-2">
+                      <MapPin className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">Address</p>
+                        <p className="text-sm text-foreground">{seller.address}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Clock className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wide">On BazaarHub since</p>
+                        <p className="text-sm text-foreground notranslate">{new Date().getFullYear() - seller.yearsOnPlatform}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </section>
 
         {/* ── Footer: Report Seller ── */}
