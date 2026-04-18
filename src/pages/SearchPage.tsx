@@ -166,37 +166,37 @@ const SearchPage: React.FC = () => {
       </Helmet>
 
       {/* TITLE BAR */}
-      <div className="border-b border-border bg-card sticky top-[64px] z-30">
+      <div className="border-b border-bh-border bg-bh-surface/95 backdrop-blur-xl sticky top-[64px] z-30">
         <div className="container py-3 space-y-2">
           <form onSubmit={handleSearch} className="flex items-center gap-2">
             <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-bh-text-muted" />
               <input
                 type="text"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder={`Search any product in ${city}...`}
-                className="w-full rounded-pill border border-border bg-background py-2.5 pl-10 pr-10 text-sm text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-pill border border-bh-border bg-bh-bg py-2.5 pl-10 pr-10 text-sm text-bh-text outline-none transition-all duration-200 focus:border-bh-orange focus:ring-2 focus:ring-bh-orange/20"
               />
               {query && (
-                <button type="button" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <button type="button" onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-bh-text-muted hover:text-bh-text">
                   <X className="h-4 w-4" />
                 </button>
               )}
             </div>
-            <Button type="submit" size="sm">Search</Button>
+            <Button type="submit" size="sm" className="rounded-full bg-bh-orange text-white shadow-price hover:bg-bh-orange-dark">Search</Button>
           </form>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-sm font-semibold text-foreground">
-                {urlQuery ? <>Results for "<span className="text-primary">{urlQuery}</span>" in {city}</> : `All Products in ${city}`}
+              <h1 className="font-display text-base font-bold text-bh-text">
+                {urlQuery ? <>Results for "<span className="text-bh-orange">{urlQuery}</span>" in {city}</> : `All Products in ${city}`}
               </h1>
-              <span className="inline-flex items-center gap-1 rounded-pill bg-accent px-2 py-0.5 text-[10px] font-medium text-accent-foreground">
+              <span className="inline-flex items-center gap-1 rounded-pill bg-bh-orange-light px-2 py-0.5 text-[10px] font-semibold text-bh-orange-dark">
                 <MapPin className="h-3 w-3" />
                 {city}
               </span>
-              <button onClick={() => window.dispatchEvent(new Event("open-city-selector"))} className="text-[10px] text-primary hover:underline">
+              <button onClick={() => window.dispatchEvent(new Event("open-city-selector"))} className="text-[10px] font-semibold text-bh-orange hover:underline">
                 Change
               </button>
             </div>

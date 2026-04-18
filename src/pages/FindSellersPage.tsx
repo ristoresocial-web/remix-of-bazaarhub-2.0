@@ -120,12 +120,13 @@ const FindSellersPage: React.FC = () => {
       </Helmet>
 
       {/* Header */}
-      <div className="border-b border-border bg-gradient-to-r from-primary/5 to-accent">
-        <div className="container py-6 md:py-8">
-          <h1 className="text-2xl font-bold text-foreground md:text-3xl">Find Sellers</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Search for a product to see all sellers — city partners & online platforms — in{" "}
-            <button onClick={() => window.dispatchEvent(new Event("open-city-selector"))} className="font-semibold text-primary hover:underline">{city}</button>
+      <div className="relative overflow-hidden border-b border-bh-border bg-gradient-to-br from-bh-orange-light/40 via-bh-surface-2 to-white">
+        <div className="absolute -top-16 -right-16 h-64 w-64 rounded-full bg-bh-orange/10 blur-3xl" />
+        <div className="container relative py-6 md:py-8">
+          <h1 className="font-display text-3xl font-bold text-bh-text md:text-4xl">Find Sellers</h1>
+          <p className="mt-2 text-sm text-bh-text-secondary">
+            Search any product to see all sellers — <span className="font-semibold text-bh-green-dark">city partners</span> &amp; <span className="font-semibold text-bh-blue">online platforms</span> — in{" "}
+            <button onClick={() => window.dispatchEvent(new Event("open-city-selector"))} className="font-semibold text-bh-orange hover:underline">{city}</button>
           </p>
         </div>
       </div>
@@ -183,8 +184,8 @@ const FindSellersPage: React.FC = () => {
                   </button>
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">Starting from</span>
-                  <span className="text-xl font-bold text-success">{formatPrice(lowestOverall || selectedProduct.lowestPrice)}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-bh-text-muted">Starting from</span>
+                  <span className="font-mono text-2xl font-bold text-bh-green-dark price-animate">{formatPrice(lowestOverall || selectedProduct.lowestPrice)}</span>
                 </div>
                 <div className="mt-2 flex items-center gap-1 text-xs text-warning-foreground">
                   <Star className="h-3 w-3 fill-current" /> {selectedProduct.avgRating} ({selectedProduct.ratingCount} reviews)
@@ -283,11 +284,11 @@ const FindSellersPage: React.FC = () => {
 
                   {/* Price */}
                   <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-lg font-bold ${seller.isLowestPrice ? "text-success" : "text-foreground"}`}>
+                    <span className={`font-mono text-xl font-bold ${seller.isLowestPrice ? "text-bh-green-dark" : "text-bh-text"}`}>
                       {formatPrice(seller.price)}
                     </span>
                     {seller.isLowestPrice && (
-                      <Badge className="bg-success/10 text-success border-success/20 text-[10px]">Lowest Price</Badge>
+                      <Badge className="bg-bh-green-light text-bh-green-dark border-bh-green/20 text-[10px] font-bold animate-savings-pop">Lowest</Badge>
                     )}
                   </div>
 

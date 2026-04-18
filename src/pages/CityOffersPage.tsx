@@ -97,21 +97,23 @@ const CityOffersPage: React.FC = () => {
       </Helmet>
 
       {/* Hero Header */}
-      <div className="border-b border-border bg-gradient-to-r from-primary/5 to-accent">
-        <div className="container py-6 md:py-8">
+      <div className="relative overflow-hidden border-b border-bh-border bg-gradient-to-br from-bh-orange-light/40 via-bh-surface-2 to-white">
+        <div className="absolute -top-20 -left-10 h-72 w-72 rounded-full bg-bh-orange/10 blur-3xl" />
+        <div className="absolute -bottom-20 -right-10 h-72 w-72 rounded-full bg-bh-green/10 blur-3xl" />
+        <div className="container relative py-6 md:py-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+              <h1 className="font-display text-3xl font-bold text-bh-text md:text-4xl">
                 சிறப்பு சலுகைகள் — City Offers
               </h1>
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
+                <Badge className="gap-1 bg-bh-orange-light text-bh-orange-dark border-bh-orange/20">
                   <MapPin className="h-3 w-3" />
                   {city}
                 </Badge>
                 <button
                   onClick={() => window.dispatchEvent(new Event("open-city-selector"))}
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="text-xs font-semibold text-bh-orange hover:underline"
                 >
                   Change City
                 </button>
@@ -120,36 +122,36 @@ const CityOffersPage: React.FC = () => {
 
             {/* Status summary pills */}
             <div className="flex items-center gap-2">
-              <Badge className="bg-success/10 text-success border-success/20 gap-1">
+              <Badge className="bg-bh-green-light text-bh-green-dark border-bh-green/20 gap-1 font-mono">
                 🟢 {statusCounts.live} Live
               </Badge>
-              <Badge className="bg-warning/10 text-warning-foreground border-warning/20 gap-1">
+              <Badge className="bg-bh-orange-light text-bh-orange-dark border-bh-orange/20 gap-1 font-mono">
                 🟡 {statusCounts.ending} Ending
               </Badge>
-              <Badge className="bg-primary/10 text-primary border-primary/20 gap-1">
+              <Badge className="bg-bh-blue-light text-bh-blue border-bh-blue/20 gap-1 font-mono">
                 🔵 {statusCounts.upcoming} Upcoming
               </Badge>
             </div>
           </div>
 
           {/* Tab switcher */}
-          <div className="mt-4 flex items-center gap-1 rounded-pill border border-border bg-muted/50 p-1 w-fit">
+          <div className="mt-4 flex items-center gap-1 rounded-pill border border-bh-border bg-bh-surface/80 backdrop-blur-sm p-1 w-fit shadow-bh-sm">
             <button
               onClick={() => setActiveTab("offers")}
-              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === "offers" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                activeTab === "offers" ? "bg-bh-orange text-white shadow-price" : "text-bh-text-secondary hover:text-bh-text"
               }`}
             >
               <ShoppingBag className="h-4 w-4" /> City Offers
             </button>
             <button
               onClick={() => setActiveTab("food")}
-              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === "food" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
+                activeTab === "food" ? "bg-bh-orange text-white shadow-price" : "text-bh-text-secondary hover:text-bh-text"
               }`}
             >
               <UtensilsCrossed className="h-4 w-4" /> Food Festival
-              <Badge className="bg-primary text-primary-foreground text-[10px] px-1.5 py-0">{foodStallCount}</Badge>
+              <Badge className="bg-white/20 text-current text-[10px] px-1.5 py-0 font-mono">{foodStallCount}</Badge>
             </button>
           </div>
         </div>

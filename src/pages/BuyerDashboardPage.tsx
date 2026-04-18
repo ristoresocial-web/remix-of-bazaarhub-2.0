@@ -75,25 +75,26 @@ const BuyerDashboardPage: React.FC = () => {
 
       <div className="container pb-20 pt-6 md:pb-8">
         {/* Profile Header */}
-        <div className="mb-6 rounded-2xl border border-border bg-card p-5 shadow-card">
-          <div className="flex items-center justify-between">
+        <div className="relative mb-6 overflow-hidden rounded-3xl border border-bh-border bg-gradient-to-br from-bh-orange-light/40 via-bh-surface-2 to-white p-5 shadow-bh">
+          <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-bh-orange/10 blur-3xl" />
+          <div className="relative flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-bh-orange text-2xl font-bold text-white shadow-price font-display">
                 {(displayName || "B")[0].toUpperCase()}
               </div>
               <div>
-                <h1 className="text-lg font-bold text-foreground">{displayName}</h1>
-                <p className="text-xs text-muted-foreground">@{displayUsername}</p>
-                <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {displayCity}</span>
-                  {displayEmail && <span className="notranslate">{displayEmail}</span>}
-                  {displayMobile && <span className="notranslate">{displayMobile}</span>}
+                <h1 className="font-display text-xl font-bold text-bh-text">{displayName}</h1>
+                <p className="text-xs text-bh-text-muted font-mono">@{displayUsername}</p>
+                <div className="mt-1 flex items-center gap-3 text-xs text-bh-text-secondary">
+                  <span className="flex items-center gap-1"><MapPin className="h-3 w-3 text-bh-orange" /> {displayCity}</span>
+                  {displayEmail && <span className="notranslate font-mono">{displayEmail}</span>}
+                  {displayMobile && <span className="notranslate font-mono">{displayMobile}</span>}
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {displayIsAdmin && <span className="flex items-center gap-1 rounded-pill bg-warning/20 px-3 py-1 text-[10px] font-bold text-warning-foreground"><Shield className="h-3 w-3" /> ADMIN</span>}
-              <button onClick={handleLogout} className="flex items-center gap-1 rounded-pill border border-border px-3 py-1.5 text-xs text-destructive transition-all duration-200 hover:bg-destructive/10">
+              {displayIsAdmin && <span className="flex items-center gap-1 rounded-pill bg-bh-orange px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-price"><Shield className="h-3 w-3" /> Admin</span>}
+              <button onClick={handleLogout} className="flex items-center gap-1 rounded-pill border border-bh-border bg-white px-3 py-1.5 text-xs font-semibold text-destructive transition-all duration-200 hover:bg-destructive/10">
                 <LogOut className="h-3.5 w-3.5" /> Logout
               </button>
             </div>
@@ -103,9 +104,9 @@ const BuyerDashboardPage: React.FC = () => {
         {/* Tabs */}
         <div className="mb-6 flex gap-2 overflow-x-auto pb-1">
           {tabs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} className={`flex items-center gap-1.5 whitespace-nowrap rounded-pill px-4 py-2 text-xs font-semibold transition-all duration-200 ${tab === t.id ? "bg-primary text-primary-foreground" : "border border-border bg-card text-foreground hover:bg-accent"}`}>
+            <button key={t.id} onClick={() => setTab(t.id)} className={`flex items-center gap-1.5 whitespace-nowrap rounded-pill px-4 py-2 text-xs font-semibold transition-all duration-200 ${tab === t.id ? "bg-bh-orange text-white shadow-price" : "border border-bh-border bg-bh-surface text-bh-text hover:border-bh-orange/30 hover:bg-bh-orange-light/30"}`}>
               <t.icon className="h-3.5 w-3.5" /> {t.label}
-              {t.count !== undefined && <span className={`rounded-full px-1.5 text-[10px] ${tab === t.id ? "bg-white/20" : "bg-muted"}`}>{t.count}</span>}
+              {t.count !== undefined && <span className={`rounded-full px-1.5 text-[10px] font-mono ${tab === t.id ? "bg-white/25" : "bg-bh-surface-2 text-bh-text-secondary"}`}>{t.count}</span>}
             </button>
           ))}
         </div>
@@ -114,14 +115,14 @@ const BuyerDashboardPage: React.FC = () => {
         {tab === "wishlist" && (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {mockWishlist.map(p => (
-              <div key={p.id} className="rounded-2xl border border-border bg-card p-4 shadow-card transition-all duration-200 hover:border-primary hover:shadow-hover">
+              <div key={p.id} className="rounded-2xl border border-bh-border bg-bh-surface p-4 shadow-bh-sm transition-all duration-200 hover:-translate-y-1 hover:border-bh-orange/30 hover:shadow-price">
                 <div className="relative mb-3">
-                  <img src={p.image} alt={p.name} className="h-40 w-full rounded-xl bg-background object-contain" loading="lazy" />
-                  <button className="absolute right-2 top-2 rounded-full bg-card p-1.5 shadow-md"><Heart className="h-4 w-4 fill-destructive text-destructive" /></button>
+                  <img src={p.image} alt={p.name} className="h-40 w-full rounded-xl bg-bh-surface-2 object-contain" loading="lazy" />
+                  <button className="absolute right-2 top-2 rounded-full bg-white p-1.5 shadow-md"><Heart className="h-4 w-4 fill-destructive text-destructive" /></button>
                 </div>
-                <h3 className="mb-1 text-sm font-semibold text-foreground line-clamp-2">{p.name}</h3>
-                <p className="mb-2 text-lg font-bold text-primary">{formatPrice(Math.min(...p.prices.map(pr => pr.price)))}</p>
-                <Link to={`/product/${p.id}/${p.slug}`} className="block rounded-pill bg-primary py-2 text-center text-xs font-semibold text-primary-foreground transition-all duration-200 hover:bg-[hsl(var(--primary-dark))]">View Product</Link>
+                <h3 className="mb-1 text-sm font-semibold text-bh-text line-clamp-2">{p.name}</h3>
+                <p className="mb-2 font-mono text-xl font-bold text-bh-green-dark">{formatPrice(Math.min(...p.prices.map(pr => pr.price)))}</p>
+                <Link to={`/product/${p.id}/${p.slug}`} className="block rounded-pill bg-bh-orange py-2 text-center text-xs font-semibold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark">View Product</Link>
               </div>
             ))}
           </div>
@@ -149,13 +150,13 @@ const BuyerDashboardPage: React.FC = () => {
         {tab === "alerts" && (
           <div className="space-y-4">
             {mockAlerts.map(a => (
-              <div key={a.id} className={`rounded-2xl border p-4 shadow-card ${a.triggered ? "border-[hsl(var(--success))] bg-[hsl(var(--success-light))]" : "border-border bg-card"}`}>
+              <div key={a.id} className={`rounded-2xl border p-4 shadow-bh-sm ${a.triggered ? "border-bh-green bg-bh-green-light/40" : "border-bh-border bg-bh-surface"}`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-foreground">{a.product}</p>
-                    <p className="text-xs text-muted-foreground">Target: {formatPrice(a.target)} · Current: {formatPrice(a.current)}</p>
+                    <p className="text-sm font-semibold text-bh-text">{a.product}</p>
+                    <p className="text-xs text-bh-text-secondary font-mono">Target: {formatPrice(a.target)} · Current: {formatPrice(a.current)}</p>
                   </div>
-                  {a.triggered && <span className="rounded-pill bg-[hsl(var(--success))] px-3 py-1 text-xs font-bold text-[hsl(var(--success-foreground))]">🎉 Price dropped!</span>}
+                  {a.triggered && <span className="rounded-pill bg-bh-green px-3 py-1 text-xs font-bold text-white animate-savings-pop">🎉 Price dropped!</span>}
                 </div>
               </div>
             ))}
