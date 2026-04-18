@@ -13,56 +13,70 @@ const products = [
 
 const PriceIntelTab: React.FC<{ city: string }> = ({ city }) => (
   <div className="space-y-4">
-    <h2 className="text-lg font-bold text-foreground">Price Intelligence — {city}</h2>
+    <div className="flex items-baseline justify-between mb-2">
+      <h2 className="text-xl font-display font-bold text-bh-text">Price Intelligence</h2>
+      <span className="text-sm text-bh-text-secondary notranslate">{city}</span>
+    </div>
+
     {products.map((p) => (
       <div
         key={p.name}
-        className={`rounded-card border p-4 ${
+        className={`rounded-2xl border-l-4 p-5 flex items-start justify-between gap-4 transition-all duration-200 hover:shadow-bh ${
           p.isBest
-            ? "border-success/30 bg-success-light"
-            : "border-primary/30 bg-primary-light"
+            ? "border-l-bh-green bg-bh-green-light/40 border-y border-r border-bh-green/10"
+            : "border-l-bh-orange bg-bh-orange-light/40 border-y border-r border-bh-orange/10"
         }`}
       >
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1">
-            <p className="font-semibold text-foreground">{p.name}</p>
-            <p className="text-sm text-muted-foreground">
-              Your price: <strong className="text-foreground">{formatPrice(p.yourPrice)}</strong> · Amazon: {formatPrice(p.amazonPrice)}
-            </p>
-          </div>
-          {p.isBest ? (
-            <div className="flex items-center gap-1.5 rounded-pill bg-success px-3 py-1 text-xs font-semibold text-success-foreground">
-              <Award className="h-3.5 w-3.5" /> Best in {city}!
+        <div className="flex-1 min-w-0">
+          <p className="font-display font-semibold text-base text-bh-text">{p.name}</p>
+          <p className="text-sm text-bh-text-secondary mt-1">
+            Your price: <strong className="font-mono text-bh-text notranslate">{formatPrice(p.yourPrice)}</strong>
+            <span className="mx-1.5 text-bh-text-muted">·</span>
+            Amazon: <span className="font-mono notranslate">{formatPrice(p.amazonPrice)}</span>
+          </p>
+
+          {!p.isBest && p.diff && (
+            <div className="mt-3 space-y-2">
+              <p className="text-sm font-semibold text-bh-orange-dark">
+                Reduce by <span className="font-mono notranslate">{formatPrice(p.diff)}</span> to become #1 — quick win!
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button className="rounded-full bg-bh-orange hover:bg-bh-orange-dark text-white text-xs font-semibold px-4 py-1.5 shadow-price transition-all duration-200 hover:scale-[1.02]">
+                  Adjust Price
+                </button>
+                <button className="rounded-full border-2 border-bh-orange text-bh-orange hover:bg-bh-orange-light text-xs font-semibold px-4 py-1.5 transition-all duration-200">
+                  Bundle Offer
+                </button>
+                <button className="rounded-full text-bh-text-secondary hover:text-bh-orange text-xs font-medium px-3 py-1.5 transition-colors duration-200">
+                  Keep Same — Service Advantage →
+                </button>
+              </div>
             </div>
-          ) : (
-            <div className="flex items-center gap-1.5 rounded-pill bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-              <TrendingDown className="h-3.5 w-3.5" /> Quick Win!
+          )}
+
+          {p.isBest && (
+            <div className="mt-2 flex items-center gap-1.5 text-sm font-medium text-bh-green-dark">
+              <Award className="h-4 w-4" /> You are the best price in {city} today!
             </div>
           )}
         </div>
-        {!p.isBest && p.diff && (
-          <div className="mt-3 space-y-2">
-            <p className="text-sm font-medium text-primary">
-              Reduce by {formatPrice(p.diff)} to become #1 — quick win!
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Button size="sm">Adjust Price</Button>
-              <Button size="sm" variant="outline">Bundle Offer</Button>
-              <Button size="sm" variant="ghost">Keep Same — Service Advantage</Button>
-            </div>
+
+        {p.isBest ? (
+          <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-bh-green-light text-bh-green-dark text-xs font-bold rounded-full border border-bh-green/20 shrink-0">
+            <Award className="h-3 w-3" /> Best in City
           </div>
-        )}
-        {p.isBest && (
-          <div className="mt-2 flex items-center gap-1.5 text-sm text-success">
-            <Award className="h-4 w-4" /> You are the best price in {city} today!
+        ) : (
+          <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-bh-orange-light text-bh-orange-dark text-xs font-bold rounded-full border border-bh-orange/20 shrink-0">
+            <TrendingDown className="h-3 w-3" /> Quick Win
           </div>
         )}
       </div>
     ))}
-    <div className="rounded-card bg-primary-light p-4 flex items-start gap-3">
-      <Lightbulb className="h-5 w-5 text-primary mt-0.5" />
-      <p className="text-sm text-foreground">
-        <strong>Tip:</strong> Your delivery + installation = ₹1,200 advantage over Amazon. Highlight this to buyers!
+
+    <div className="rounded-2xl bg-bh-orange-light/60 border border-bh-orange/15 p-4 flex items-start gap-3">
+      <Lightbulb className="h-5 w-5 text-bh-orange mt-0.5 shrink-0" />
+      <p className="text-sm text-bh-text">
+        <strong className="font-semibold">Tip:</strong> Your delivery + installation = <span className="font-mono notranslate">₹1,200</span> advantage over Amazon. Highlight this to buyers!
       </p>
     </div>
   </div>
