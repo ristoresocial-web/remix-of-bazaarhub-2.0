@@ -6,105 +6,147 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 215 25% 17%;
+    --background: 60 9% 98%;
+    --foreground: 24 10% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 17%;
+    --card-foreground: 24 10% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 17%;
+    --popover-foreground: 24 10% 10%;
 
     --primary: 25 95% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-dark: 25 95% 45%;
-    --primary-light: 33 100% 96%;
+    --primary-dark: 24 91% 48%;
+    --primary-light: 33 100% 95%;
 
-    --secondary: 222 47% 11%;
+    --secondary: 24 10% 5%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 57%;
+    --muted: 60 5% 96%;
+    --muted-foreground: 24 6% 46%;
 
-    --accent: 25 100% 96%;
+    --accent: 33 100% 95%;
     --accent-foreground: 25 95% 40%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --destructive-light: 0 67% 96%;
 
-    --success: 142 71% 45%;
+    --success: 142 71% 38%;
     --success-foreground: 0 0% 100%;
-    --success-light: 142 39% 93%;
+    --success-light: 142 76% 92%;
 
     --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
+    --warning-foreground: 24 10% 10%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
     --ring: 25 95% 53%;
 
     --radius: 0.75rem;
     --radius-btn: 1.5rem;
     --radius-input: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 215 25% 17%;
+    --sidebar-background: 24 10% 4%;
+    --sidebar-foreground: 24 6% 84%;
     --sidebar-primary: 25 95% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 32% 91%;
+    --sidebar-accent: 24 10% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 24 10% 12%;
     --sidebar-ring: 25 95% 53%;
 
-    --navy: 222 47% 11%;
-    --navy-deep: 222 47% 11%;
+    --navy: 24 10% 5%;
+    --navy-deep: 24 10% 4%;
     --orange: 25 95% 53%;
-    --orange-light: 33 100% 96%;
-    --orange-dark: 25 95% 45%;
-    --orange-deep: 25 95% 31%;
+    --orange-light: 33 100% 95%;
+    --orange-dark: 24 91% 48%;
+    --orange-deep: 22 95% 35%;
     --logo-purple: 25 95% 53%;
-    --logo-cyan: 142 71% 45%;
+    --logo-cyan: 142 71% 38%;
+
+    /* === 2026 BazaarHub Premium Tokens (HSL) === */
+    --bh-orange: 25 95% 53%;
+    --bh-orange-light: 33 100% 95%;
+    --bh-orange-dark: 24 91% 48%;
+    --bh-green: 142 71% 38%;
+    --bh-green-light: 141 79% 87%;
+    --bh-green-dark: 142 72% 29%;
+    --bh-blue: 201 96% 32%;
+    --bh-blue-light: 204 94% 94%;
+
+    --bh-bg: 60 9% 98%;
+    --bh-surface: 0 0% 100%;
+    --bh-surface-2: 60 5% 96%;
+    --bh-border: 20 6% 90%;
+    --bh-border-light: 60 5% 96%;
+
+    --bh-text-primary: 24 10% 10%;
+    --bh-text-secondary: 24 6% 46%;
+    --bh-text-muted: 24 6% 64%;
+
+    --bh-sidebar: 24 10% 4%;
+    --bh-sidebar-text: 24 6% 84%;
+    --bh-sidebar-muted: 24 6% 35%;
+
+    --bh-price-local: 142 71% 38%;
+    --bh-price-online: 201 96% 32%;
+    --bh-price-savings: 25 95% 53%;
+    --bh-price-bad: 0 72% 51%;
+
+    --bh-shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --bh-shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --bh-shadow-lg: 0 12px 40px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+    --bh-shadow-price: 0 8px 32px rgba(249,115,22,0.18);
+
+    --bh-radius-sm: 8px;
+    --bh-radius-md: 12px;
+    --bh-radius-lg: 16px;
+    --bh-radius-xl: 24px;
+    --bh-radius-pill: 999px;
+
+    --bh-ease: cubic-bezier(0.16, 1, 0.3, 1);
 
     --shadow-md: 0 2px 12px rgba(0,0,0,0.06);
     --shadow-hover: 0 8px 24px rgba(249,115,22,0.15);
   }
 
   .dark {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 10%;
-    --popover-foreground: 210 40% 98%;
+    --background: 24 10% 6%;
+    --foreground: 60 9% 98%;
+    --card: 24 10% 10%;
+    --card-foreground: 60 9% 98%;
+    --popover: 24 10% 10%;
+    --popover-foreground: 60 9% 98%;
     --primary: 25 95% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-dark: 25 95% 45%;
+    --primary-dark: 24 91% 48%;
     --primary-light: 25 80% 15%;
-    --secondary: 222 40% 20%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 222 30% 16%;
-    --muted-foreground: 215 16% 57%;
+    --secondary: 24 10% 18%;
+    --secondary-foreground: 60 9% 98%;
+    --muted: 24 8% 16%;
+    --muted-foreground: 24 6% 64%;
     --accent: 25 80% 15%;
     --accent-foreground: 25 95% 70%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --destructive-light: 0 50% 15%;
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     --success-light: 142 40% 15%;
     --warning: 38 92% 50%;
-    --warning-foreground: 222 47% 11%;
-    --border: 222 30% 20%;
-    --input: 222 30% 20%;
+    --warning-foreground: 24 10% 10%;
+    --border: 24 8% 20%;
+    --input: 24 8% 20%;
     --ring: 25 95% 53%;
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 210 40% 90%;
+    --sidebar-background: 24 10% 4%;
+    --sidebar-foreground: 24 6% 84%;
     --sidebar-primary: 25 95% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 30% 14%;
-    --sidebar-accent-foreground: 210 40% 90%;
-    --sidebar-border: 222 30% 18%;
+    --sidebar-accent: 24 10% 10%;
+    --sidebar-accent-foreground: 60 9% 98%;
+    --sidebar-border: 24 10% 14%;
     --sidebar-ring: 25 95% 53%;
   }
 }
@@ -114,26 +156,44 @@
     @apply border-border;
   }
   html, body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'DM Sans', 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Premium typography defaults */
+  h1, h2, h3, .font-display {
+    font-family: 'Syne', 'DM Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  h1 { font-weight: 800; letter-spacing: -0.03em; }
+  h2 { font-weight: 700; }
+  h3 { font-weight: 700; }
+
+  /* All elements with `price` semantic get mono numerics */
+  .price, .price-number, .text-price, .text-price-lg {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
   .bazaar-logo-text {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
+    font-family: 'Syne', 'DM Sans', sans-serif;
+    font-weight: 800;
     font-size: 1.5rem;
     line-height: 1;
     letter-spacing: -0.02em;
   }
   .bazaar-logo-navy {
-    color: hsl(var(--logo-purple));
+    color: hsl(var(--bh-orange));
   }
   .bazaar-logo-orange {
-    color: hsl(var(--logo-cyan));
+    color: hsl(var(--bh-green));
   }
   .hover-scale {
     @apply transition-all duration-200 hover:scale-105;
@@ -145,6 +205,56 @@
     box-shadow: var(--shadow-hover);
   }
 
+  /* === 2026 typography utility scales === */
+  .text-hero {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .text-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .text-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .text-price {
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+  .text-price-lg {
+    font-size: 2.5rem;
+    font-weight: 500;
+  }
+
+  /* === Skeleton shimmer === */
+  .skeleton {
+    background: linear-gradient(90deg,
+      hsl(var(--bh-surface-2)) 25%,
+      hsl(var(--bh-border)) 50%,
+      hsl(var(--bh-surface-2)) 75%);
+    background-size: 200% 100%;
+    animation: bh-shimmer 1.5s infinite;
+    border-radius: 8px;
+  }
+
+  /* === Hover lift utility === */
+  .hover-lift {
+    transition: transform 0.2s var(--bh-ease), box-shadow 0.2s var(--bh-ease);
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--bh-shadow-lg);
+  }
+
   /* Hide Google Translate top banner and frame */
   .goog-te-banner-frame,
   .skiptranslate,
@@ -154,4 +264,31 @@
   body {
     top: 0 !important;
   }
+}
+
+@layer utilities {
+  /* === 2026 keyframes === */
+  @keyframes bh-fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bh-price-reveal {
+    from { opacity: 0; transform: translateY(8px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes bh-savings-pop {
+    0%   { transform: scale(0.8); opacity: 0; }
+    60%  { transform: scale(1.08); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes bh-shimmer {
+    from { background-position: -200% center; }
+    to   { background-position: 200% center; }
+  }
+
+  .animate-fade-up        { animation: bh-fade-up 0.5s var(--bh-ease) both; }
+  .animate-fade-up-delay  { animation: bh-fade-up 0.5s 0.15s var(--bh-ease) both; }
+  .animate-price-reveal,
+  .price-animate          { animation: bh-price-reveal 0.4s var(--bh-ease) both; }
+  .animate-savings-pop    { animation: bh-savings-pop 0.55s 0.2s var(--bh-ease) both; }
 }

@@ -45,21 +45,27 @@ const Index = () => {
   return (
     <div>
       {/* ── 1. HERO SECTION ── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-background to-accent/30 px-4 py-20">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(33_100%_98%)] via-[hsl(33_100%_96%)] to-bh-bg px-4 pt-16 pb-24 md:pt-20">
+        {/* Decorative background blobs */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-bh-orange/10 blur-3xl" />
+          <div className="absolute top-1/2 -left-32 h-80 w-80 rounded-full bg-bh-green/10 blur-3xl" />
+        </div>
+
         <div className="container relative z-10 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="mb-3 text-4xl font-bold text-foreground md:text-5xl"
+            className="text-hero text-bh-text mx-auto max-w-4xl"
           >
-            Find the Best Price in Your City
+            Find the <span className="text-bh-orange">Best Price</span> in Your City
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-            className="mx-auto mb-8 max-w-xl text-base text-muted-foreground"
+            className="mx-auto mt-5 mb-8 max-w-xl text-base md:text-lg text-bh-text-secondary"
           >
             Compare city partners vs Amazon, Flipkart — in real time.
           </motion.p>
@@ -69,7 +75,7 @@ const Index = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
           >
-            <AISmartSearchBar city={selectedCity} className="mx-auto max-w-2xl" />
+            <AISmartSearchBar city={selectedCity} className="mx-auto max-w-3xl" />
           </motion.div>
 
           {/* Popular searches */}
@@ -77,14 +83,14 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-5 flex flex-wrap justify-center gap-2"
+            className="mt-6 flex flex-wrap justify-center items-center gap-2"
           >
-            <span className="text-sm text-muted-foreground">Popular:</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-bh-text-muted">Popular:</span>
             {popularSearches.map((term) => (
               <Link
                 key={term}
                 to={`/search?q=${encodeURIComponent(term)}`}
-                className="notranslate rounded-full border border-border bg-card px-3 py-1 text-sm text-foreground transition-all duration-200 hover:border-primary hover:text-primary"
+                className="notranslate inline-flex items-center rounded-full border border-bh-border bg-white px-3 py-1.5 text-sm text-bh-text-secondary transition-all duration-150 hover:border-bh-orange hover:text-bh-orange hover:shadow-bh-sm"
               >
                 {term}
               </Link>
@@ -96,12 +102,12 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.75 }}
-            className="mt-4 text-sm text-muted-foreground"
+            className="mt-5 text-sm text-bh-text-secondary"
           >
-            Showing prices in <span className="font-semibold text-foreground">{selectedCity}</span> ·{" "}
+            Showing prices in <span className="font-semibold text-bh-text">{selectedCity}</span> ·{" "}
             <button
               onClick={() => document.querySelector<HTMLButtonElement>('[data-city-selector]')?.click()}
-              className="text-primary underline-offset-2 hover:underline"
+              className="text-bh-orange font-medium underline-offset-2 hover:underline"
             >
               Change city
             </button>
