@@ -152,11 +152,14 @@ const AISmartSearchBar: React.FC<AISmartSearchBarProps> = ({ city, className = "
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {/* Search Bar */}
-      <form onSubmit={handleSubmit} className="relative flex items-center overflow-hidden rounded-2xl bg-white shadow-2xl border-l-4 border-primary">
+      <form
+        onSubmit={handleSubmit}
+        className="relative flex items-center overflow-hidden rounded-2xl bg-white border-2 border-bh-border transition-all duration-300 hover:border-bh-orange/60 focus-within:border-bh-orange focus-within:shadow-[0_0_0_4px_hsl(var(--bh-orange)/0.12)] shadow-bh-sm"
+      >
         {/* City button */}
         <button
           type="button"
-          className="hidden md:flex items-center gap-1.5 px-4 py-3 text-sm font-medium text-primary whitespace-nowrap border-r border-border"
+          className="hidden md:flex items-center gap-1.5 px-5 py-3.5 text-sm font-semibold text-bh-orange whitespace-nowrap border-r border-bh-border hover:bg-bh-orange-light transition-colors"
           onClick={() => window.dispatchEvent(new CustomEvent("open-city-selector"))}
         >
           <MapPin className="h-4 w-4" />
@@ -172,7 +175,7 @@ const AISmartSearchBar: React.FC<AISmartSearchBarProps> = ({ city, className = "
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => { if (query.length >= 2) setOpen(true); }}
             onKeyDown={handleKeyDown}
-            className="w-full border-none bg-transparent px-5 py-4 md:py-5 text-sm md:text-base text-foreground outline-none"
+            className="w-full border-none bg-transparent px-5 py-4 md:py-5 text-base md:text-lg text-bh-text outline-none placeholder:text-bh-text-muted"
             autoComplete="off"
             role="combobox"
             aria-expanded={showDropdown}
@@ -182,10 +185,10 @@ const AISmartSearchBar: React.FC<AISmartSearchBarProps> = ({ city, className = "
               <motion.span
                 key={placeholderIdx}
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 0.5, y: 0 }}
+                animate={{ opacity: 0.55, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm md:text-base text-muted-foreground"
+                className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-base md:text-lg text-bh-text-muted"
               >
                 {ROTATING_PLACEHOLDERS[placeholderIdx]}
               </motion.span>
@@ -194,7 +197,12 @@ const AISmartSearchBar: React.FC<AISmartSearchBarProps> = ({ city, className = "
         </div>
 
         {query && (
-          <button type="button" onClick={() => { setQuery(""); setOpen(false); }} className="mr-1 p-2 text-muted-foreground hover:text-foreground">
+          <button
+            type="button"
+            onClick={() => { setQuery(""); setOpen(false); }}
+            className="mr-1 p-2 text-bh-text-muted hover:text-bh-text transition-colors"
+            aria-label="Clear search"
+          >
             <X className="h-4 w-4" />
           </button>
         )}
@@ -202,7 +210,8 @@ const AISmartSearchBar: React.FC<AISmartSearchBarProps> = ({ city, className = "
         <motion.button
           type="submit"
           whileHover={{ scale: 1.03 }}
-          className="m-2 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-xl"
+          whileTap={{ scale: 0.97 }}
+          className="m-2 flex items-center gap-2 rounded-xl bg-bh-orange px-5 md:px-6 py-3 text-sm font-bold text-white shadow-price transition-all hover:bg-bh-orange-dark"
         >
           <Search className="h-4 w-4" />
           <span className="hidden md:inline">Search</span>

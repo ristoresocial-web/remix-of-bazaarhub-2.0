@@ -14,18 +14,23 @@ const categories = [
 const CategoryGrid: React.FC = () => {
   return (
     <section className="container py-14">
-      <h2 className="mb-8 text-center text-2xl font-bold text-foreground">
-        What are you looking for?
-      </h2>
+      <div className="mb-8 flex items-baseline justify-between">
+        <div>
+          <h2 className="text-title text-bh-text">What are you looking for?</h2>
+          <p className="mt-1 text-sm text-bh-text-secondary">Browse popular categories near you</p>
+        </div>
+      </div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
         {categories.map((cat) => (
           <Link
             key={cat.name}
             to={`/search?category=${encodeURIComponent(cat.query)}`}
-            className="group flex flex-col items-center gap-3 rounded-xl border-2 border-border bg-card p-6 shadow-card transition-all duration-200 hover:border-primary hover:shadow-card-hover hover:-translate-y-1"
+            className="group flex flex-col items-center gap-3 rounded-2xl border border-bh-border bg-bh-surface p-5 md:p-6 shadow-bh-sm transition-all duration-200 hover:border-bh-orange hover:shadow-price hover:-translate-y-1"
           >
-            <cat.icon className="h-10 w-10 text-primary transition-transform duration-200 group-hover:scale-110" />
-            <span className="text-sm font-semibold text-foreground">{cat.name}</span>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-bh-orange-light transition-transform duration-200 group-hover:scale-110">
+              <cat.icon className="h-7 w-7 text-bh-orange" />
+            </div>
+            <span className="text-sm font-semibold text-bh-text group-hover:text-bh-orange transition-colors">{cat.name}</span>
           </Link>
         ))}
       </div>

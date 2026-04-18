@@ -14,7 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        sans: ["DM Sans", "Poppins", "sans-serif"],
+        display: ["Syne", "sans-serif"],
+        body: ["DM Sans", "sans-serif"],
+        mono: ["DM Mono", "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -72,6 +75,29 @@ export default {
           dark: "hsl(var(--orange-dark))",
           deep: "hsl(var(--orange-deep))",
         },
+        bh: {
+          orange: "hsl(var(--bh-orange))",
+          "orange-light": "hsl(var(--bh-orange-light))",
+          "orange-dark": "hsl(var(--bh-orange-dark))",
+          green: "hsl(var(--bh-green))",
+          "green-light": "hsl(var(--bh-green-light))",
+          "green-dark": "hsl(var(--bh-green-dark))",
+          blue: "hsl(var(--bh-blue))",
+          "blue-light": "hsl(var(--bh-blue-light))",
+          bg: "hsl(var(--bh-bg))",
+          surface: "hsl(var(--bh-surface))",
+          "surface-2": "hsl(var(--bh-surface-2))",
+          border: "hsl(var(--bh-border))",
+          sidebar: "hsl(var(--bh-sidebar))",
+          "sidebar-text": "hsl(var(--bh-sidebar-text))",
+          "sidebar-muted": "hsl(var(--bh-sidebar-muted))",
+          text: "hsl(var(--bh-text-primary))",
+          "text-secondary": "hsl(var(--bh-text-secondary))",
+          "text-muted": "hsl(var(--bh-text-muted))",
+          "price-local": "hsl(var(--bh-price-local))",
+          "price-online": "hsl(var(--bh-price-online))",
+          "price-savings": "hsl(var(--bh-price-savings))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -90,10 +116,16 @@ export default {
         pill: "9999px",
         card: "var(--radius)",
         input: "var(--radius-input)",
+        "2xl": "16px",
+        "3xl": "24px",
       },
       boxShadow: {
         card: "var(--shadow-md)",
         "card-hover": "var(--shadow-hover)",
+        price: "var(--bh-shadow-price)",
+        bh: "var(--bh-shadow-md)",
+        "bh-sm": "var(--bh-shadow-sm)",
+        "bh-lg": "var(--bh-shadow-lg)",
       },
       keyframes: {
         "accordion-down": {

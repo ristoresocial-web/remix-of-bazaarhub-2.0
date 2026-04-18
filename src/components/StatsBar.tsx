@@ -47,16 +47,23 @@ const StatsBar: React.FC = () => {
   }, []);
 
   return (
-    <section ref={ref} className="bg-secondary py-6">
-      <div className="container grid grid-cols-2 gap-4 md:grid-cols-4">
-        {stats.map((s) => (
-          <div key={s.label} className="text-center">
-            <p className="text-2xl font-bold text-primary md:text-3xl">
-              <AnimatedCounter target={s.value} prefix={s.prefix} suffix={s.suffix} active={visible} />
-            </p>
-            <p className="text-xs text-secondary-foreground/70 md:text-sm">{s.label}</p>
-          </div>
-        ))}
+    <section ref={ref} className="border-y border-bh-border bg-white">
+      <div className="container px-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-bh-border">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="bg-white px-4 py-5 md:px-8 md:py-6 text-center transition-colors duration-200 hover:bg-bh-orange-light"
+            >
+              <p className="font-mono text-2xl md:text-3xl font-medium text-bh-orange tracking-tight">
+                <AnimatedCounter target={s.value} prefix={s.prefix} suffix={s.suffix} active={visible} />
+              </p>
+              <p className="mt-1 text-[10px] md:text-xs font-bold uppercase tracking-[0.12em] text-bh-text-muted">
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

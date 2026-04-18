@@ -32,20 +32,21 @@ const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur transition-shadow duration-200 supports-[backdrop-filter]:bg-card/80 ${
-        scrolled ? "shadow-card" : ""
+      className={`sticky top-0 z-50 border-b border-bh-border bg-white/90 backdrop-blur-xl transition-shadow duration-200 supports-[backdrop-filter]:bg-white/80 ${
+        scrolled ? "shadow-bh-sm" : ""
       }`}
     >
       {/* Desktop Navbar */}
       <div className="container hidden h-16 items-center justify-between gap-4 md:flex">
         {/* Left: Logo + Home + Tagline */}
         <div className="flex items-center gap-4">
-          <div className="flex flex-col">
-            <Link to="/">
-              <BazaarLogo />
-            </Link>
-          </div>
-          <Link to="/" className="rounded-pill border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent">
+          <Link to="/">
+            <BazaarLogo />
+          </Link>
+          <Link
+            to="/"
+            className="rounded-full border border-bh-border px-3 py-1.5 text-xs font-semibold text-bh-text transition-all duration-200 hover:bg-bh-orange-light hover:border-bh-orange hover:text-bh-orange-dark"
+          >
             {t("home")}
           </Link>
         </div>
@@ -62,30 +63,33 @@ const Navbar: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products, brands..."
-              className="h-9 w-full rounded-full border border-border bg-background pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className="h-10 w-full rounded-full border border-bh-border bg-bh-surface-2 pl-10 pr-4 text-sm text-bh-text placeholder:text-bh-text-muted outline-none transition-all duration-200 focus:border-bh-orange focus:bg-white focus:ring-4 focus:ring-bh-orange/12"
             />
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-bh-text-muted" />
           </form>
         </div>
 
-        {/* Right: Language + Seller Login */}
+        {/* Right: Language + Login + Seller */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
           {isLoggedIn ? (
-            <Link to="/buyer/dashboard" className="flex items-center gap-2 rounded-pill border border-primary px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground">
+            <Link
+              to="/buyer/dashboard"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-bh-orange px-4 py-2 text-sm font-semibold text-bh-orange transition-all duration-200 hover:bg-bh-orange hover:text-white"
+            >
               <User className="h-4 w-4" /> {profile?.name || "My Account"}
             </Link>
           ) : (
             <Link
               to="/buyer/login"
-              className="rounded-pill border border-primary px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex items-center rounded-full border-2 border-bh-orange px-4 py-2 text-sm font-semibold text-bh-orange transition-all duration-200 hover:bg-bh-orange hover:text-white"
             >
               Login
             </Link>
           )}
           <Link
             to="/seller/dashboard"
-            className="rounded-pill bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-[hsl(var(--primary-dark))] hover:shadow-lg"
+            className="inline-flex items-center rounded-full bg-bh-orange px-5 py-2 text-sm font-semibold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark hover:scale-[1.02] active:scale-[0.98]"
           >
             {t("sellerLogin")}
           </Link>
@@ -95,12 +99,11 @@ const Navbar: React.FC = () => {
       {/* Announcement Ticker */}
       <AnnouncementTicker />
 
-
       <div className="flex h-14 items-center justify-between gap-2 px-4 md:hidden">
         {/* Left: Hamburger */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-foreground transition-all duration-200 hover:bg-accent"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-bh-text transition-all duration-200 hover:bg-bh-surface-2"
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -113,30 +116,38 @@ const Navbar: React.FC = () => {
         {/* Right: Compact City Selector */}
         <button
           onClick={() => {
-            /* CitySelector will open via its own state, so we use a workaround */
             const event = new CustomEvent("open-city-selector");
             window.dispatchEvent(event);
           }}
-          className="flex items-center gap-1 rounded-pill border border-border bg-background px-2.5 py-1 text-xs font-medium text-foreground transition-all duration-200"
+          className="flex items-center gap-1 rounded-full border border-bh-border bg-bh-surface-2 px-2.5 py-1.5 text-xs font-semibold text-bh-text transition-all duration-200 hover:bg-bh-orange-light hover:border-bh-orange"
         >
-          <MapPin className="h-3.5 w-3.5 text-primary" />
+          <MapPin className="h-3.5 w-3.5 text-bh-orange" />
           <span className="max-w-[60px] truncate">{selectedCity}</span>
         </button>
       </div>
 
       {/* Mobile Slide Menu */}
       {mobileMenuOpen && (
-        <div className="animate-fade-in border-t border-border bg-card px-4 py-4 md:hidden">
+        <div className="animate-fade-in border-t border-bh-border bg-white px-4 py-4 md:hidden">
           <div className="mb-4">
             <CitySelector selectedCity={selectedCity} onCityChange={handleCityChange} />
           </div>
           <div className="mb-4">
             <LanguageSwitcher />
           </div>
+          {!isLoggedIn && (
+            <Link
+              to="/buyer/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block mb-3 rounded-full border-2 border-bh-orange py-2.5 text-center text-sm font-semibold text-bh-orange"
+            >
+              Login
+            </Link>
+          )}
           <Link
             to="/seller/dashboard"
             onClick={() => setMobileMenuOpen(false)}
-            className="block rounded-pill bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary-dark"
+            className="block rounded-full bg-bh-orange py-2.5 text-center text-sm font-semibold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark"
           >
             {t("sellerLogin")}
           </Link>
