@@ -13,7 +13,7 @@ interface Props {
 const SettingsTab: React.FC<Props> = ({ holidayMode, setHolidayMode }) => {
   const [shopName, setShopName] = useState("Poorvika Mobiles");
   const [shopCity, setShopCity] = useState("Madurai");
-  const [shopPhone, setShopPhone] = useState("+91 98765 43210");
+  const [shopPhone, setShopPhone] = useState("+91 99434 40384");
   const [language, setLanguage] = useState("en");
   const [holidayStart, setHolidayStart] = useState("");
   const [holidayEnd, setHolidayEnd] = useState("");

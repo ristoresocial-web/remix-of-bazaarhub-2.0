@@ -24,7 +24,7 @@ const AdvertiseTab: React.FC<{ city: string }> = ({ city }) => {
     topProduct: "",
     topProductPrice: "",
     shopName: "My Electronics Store",
-    phone: "9876543210",
+    phone: "9943440384",
     address: "Main Road, " + city,
   });
   const [booked, setBooked] = useState(false);

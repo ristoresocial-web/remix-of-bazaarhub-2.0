@@ -63,9 +63,9 @@ const tvProduct = {
     ["Weight", "8.2 kg (without stand)"],
   ] as [string, string][],
   cityPartners: [
-    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9876543210", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
-    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9876512345", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
-    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9876567890", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
+    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9943440384", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
+    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9943440384", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
+    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9943440384", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
   ],
   reviews: [
     { user: "Ramesh K.", rating: 5, text: "Crystal clear picture quality! Best TV under 30k. Delivery from Sri Murugan was same day.", date: "Dec 2024" },

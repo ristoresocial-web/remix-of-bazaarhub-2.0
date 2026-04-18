@@ -109,7 +109,7 @@ const ContactPage: React.FC = () => {
 
                     <div>
                       <Label>Email or Phone</Label>
-                      <Input className="mt-1" placeholder="you@email.com or +91 98765 43210" value={form.contact} onChange={e => setForm(p => ({ ...p, contact: e.target.value }))} maxLength={255} />
+                      <Input className="mt-1" placeholder="you@email.com or +91 99424 40384" value={form.contact} onChange={e => setForm(p => ({ ...p, contact: e.target.value }))} maxLength={255} />
                       {errors.contact && <p className="text-xs text-destructive mt-1">{errors.contact}</p>}
                     </div>
 
