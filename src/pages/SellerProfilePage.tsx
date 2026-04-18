@@ -4,13 +4,14 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import {
   MapPin, Phone, MessageCircle, Star, ShieldCheck, Package,
-  TrendingUp, Clock, Activity, Share2, Flag,
+  TrendingUp, Clock, Activity, Share2, Flag, Navigation, Award, Info,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 import ProductCard from "@/components/ProductCard";
 import ReportModal from "@/components/ReportModal";
