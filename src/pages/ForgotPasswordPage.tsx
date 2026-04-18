@@ -97,20 +97,24 @@ const ForgotPasswordPage: React.FC = () => {
         <title>Reset Password — Bazaar Hub</title>
         <meta name="description" content="Reset your Bazaar Hub password using a mobile OTP." />
       </Helmet>
-      <div className="container flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md">
-          <div className="mb-6 flex flex-col items-center text-center">
-            <PriceTagLogo size={48} />
-            <h1 className="mt-3 text-xl font-bold text-foreground">Reset via Mobile OTP</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We'll send a 6-digit code to your registered mobile number
-            </p>
-          </div>
+      <div className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-gradient-to-br from-bh-orange-light/40 via-bh-bg to-bh-green-light/30">
+        <div className="pointer-events-none absolute -top-32 -left-20 h-80 w-80 rounded-full bg-bh-orange/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-bh-green/15 blur-3xl" />
 
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
-            <div className="mb-5 flex items-center justify-center gap-2 rounded-xl bg-muted px-3 py-2 text-xs font-semibold text-primary">
-              <Smartphone className="h-3.5 w-3.5" /> Mobile OTP
+        <div className="container relative flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
+          <div className="w-full max-w-md">
+            <div className="mb-6 flex flex-col items-center text-center">
+              <PriceTagLogo size={48} />
+              <h1 className="mt-3 font-display text-2xl font-bold text-bh-text">Reset via Mobile OTP</h1>
+              <p className="mt-1 text-sm text-bh-text-secondary">
+                We'll send a 6-digit code to your registered mobile number
+              </p>
             </div>
+
+            <div className="rounded-3xl border border-bh-border bg-bh-surface/95 backdrop-blur-xl p-6 shadow-bh-lg">
+              <div className="mb-5 flex items-center justify-center gap-2 rounded-pill bg-bh-orange-light px-3 py-2 text-xs font-bold uppercase tracking-wider text-bh-orange-dark">
+                <Smartphone className="h-3.5 w-3.5" /> Mobile OTP
+              </div>
 
             {mobileStep === "enterMobile" && (
               <form
@@ -122,16 +126,16 @@ const ForgotPasswordPage: React.FC = () => {
               >
                 <Link
                   to="/auth"
-                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                  className="flex items-center gap-1 text-xs font-semibold text-bh-text-secondary hover:text-bh-orange"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" /> Back to login
                 </Link>
                 <div>
-                  <label className="mb-1 block text-xs font-semibold text-foreground">
+                  <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-bh-text">
                     Registered Mobile Number
                   </label>
                   <div className="flex items-center gap-2">
-                    <span className="notranslate flex h-11 items-center rounded-lg border border-input bg-muted px-3 text-sm font-semibold text-muted-foreground">
+                    <span className="notranslate flex h-11 items-center rounded-xl border border-bh-border bg-bh-surface-2 px-3 font-mono text-sm font-semibold text-bh-text-secondary">
                       +91
                     </span>
                     <input
@@ -141,7 +145,7 @@ const ForgotPasswordPage: React.FC = () => {
                         setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))
                       }
                       placeholder="99434 40384"
-                      className="notranslate h-11 flex-1 rounded-xl border border-input bg-background px-4 text-base focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="notranslate h-11 flex-1 rounded-xl border border-bh-border bg-white px-4 font-mono text-base focus:border-bh-orange focus:outline-none focus:ring-2 focus:ring-bh-orange/20"
                       required
                     />
                   </div>
@@ -152,7 +156,7 @@ const ForgotPasswordPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={mobileLoading}
-                  className="h-11 w-full rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-all hover:bg-[hsl(var(--primary-dark))] disabled:opacity-50"
+                  className="h-11 w-full rounded-pill bg-bh-orange text-sm font-semibold text-white shadow-price transition-all hover:bg-bh-orange-dark hover:scale-[1.02] disabled:opacity-50"
                 >
                   {mobileLoading ? (
                     <Loader2 className="mx-auto h-5 w-5 animate-spin" />
