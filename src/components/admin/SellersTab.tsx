@@ -98,8 +98,8 @@ const SellersTab: React.FC = () => {
   };
 
   const SortHeader: React.FC<{ label: string; field: SortKey }> = ({ label, field }) => (
-    <th onClick={() => toggleSort(field)} className="p-3 text-left font-medium text-muted-foreground cursor-pointer hover:text-foreground select-none">
-      <span className="flex items-center gap-1">{label} <ArrowUpDown className={`h-3 w-3 ${sortKey === field ? "text-primary" : "text-muted-foreground/40"}`} /></span>
+    <th onClick={() => toggleSort(field)} className="p-3 text-left text-[10px] font-bold uppercase tracking-wider text-bh-text-muted cursor-pointer hover:text-bh-text select-none">
+      <span className="flex items-center gap-1">{label} <ArrowUpDown className={`h-3 w-3 ${sortKey === field ? "text-bh-orange" : "text-bh-text-muted/40"}`} /></span>
     </th>
   );
 
@@ -144,30 +144,30 @@ const SellersTab: React.FC = () => {
         </select>
       </div>
 
-      <div className="overflow-x-auto rounded-card border border-border bg-card shadow-card">
+      <div className="overflow-x-auto rounded-2xl border border-bh-border bg-white shadow-bh-sm">
         <table className="w-full text-sm">
-          <thead className="bg-muted/50">
+          <thead className="bg-bh-surface-2 border-b border-bh-border">
             <tr>
               <SortHeader label="Name" field="name" />
               <SortHeader label="City" field="city" />
-              <th className="p-3 text-left font-medium text-muted-foreground hidden lg:table-cell">GST</th>
+              <th className="p-3 text-left text-[10px] font-bold uppercase tracking-wider text-bh-text-muted hidden lg:table-cell">GST</th>
               <SortHeader label="Products" field="products" />
-              <th className="p-3 text-center font-medium text-muted-foreground">Status</th>
-              <th className="p-3 text-center font-medium text-muted-foreground">Trust</th>
+              <th className="p-3 text-center text-[10px] font-bold uppercase tracking-wider text-bh-text-muted">Status</th>
+              <th className="p-3 text-center text-[10px] font-bold uppercase tracking-wider text-bh-text-muted">Trust</th>
               <SortHeader label="Revenue" field="revenue" />
-              <th className="p-3 text-center font-medium text-muted-foreground">Actions</th>
+              <th className="p-3 text-center text-[10px] font-bold uppercase tracking-wider text-bh-text-muted">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-bh-border">
             {paged.map(s => (
-              <tr key={s.gst} className="hover:bg-accent/30 transition-all duration-200">
-                <td className="p-3 font-semibold text-foreground">{s.name}</td>
-                <td className="p-3 text-muted-foreground">{s.city}</td>
-                <td className="p-3 text-muted-foreground hidden lg:table-cell font-mono text-xs">{s.gst}</td>
-                <td className="p-3 text-center text-foreground">{s.products}</td>
+              <tr key={s.gst} className="hover:bg-bh-surface-2 transition-all duration-200">
+                <td className="p-3 font-semibold text-bh-text">{s.name}</td>
+                <td className="p-3 text-bh-text-secondary">{s.city}</td>
+                <td className="p-3 text-bh-text-secondary hidden lg:table-cell font-mono text-xs notranslate">{s.gst}</td>
+                <td className="p-3 text-center font-mono text-bh-text notranslate">{s.products}</td>
                 <td className="p-3 text-center"><StatusBadge variant={statusMap[s.status]} label={statusLabel[s.status]} /></td>
                 <td className="p-3 text-center"><TrustBadge variant={trustMap[s.trust]} /></td>
-                <td className="p-3 text-right notranslate text-foreground">₹{(s.revenue / 100000).toFixed(1)}L</td>
+                <td className="p-3 text-right notranslate font-mono text-bh-text">₹{(s.revenue / 100000).toFixed(1)}L</td>
                 <td className="p-3 text-center">
                   <div className="flex items-center justify-center gap-1 flex-wrap">
                     {s.status === "pending" && (

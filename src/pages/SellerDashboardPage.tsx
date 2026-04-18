@@ -80,41 +80,63 @@ const SellerDashboardPage: React.FC = () => {
       </Helmet>
 
       {/* Top Bar */}
-      <div className="sticky top-0 z-20 border-b border-border bg-card shadow-card">
-        <div className="flex items-center justify-between px-4 py-3 md:px-6">
+      <div className="sticky top-0 z-20 border-b border-bh-border bg-white/90 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-3 md:px-6 h-16">
           <div className="flex items-center gap-3">
-            <span className="bazaar-logo-text text-lg">
-              <span className="bazaar-logo-navy">Bazaar</span>
-              <span className="bazaar-logo-orange">Hub</span>
+            <span className="font-display font-extrabold text-xl">
+              <span className="text-bh-orange">Bazaar</span>
+              <span className="text-bh-green">Hub</span>
             </span>
-            <span className="hidden sm:inline text-sm font-semibold text-foreground">Seller Dashboard</span>
+            <span className="hidden sm:inline text-sm font-semibold text-bh-text-secondary">Seller Dashboard</span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="relative rounded-full p-2 text-muted-foreground hover:bg-accent transition-all duration-200">
+            <button className="relative rounded-full p-2 text-bh-text-secondary hover:bg-bh-surface-2 transition-all duration-200">
               <Bell className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">3</span>
+              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full bg-bh-orange text-[10px] font-bold text-white flex items-center justify-center">3</span>
             </button>
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-foreground">Poorvika Mobiles</p>
-              <p className="text-[10px] text-muted-foreground">{city}</p>
+              <p className="text-sm font-semibold text-bh-text">Poorvika Mobiles</p>
+              <p className="text-[10px] text-bh-text-muted notranslate">{city}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Verification Banner */}
+      {/* Onboarding Banner — orange gradient with progress dots */}
       {!isApproved && !bannerDismissed && (
-        <div className="mx-4 mt-4 rounded-card bg-primary p-4 text-primary-foreground md:mx-6">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="font-semibold">Your shop is getting ready to go live!</p>
-              <p className="text-sm opacity-90">You are almost there! Our team reviews within 24 hours. SMS + WhatsApp sent on approval.</p>
+        <div className="mx-4 mt-4 md:mx-6 relative overflow-hidden rounded-2xl bg-gradient-to-r from-bh-orange to-[#FB923C] text-white px-6 py-4 shadow-price">
+          {/* Decorative glow */}
+          <div className="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+          <div className="absolute right-20 bottom-0 w-32 h-32 rounded-full bg-white/5 blur-xl pointer-events-none" />
+
+          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex-1">
+              <p className="font-display font-bold text-base">Your shop is getting ready to go live!</p>
+              <p className="text-sm opacity-90 mt-0.5">You are almost there! Our team reviews within 24 hours. SMS + WhatsApp sent on approval.</p>
+
+              {/* Progress dots */}
+              <div className="flex items-center gap-2 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2 w-2 rounded-full bg-white" />
+                  <span className="text-[11px] font-semibold opacity-90">Submitted</span>
+                </div>
+                <div className="h-px w-6 bg-white/30" />
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+                  <span className="text-[11px] font-semibold opacity-90">Under review</span>
+                </div>
+                <div className="h-px w-6 bg-white/20" />
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2 w-2 rounded-full bg-white/30" />
+                  <span className="text-[11px] font-medium opacity-60">Live</span>
+                </div>
+              </div>
             </div>
             <div className="flex items-center gap-2 self-start">
-              <Button variant="outline" size="sm" className="border-white text-white hover:bg-white/20">
-                <Phone className="h-3.5 w-3.5 mr-1" /> Contact Support
-              </Button>
-              <button onClick={() => setBannerDismissed(true)} className="rounded-full p-1 text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200">
+              <button className="inline-flex items-center gap-1.5 rounded-full border-2 border-white/80 text-white hover:bg-white/15 px-4 py-1.5 text-xs font-semibold transition-all duration-200">
+                <Phone className="h-3.5 w-3.5" /> Contact Support
+              </button>
+              <button onClick={() => setBannerDismissed(true)} className="rounded-full p-1.5 text-white/80 hover:text-white hover:bg-white/15 transition-all duration-200">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -124,9 +146,9 @@ const SellerDashboardPage: React.FC = () => {
 
       {/* Holiday Banner */}
       {holidayMode && (
-        <div className="mx-4 mt-4 rounded-card bg-primary-light border border-primary/30 p-3 flex items-center gap-2 md:mx-6">
-          <Calendar className="h-5 w-5 text-primary" />
-          <p className="text-sm font-medium text-foreground">Holiday Mode is active. Your listings show "On Holiday" and contact buttons are disabled.</p>
+        <div className="mx-4 mt-4 rounded-2xl bg-bh-orange-light border border-bh-orange/20 p-3 flex items-center gap-2 md:mx-6">
+          <Calendar className="h-5 w-5 text-bh-orange" />
+          <p className="text-sm font-medium text-bh-text">Holiday Mode is active. Your listings show "On Holiday" and contact buttons are disabled.</p>
         </div>
       )}
 
