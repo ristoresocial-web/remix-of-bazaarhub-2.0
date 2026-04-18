@@ -581,8 +581,8 @@ export function getSellersForModel(model: ModelSpec): ModelSeller[] {
   ];
   if (["Mobiles", "TVs", "Laptops", "Washing Machines", "Refrigerators", "ACs"].includes(model.category)) {
     base.push(
-      { name: "Sangeetha Electronics", type: "local", price: model.lowestPrice - 500, distance: 2.4, rating: 4.5, reviews: 340, url: "#", phone: "+91 98765 67890" },
-      { name: "Poorvika Mobiles", type: "local", price: model.lowestPrice + 200, distance: 1.2, rating: 4.6, reviews: 520, url: "#", phone: "+91 98765 43210" },
+      { name: "Sangeetha Electronics", type: "local", price: model.lowestPrice - 500, distance: 2.4, rating: 4.5, reviews: 340, url: "#", phone: "+91 99434 40384" },
+      { name: "Poorvika Mobiles", type: "local", price: model.lowestPrice + 200, distance: 1.2, rating: 4.6, reviews: 520, url: "#", phone: "+91 99434 40384" },
     );
   }
   return base.sort((a, b) => a.price - b.price);
