@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { MapPin, Star, Navigation, MessageCircle, Crown, UtensilsCrossed } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { FoodStall, getFoodStallStatus } from "@/data/foodFestivalData";
+import { useMapsKey } from "@/lib/googleMapsKey";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   stalls: FoodStall[];
@@ -10,18 +12,23 @@ interface Props {
 
 const FoodStallMapView: React.FC<Props> = ({ stalls, city }) => {
   const [selected, setSelected] = useState<FoodStall | null>(null);
+  const { key: mapsKey, loading: keyLoading } = useMapsKey();
 
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       {/* Map */}
       <div className="relative h-[400px] flex-1 overflow-hidden rounded-card border border-border bg-muted lg:h-[600px]">
-        <iframe
-          src={`https://www.google.com/maps/embed/v1/search?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=food+stalls+in+${encodeURIComponent(city)}&zoom=13`}
-          className="h-full w-full border-0"
-          allowFullScreen
-          loading="lazy"
-          title={`Food stalls map in ${city}`}
-        />
+        {keyLoading || !mapsKey ? (
+          <Skeleton className="h-full w-full" />
+        ) : (
+          <iframe
+            src={`https://www.google.com/maps/embed/v1/search?key=${mapsKey}&q=food+stalls+in+${encodeURIComponent(city)}&zoom=13`}
+            className="h-full w-full border-0"
+            allowFullScreen
+            loading="lazy"
+            title={`Food stalls map in ${city}`}
+          />
+        )}
         <div className="absolute bottom-3 left-3 flex flex-col gap-1 rounded-card bg-card/95 p-2 shadow-card backdrop-blur-sm">
           <span className="text-[10px] font-semibold text-foreground">🍽️ {stalls.length} food stalls</span>
           <div className="flex gap-2 text-[10px] text-muted-foreground">

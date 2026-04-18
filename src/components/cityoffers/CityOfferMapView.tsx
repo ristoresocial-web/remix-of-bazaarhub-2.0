@@ -3,6 +3,8 @@ import { MapPin, Phone, Star, Clock, Navigation, ExternalLink } from "lucide-rea
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/cityUtils";
 import { CityOffer, getOfferStatus, getDaysLeft } from "@/data/cityOffersData";
+import { useMapsKey } from "@/lib/googleMapsKey";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
   offers: CityOffer[];
@@ -11,18 +13,23 @@ interface Props {
 
 const CityOfferMapView: React.FC<Props> = ({ offers, city }) => {
   const [selectedOffer, setSelectedOffer] = React.useState<CityOffer | null>(null);
+  const { key: mapsKey, loading: keyLoading } = useMapsKey();
 
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       {/* Map embed */}
       <div className="relative h-[400px] flex-1 overflow-hidden rounded-card border border-border bg-muted lg:h-[600px]">
-        <iframe
-          src={`https://www.google.com/maps/embed/v1/search?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=shops+in+${encodeURIComponent(city)}&zoom=13`}
-          className="h-full w-full border-0"
-          allowFullScreen
-          loading="lazy"
-          title={`Map of pop-up shops in ${city}`}
-        />
+        {keyLoading || !mapsKey ? (
+          <Skeleton className="h-full w-full" />
+        ) : (
+          <iframe
+            src={`https://www.google.com/maps/embed/v1/search?key=${mapsKey}&q=shops+in+${encodeURIComponent(city)}&zoom=13`}
+            className="h-full w-full border-0"
+            allowFullScreen
+            loading="lazy"
+            title={`Map of pop-up shops in ${city}`}
+          />
+        )}
 
         {/* Pin overlay legend */}
         <div className="absolute bottom-3 left-3 flex flex-col gap-1 rounded-card bg-card/95 p-2 shadow-card backdrop-blur-sm">
