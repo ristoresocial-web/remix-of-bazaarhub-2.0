@@ -301,21 +301,88 @@ const ProductPage: React.FC = () => {
                 />
               )}
 
-              {/* ── SPECS TABLE ── */}
+              {/* ── SPECS ACCORDION ── */}
               {specs && specs.length > 0 && (
                 <Reveal>
                   <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-                    <h3 className="p-4 text-base font-bold text-foreground">📋 Product Specifications</h3>
-                    <table className="w-full text-sm">
-                      <tbody>
-                        {specs.map(([key, val], idx) => (
-                          <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
-                            <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
-                            <td className="notranslate px-4 py-2.5 text-foreground">{val}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <Accordion type="single" collapsible defaultValue="specs">
+                      <AccordionItem value="specs" className="border-b-0">
+                        <AccordionTrigger className="px-4 py-4 text-base font-bold text-foreground hover:no-underline">
+                          <span className="flex items-center gap-2">📋 Specifications</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-0 pb-0">
+                          <table className="w-full text-sm">
+                            <tbody>
+                              {specs.map(([key, val], idx) => (
+                                <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
+                                  <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
+                                  <td className="notranslate px-4 py-2.5 text-foreground">{val}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                </Reveal>
+              )}
+
+              {/* ── DELIVERY & PICKUP OPTIONS ── */}
+              {cityPartner && (
+                <Reveal>
+                  <div>
+                    <h3 className="mb-3 text-base font-bold text-foreground flex items-center gap-2">
+                      🚚 Delivery & Pickup Options
+                    </h3>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {/* Store Pickup */}
+                      <div className="rounded-2xl border border-success/30 bg-success/5 p-4 transition-all duration-200 hover:shadow-card">
+                        <div className="mb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full bg-success/15 p-2">
+                              <Store className="h-4 w-4 text-success" />
+                            </div>
+                            <p className="text-sm font-bold text-foreground">Store Pickup</p>
+                          </div>
+                          <span className="rounded-pill bg-success px-2 py-0.5 text-[10px] font-bold uppercase text-success-foreground">Free</span>
+                        </div>
+                        <p className="text-xs font-semibold text-success">Ready in 2 hours</p>
+                        <p className="mt-1.5 text-xs text-muted-foreground flex items-start gap-1">
+                          <MapPin className="h-3 w-3 mt-0.5 shrink-0" />
+                          <span className="notranslate">{cityPartner.address}</span>
+                        </p>
+                      </div>
+
+                      {/* Home Delivery */}
+                      <div className={`rounded-2xl border p-4 transition-all duration-200 hover:shadow-card ${
+                        (cityPartner as any).homeDelivery ? "border-primary/30 bg-primary-light" : "border-border bg-muted/40 opacity-70"
+                      }`}>
+                        <div className="mb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className={`rounded-full p-2 ${(cityPartner as any).homeDelivery ? "bg-primary/15" : "bg-muted"}`}>
+                              <Truck className={`h-4 w-4 ${(cityPartner as any).homeDelivery ? "text-primary" : "text-muted-foreground"}`} />
+                            </div>
+                            <p className="text-sm font-bold text-foreground">Home Delivery</p>
+                          </div>
+                          {(cityPartner as any).homeDelivery ? (
+                            <span className="notranslate rounded-pill bg-primary px-2 py-0.5 text-[10px] font-bold uppercase text-primary-foreground">
+                              {(cityPartner as any).deliveryFee || "₹40–₹80"}
+                            </span>
+                          ) : (
+                            <span className="rounded-pill bg-muted px-2 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">Unavailable</span>
+                          )}
+                        </div>
+                        {(cityPartner as any).homeDelivery ? (
+                          <>
+                            <p className="text-xs font-semibold text-primary">1–3 business days</p>
+                            <p className="mt-1.5 text-xs text-muted-foreground">Delivered to your doorstep with tracking & free installation.</p>
+                          </>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">This seller offers store pickup only.</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </Reveal>
               )}
