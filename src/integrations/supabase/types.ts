@@ -47,6 +47,66 @@ export type Database = {
         }
         Relationships: []
       }
+      price_alerts: {
+        Row: {
+          category: string | null
+          city: string
+          created_at: string
+          current_best_price: number | null
+          current_best_seller: string | null
+          id: string
+          last_checked_at: string | null
+          notify_email: boolean
+          notify_whatsapp: boolean
+          product_image: string | null
+          product_name: string
+          status: string
+          target_price: number
+          triggered_at: string | null
+          updated_at: string
+          user_id: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          category?: string | null
+          city?: string
+          created_at?: string
+          current_best_price?: number | null
+          current_best_seller?: string | null
+          id?: string
+          last_checked_at?: string | null
+          notify_email?: boolean
+          notify_whatsapp?: boolean
+          product_image?: string | null
+          product_name: string
+          status?: string
+          target_price: number
+          triggered_at?: string | null
+          updated_at?: string
+          user_id: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          category?: string | null
+          city?: string
+          created_at?: string
+          current_best_price?: number | null
+          current_best_seller?: string | null
+          id?: string
+          last_checked_at?: string | null
+          notify_email?: boolean
+          notify_whatsapp?: boolean
+          product_image?: string | null
+          product_name?: string
+          status?: string
+          target_price?: number
+          triggered_at?: string | null
+          updated_at?: string
+          user_id?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           brand: string
