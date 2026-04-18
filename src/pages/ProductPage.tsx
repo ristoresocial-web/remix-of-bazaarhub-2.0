@@ -4,8 +4,10 @@ import { Helmet } from "react-helmet-async";
 import {
   ArrowLeft, MapPin, Phone, Flag, Star, RefreshCw, Bell, ChevronRight,
   MessageCircle, ExternalLink, Truck, Wrench, ShieldCheck, RotateCcw,
-  Clock, Calendar, Heart,
+  Clock, Calendar, Heart, Home as HomeIcon, Store, QrCode, Share2, X,
 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { mockProducts } from "@/data/mockData";
 import { formatPrice, getDistance, getPlatformsForCity } from "@/lib/cityUtils";
 import SellerPriceTable from "@/components/SellerPriceTable";
