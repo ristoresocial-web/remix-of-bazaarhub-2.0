@@ -111,6 +111,9 @@ const ProductPage: React.FC = () => {
     new Date().toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true })
   );
   const [showCompareBtn, setShowCompareBtn] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+
+  const productUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const existingProduct = mockProducts.find(p => p.id === Number(id));
   const isTVProduct = Number(id) === 200 || !existingProduct;
