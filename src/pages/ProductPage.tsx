@@ -216,14 +216,21 @@ const ProductPage: React.FC = () => {
         <div className="container py-4">
 
           {/* ── BREADCRUMB ── */}
-          <nav className="mb-4 flex items-center gap-1 text-sm text-muted-foreground">
-            <Link to="/" className="transition-all duration-200 hover:text-primary">Home</Link>
+          <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+            <Link to="/" className="flex items-center gap-1 transition-all duration-200 hover:text-primary">
+              <HomeIcon className="h-3.5 w-3.5" /> Home
+            </Link>
             <ChevronRight className="h-3 w-3" />
             <Link to={`/search?q=${encodeURIComponent(isTVProduct ? tvProduct.category : product!.category)}`} className="transition-all duration-200 hover:text-primary">
               {isTVProduct ? tvProduct.category : product!.category}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productBrand}</span>
+            <Link
+              to={`/search?q=${encodeURIComponent(isTVProduct ? tvProduct.subcategory : productBrand)}`}
+              className="notranslate transition-all duration-200 hover:text-primary"
+            >
+              {isTVProduct ? tvProduct.subcategory : productBrand}
+            </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productName}</span>
           </nav>
