@@ -222,6 +222,7 @@ const ForgotPasswordPage: React.FC = () => {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
