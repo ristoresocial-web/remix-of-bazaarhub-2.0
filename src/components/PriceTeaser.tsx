@@ -28,18 +28,22 @@ const PriceTeaser: React.FC<PriceTeaserProps> = ({ productSlug, localPrice, onli
 
   if (diff < 100) return null;
 
+  const cheaperColor = local < online ? "text-bh-green-dark" : "text-bh-blue";
+
   return (
     <p className="mt-1 text-[10px] leading-tight">
-      <span className="text-muted-foreground">
-        ₹{local.toLocaleString("en-IN")} local
+      <span className="font-mono notranslate text-bh-green-dark">
+        ₹{local.toLocaleString("en-IN")}
       </span>
-      <span className="mx-1 text-muted-foreground/50">|</span>
-      <span className="text-muted-foreground">
-        ₹{online.toLocaleString("en-IN")} online
+      <span className="ml-0.5 text-bh-text-muted">local</span>
+      <span className="mx-1 text-bh-border">|</span>
+      <span className="font-mono notranslate text-bh-blue">
+        ₹{online.toLocaleString("en-IN")}
       </span>
-      <span className="mx-1">→</span>
-      <span className="font-semibold text-success">
-        ₹{diff.toLocaleString("en-IN")} cheaper {cheaper}
+      <span className="ml-0.5 text-bh-text-muted">online</span>
+      <span className="mx-1 text-bh-text-muted">→</span>
+      <span className={`font-display font-bold ${cheaperColor}`}>
+        <span className="font-mono notranslate">₹{diff.toLocaleString("en-IN")}</span> cheaper {cheaper}
       </span>
     </p>
   );

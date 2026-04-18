@@ -57,11 +57,10 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
   return (
     <div className="space-y-6">
       {/* Online Sellers */}
-      <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="bg-muted/50 px-4 py-3 border-b border-border">
-          <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-            <Truck className="h-4 w-4 text-primary" />
-            Online Sellers
+      <div className="rounded-2xl border border-bh-blue/20 bg-bh-blue-light/30 shadow-bh-sm overflow-hidden">
+        <div className="bg-bh-blue-light px-4 py-3 border-b border-bh-blue/20">
+          <h3 className="text-sm font-display font-bold text-bh-blue flex items-center gap-2">
+            🌐 <Truck className="h-4 w-4" /> Online Sellers
           </h3>
         </div>
         <div className="divide-y divide-border">
@@ -70,31 +69,31 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
             return (
               <div
                 key={entry.platform}
-                className={`flex items-center gap-3 p-3 transition-all duration-200 ${
-                  isCheapest ? "bg-success-light" : ""
+                className={`flex items-center gap-3 p-3 transition-all duration-200 bg-white/70 ${
+                  isCheapest ? "ring-2 ring-bh-orange ring-inset bg-bh-orange-light/40" : "hover:bg-white"
                 }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="notranslate text-sm font-semibold text-foreground">
+                    <span className="notranslate text-sm font-display font-bold text-bh-text">
                       {entry.platform}
                     </span>
                     {isCheapest && (
-                      <span className="rounded-pill bg-success px-2 py-0.5 text-[10px] font-bold text-success-foreground flex items-center gap-0.5">
+                      <span className="rounded-full bg-bh-orange px-2 py-0.5 text-[10px] font-bold text-white shadow-price flex items-center gap-0.5">
                         <Crown className="h-2.5 w-2.5" /> Best Price
                       </span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                    <span className="text-[10px] text-bh-text-muted flex items-center gap-0.5">
                       <Truck className="h-2.5 w-2.5" /> 2-4 days
                     </span>
-                    <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                    <span className="text-[10px] text-bh-text-muted flex items-center gap-0.5">
                       <Star className="h-2.5 w-2.5 fill-warning text-warning" /> 4.3
                     </span>
                   </div>
                   {entry.isAffiliate && (
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                    <p className="text-[10px] text-bh-text-muted mt-0.5">
                       {entry.platform.toLowerCase().includes("amazon")
                         ? `as of ${timestamp} · Amazon Associate link`
                         : "Affiliate link · Commission earned"}
@@ -102,8 +101,8 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
                   )}
                 </div>
                 <p
-                  className={`notranslate text-base font-bold whitespace-nowrap ${
-                    isCheapest ? "text-success" : "text-foreground"
+                  className={`notranslate font-mono text-lg font-medium whitespace-nowrap price-animate ${
+                    isCheapest ? "text-bh-orange-dark" : "text-bh-blue"
                   }`}
                 >
                   {formatPrice(entry.price)}
@@ -112,7 +111,7 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
                   href={entry.url}
                   target="_blank"
                   rel="nofollow sponsored noopener noreferrer"
-                  className="flex items-center gap-1 rounded-pill bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90 whitespace-nowrap"
+                  className="flex items-center gap-1 rounded-full bg-bh-orange px-3 py-1.5 text-xs font-bold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark hover:scale-[1.03] active:scale-[0.97] whitespace-nowrap"
                 >
                   Buy <ExternalLink className="h-3 w-3" />
                 </a>
@@ -128,9 +127,9 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
       </div>
 
       {/* City Partners */}
-      <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-        <div className="bg-primary-light px-4 py-3 border-b border-primary/20">
-          <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+      <div className="rounded-2xl border border-bh-green/20 bg-bh-green-light/30 shadow-bh-sm overflow-hidden">
+        <div className="bg-bh-green-light px-4 py-3 border-b border-bh-green/20">
+          <h3 className="text-sm font-display font-bold text-bh-green-dark flex items-center gap-2">
             🏪 {city} City Partners
           </h3>
         </div>
@@ -140,41 +139,41 @@ const SellerPriceTable: React.FC<SellerPriceTableProps> = ({
             return (
               <div
                 key={partner.name}
-                className={`p-3 transition-all duration-200 ${
-                  isCheapest ? "bg-success-light" : ""
+                className={`p-3 bg-white/70 transition-all duration-200 ${
+                  isCheapest ? "ring-2 ring-bh-orange ring-inset bg-bh-orange-light/40" : "hover:bg-white"
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{partner.photo}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-foreground">
+                      <span className="text-sm font-display font-bold text-bh-text">
                         {partner.name}
                       </span>
                       {isCheapest && (
-                        <span className="rounded-pill bg-success px-2 py-0.5 text-[10px] font-bold text-success-foreground flex items-center gap-0.5">
+                        <span className="rounded-full bg-bh-orange px-2 py-0.5 text-[10px] font-bold text-white shadow-price flex items-center gap-0.5">
                           <Crown className="h-2.5 w-2.5" /> Best Price
                         </span>
                       )}
                       {idx === 0 && !isCheapest && (
-                        <span className="rounded-pill bg-accent px-2 py-0.5 text-[10px] font-bold text-accent-foreground">
+                        <span className="rounded-full bg-bh-green-light text-bh-green-dark border border-bh-green/20 px-2 py-0.5 text-[10px] font-bold">
                           City Best
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                      <span className="text-[10px] text-bh-text-muted flex items-center gap-0.5">
                         <Star className="h-2.5 w-2.5 fill-warning text-warning" /> {partner.rating}
                       </span>
-                      <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                      <span className="text-[10px] text-bh-text-muted flex items-center gap-0.5">
                         <MapPin className="h-2.5 w-2.5" /> {getDistance(partner.km)}
                       </span>
-                      <span className="text-[10px] text-success font-medium">In Stock</span>
+                      <span className="text-[10px] text-bh-green-dark font-bold">● In Stock</span>
                     </div>
                   </div>
                   <p
-                    className={`notranslate text-base font-bold whitespace-nowrap ${
-                      isCheapest ? "text-success" : "text-foreground"
+                    className={`notranslate font-mono text-lg font-medium whitespace-nowrap price-animate ${
+                      isCheapest ? "text-bh-orange-dark" : "text-bh-green-dark"
                     }`}
                   >
                     {formatPrice(partner.price)}
