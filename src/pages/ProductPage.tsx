@@ -399,48 +399,63 @@ const ProductPage: React.FC = () => {
             <div className="space-y-4 lg:sticky lg:top-20 lg:self-start">
 
               {/* ── BEST PRICE SUMMARY ── */}
-              <div className="rounded-2xl border-2 border-primary p-4">
-                <div className="mb-3 flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-foreground">
+              <div className="rounded-3xl border border-bh-border bg-gradient-to-br from-bh-surface-2 to-white p-5 shadow-bh">
+                <div className="mb-1 flex items-center justify-between">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-bh-orange">
                     🏆 Best Price in {selectedCity}
-                  </h3>
-                  <Link to="/" className="text-xs font-medium text-primary transition-all duration-200 hover:underline">
+                  </p>
+                  <Link to="/" className="text-xs font-medium text-bh-orange transition-all duration-200 hover:underline">
                     Change City
                   </Link>
                 </div>
 
-                <p className="notranslate text-3xl font-bold text-primary">{formatPrice(cheapest)}</p>
-                <p className="text-sm text-muted-foreground mb-4">
-                  at <span className="font-semibold text-foreground">{cheapestSeller}</span>
+                <p className="notranslate font-mono text-4xl font-medium text-bh-text price-animate tracking-tight">
+                  {formatPrice(cheapest)}
+                </p>
+                <p className="text-sm text-bh-text-secondary mb-4">
+                  at <span className="font-display font-bold text-bh-text">{cheapestSeller}</span>
                 </p>
 
                 {/* Online vs City Partner comparison */}
-                <div className="rounded-xl bg-muted/50 p-3 space-y-2 mb-4">
+                <div className="rounded-2xl bg-white border border-bh-border p-3 space-y-2 mb-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Online Best:</span>
-                    <span className="notranslate font-semibold text-foreground">{formatPrice(onlineBest)}</span>
+                    <span className="text-bh-text-secondary flex items-center gap-1">🌐 Online Best</span>
+                    <span className="notranslate font-mono font-medium text-bh-blue">{formatPrice(onlineBest)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-px flex-1 bg-bh-border" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-bh-text-muted">vs</span>
+                    <div className="h-px flex-1 bg-bh-border" />
                   </div>
                   {localBest !== null && (
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">City Partner Best:</span>
-                      <span className="notranslate font-semibold text-foreground">{formatPrice(localBest)}</span>
+                      <span className="text-bh-text-secondary flex items-center gap-1">🏪 City Partner Best</span>
+                      <span className="notranslate font-mono font-medium text-bh-green-dark">{formatPrice(localBest)}</span>
                     </div>
                   )}
                   {priceDiff > 0 && (
-                    <div className="pt-1 border-t border-border">
-                      <span className="rounded-pill bg-success px-2.5 py-1 text-xs font-bold text-success-foreground">
-                        {formatPrice(priceDiff)} cheaper via {cheaperSource}
+                    <div className="mt-2 flex items-center justify-between rounded-xl border border-bh-orange/20 bg-bh-orange-light p-2.5 animate-savings-pop">
+                      <span className="text-xs font-bold text-bh-orange-dark flex items-center gap-1">
+                        💰 You save
+                      </span>
+                      <span className="font-mono notranslate text-lg font-medium text-bh-orange-dark">
+                        {formatPrice(priceDiff)}
                       </span>
                     </div>
+                  )}
+                  {priceDiff > 0 && (
+                    <p className="text-[10px] text-bh-text-muted text-center">
+                      cheaper via <span className="font-bold text-bh-orange-dark">{cheaperSource}</span>
+                    </p>
                   )}
                 </div>
 
                 {/* Action buttons */}
                 <div className="grid grid-cols-2 gap-2">
-                  <a href="#sellers" className="flex items-center justify-center gap-1 rounded-pill bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:bg-primary/90">
+                  <a href="#sellers" className="flex items-center justify-center gap-1 rounded-full bg-bh-orange py-2.5 text-sm font-bold text-white shadow-price transition-all duration-200 hover:bg-bh-orange-dark hover:scale-[1.02] active:scale-[0.98]">
                     Compare All Prices
                   </a>
-                  <button className="flex items-center justify-center gap-1 rounded-pill border-2 border-primary py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground">
+                  <button className="flex items-center justify-center gap-1 rounded-full border-2 border-bh-orange py-2.5 text-sm font-bold text-bh-orange transition-all duration-200 hover:bg-bh-orange-light">
                     <Bell className="h-4 w-4" /> Price Alert
                   </button>
                 </div>

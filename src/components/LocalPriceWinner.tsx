@@ -18,10 +18,10 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="rounded-lg bg-primary/10 border border-primary/20 p-3 text-sm"
+        className="rounded-2xl bg-bh-orange-light border border-bh-orange/20 p-3 text-sm"
       >
-        <span className="font-semibold">⚖️ Same price via city partner and online</span>
-        <span className="text-muted-foreground ml-1">— visit your city partner for instant pickup!</span>
+        <span className="font-display font-bold text-bh-orange-dark">⚖️ Same price — local & online</span>
+        <span className="text-bh-text-secondary ml-1">— pick up locally for instant delivery!</span>
       </motion.div>
     );
   }
@@ -31,10 +31,11 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="rounded-lg bg-[hsl(var(--success))]/10 border border-[hsl(var(--success))]/20 p-3 text-sm"
+        className="rounded-2xl bg-bh-green-light/60 border border-bh-green/20 p-3 text-sm"
       >
-        <span className="font-semibold text-[hsl(var(--success))]">
-          💚 {city} City Partners beat online by {formattedDiff}!
+        <span className="font-display font-bold text-bh-green-dark">
+          💚 {city} City Partners beat online by{" "}
+          <span className="font-mono notranslate">{formattedDiff}</span>!
         </span>
       </motion.div>
     );
@@ -44,12 +45,12 @@ const LocalPriceWinner: React.FC<LocalPriceWinnerProps> = ({ localLowest, online
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="rounded-lg bg-[hsl(var(--warning))]/10 border border-[hsl(var(--warning))]/20 p-3 text-sm"
+      className="rounded-2xl bg-bh-blue-light border border-bh-blue/20 p-3 text-sm"
     >
-      <span className="font-semibold text-[hsl(var(--warning-foreground))]">
-        🌐 Online is cheaper by {formattedDiff}.
+      <span className="font-display font-bold text-bh-blue">
+        🌐 Online is cheaper by <span className="font-mono notranslate">{formattedDiff}</span>
       </span>
-      <span className="text-muted-foreground ml-1">Check city partners for faster delivery!</span>
+      <span className="text-bh-text-secondary ml-1">— or pick up locally for faster delivery!</span>
     </motion.div>
   );
 };
