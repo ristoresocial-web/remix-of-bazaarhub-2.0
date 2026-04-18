@@ -65,10 +65,11 @@ const tvProduct = {
     ["Weight", "8.2 kg (without stand)"],
   ] as [string, string][],
   cityPartners: [
-    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9943440384", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
-    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9943440384", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
-    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9943440384", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
+    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9943440384", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "", homeDelivery: true, deliveryFee: "₹40–₹80", sellerNote: "Brand new sealed pack with original Samsung India warranty. Free wall mounting + demo on delivery. Festive offer: Free 32GB pen-drive worth ₹499." },
+    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9943440384", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "", homeDelivery: true, deliveryFee: "₹60", sellerNote: "Authorized Samsung dealer. EMI starts ₹999/month. Exchange your old TV for up to ₹3,000 off." },
+    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9943440384", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20", homeDelivery: false, deliveryFee: "—", sellerNote: "Shop closed for Pongal until Jan 20. Online queries answered via WhatsApp." },
   ],
+  subcategory: "Smart TVs",
   reviews: [
     { user: "Ramesh K.", rating: 5, text: "Crystal clear picture quality! Best TV under 30k. Delivery from Sri Murugan was same day.", date: "Dec 2024" },
     { user: "Priya S.", rating: 4, text: "Good smart TV. Tizen OS is smooth. Remote could be better.", date: "Nov 2024" },
