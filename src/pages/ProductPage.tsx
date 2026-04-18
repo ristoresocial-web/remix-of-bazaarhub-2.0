@@ -655,6 +655,16 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* ── PAGE FOOTER: REPORT SELLER ── */}
+          <div className="mt-10 border-t border-border pt-5 text-center">
+            <button
+              onClick={() => setReportOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-all duration-200 hover:text-destructive"
+            >
+              <Flag className="h-3.5 w-3.5" /> Report Seller / Wrong information
+            </button>
+          </div>
         </div>
       </div>
 
@@ -666,6 +676,38 @@ const ProductPage: React.FC = () => {
         >
           + Compare
         </Link>
+      )}
+
+      {/* ── QR CODE MODAL ── */}
+      {qrOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in"
+          onClick={() => setQrOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-xs rounded-2xl bg-card p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setQrOpen(false)}
+              aria-label="Close"
+              className="absolute right-3 top-3 rounded-full p-1 text-muted-foreground transition-all duration-200 hover:bg-accent"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <h3 className="mb-1 text-center text-base font-bold text-foreground">Scan to share</h3>
+            <p className="mb-4 text-center text-xs text-muted-foreground notranslate truncate">{productName}</p>
+            <div className="flex justify-center rounded-xl bg-white p-4">
+              <QRCodeSVG value={productUrl} size={192} level="M" includeMargin={false} />
+            </div>
+            <button
+              onClick={() => { navigator.clipboard?.writeText(productUrl); }}
+              className="mt-4 w-full rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
+            >
+              Copy product link
+            </button>
+          </div>
+        </div>
       )}
 
       <ReportModal isOpen={reportOpen} onClose={() => setReportOpen(false)} productName={productName} />
