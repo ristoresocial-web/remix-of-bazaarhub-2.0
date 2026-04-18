@@ -150,13 +150,13 @@ const BuyerDashboardPage: React.FC = () => {
         {tab === "alerts" && (
           <div className="space-y-4">
             {mockAlerts.map(a => (
-              <div key={a.id} className={`rounded-2xl border p-4 shadow-card ${a.triggered ? "border-[hsl(var(--success))] bg-[hsl(var(--success-light))]" : "border-border bg-card"}`}>
+              <div key={a.id} className={`rounded-2xl border p-4 shadow-bh-sm ${a.triggered ? "border-bh-green bg-bh-green-light/40" : "border-bh-border bg-bh-surface"}`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold text-foreground">{a.product}</p>
-                    <p className="text-xs text-muted-foreground">Target: {formatPrice(a.target)} · Current: {formatPrice(a.current)}</p>
+                    <p className="text-sm font-semibold text-bh-text">{a.product}</p>
+                    <p className="text-xs text-bh-text-secondary font-mono">Target: {formatPrice(a.target)} · Current: {formatPrice(a.current)}</p>
                   </div>
-                  {a.triggered && <span className="rounded-pill bg-[hsl(var(--success))] px-3 py-1 text-xs font-bold text-[hsl(var(--success-foreground))]">🎉 Price dropped!</span>}
+                  {a.triggered && <span className="rounded-pill bg-bh-green px-3 py-1 text-xs font-bold text-white animate-savings-pop">🎉 Price dropped!</span>}
                 </div>
               </div>
             ))}
