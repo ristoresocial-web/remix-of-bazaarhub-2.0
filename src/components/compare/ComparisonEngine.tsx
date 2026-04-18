@@ -262,45 +262,47 @@ function CityPartnerCard({
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`rounded-card border bg-card p-3 transition-all ${
-        isAbsoluteLowest ? "border-success shadow-md" : "border-border"
+      className={`rounded-xl border bg-white p-3 transition-all ${
+        isAbsoluteLowest ? "border-bh-orange ring-2 ring-bh-orange ring-offset-1 shadow-price" : "border-white hover:shadow-bh-sm"
       }`}
     >
       <div className="flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">{partner.shopName}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-display font-bold text-bh-text">{partner.shopName}</span>
             {isAbsoluteLowest && (
-              <Badge className="bg-success text-success-foreground text-[10px] gap-1">
-                <Trophy className="h-3 w-3" /> Lowest Price in {city}
+              <Badge className="bg-bh-orange text-white text-[10px] gap-1 shadow-price">
+                <Trophy className="h-3 w-3" /> Lowest in {city}
               </Badge>
             )}
             {isLowest && !isAbsoluteLowest && (
-              <Badge variant="secondary" className="text-[10px]">Best City Partner</Badge>
+              <Badge variant="secondary" className="text-[10px] bg-bh-green-light text-bh-green-dark border border-bh-green/20">Best Local</Badge>
             )}
           </div>
-          <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="mt-1 flex items-center gap-3 text-xs text-bh-text-muted">
             <span className="flex items-center gap-1">
               <TrustIcon className={`h-3 w-3 ${trustColor}`} />
               {partner.trustLevel.charAt(0).toUpperCase() + partner.trustLevel.slice(1)}
             </span>
             <span className="flex items-center gap-1">
-              <Star className="h-3 w-3 fill-primary text-primary" /> {partner.rating}
+              <Star className="h-3 w-3 fill-warning text-warning" /> {partner.rating}
             </span>
             <span>📍 {partner.distanceKm.toFixed(1)} km</span>
           </div>
         </div>
         <div className="text-right">
-          <p className="notranslate text-lg font-bold text-foreground">₹{partner.price.toLocaleString("en-IN")}</p>
+          <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-green-dark"}`}>
+            ₹{partner.price.toLocaleString("en-IN")}
+          </p>
           {partner.inStock ? (
-            <span className="text-[10px] text-success">🟢 In Stock</span>
+            <span className="text-[10px] text-bh-green-dark font-bold">● In Stock</span>
           ) : (
             <span className="text-[10px] text-destructive">Out of Stock</span>
           )}
         </div>
       </div>
 
-      <p className="mt-1 text-[10px] text-muted-foreground">{partner.address}</p>
+      <p className="mt-1 text-[10px] text-bh-text-muted">{partner.address}</p>
 
       {/* Contact buttons — gated */}
       <div className="mt-2 flex items-center gap-2">
