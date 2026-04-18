@@ -1,2 +1,2 @@
 
-User added secret `key_API_KEY` (already shows in fetch_secrets list). I'll use it as the Google Maps API key. Plan: edge function to serve key, client helper, swap hardcoded keys in 2 components.
+User wants a website workflow diagram. This is a research/visual task — I'll create a Mermaid diagram showing the full Bazaar Hub user flow across buyer, seller, and admin journeys. Plan is to deliver one comprehensive flow diagram covering: entry → city select → search/browse → product compare → seller contact (gated by auth) → buyer dashboard, plus seller registration → listing → dashboard, and admin moderation.
