@@ -164,6 +164,15 @@ const SellerProfilePage: React.FC = () => {
                       <Button size="sm" variant="outline" className="gap-2" onClick={handleShare}>
                         <Share2 className="h-4 w-4" /> Share
                       </Button>
+                      <Button size="sm" variant="outline" className="gap-2" asChild>
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(seller.address)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Navigation className="h-4 w-4" /> Directions
+                        </a>
+                      </Button>
                     </div>
                   </div>
                 </div>
