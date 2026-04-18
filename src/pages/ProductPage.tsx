@@ -4,8 +4,10 @@ import { Helmet } from "react-helmet-async";
 import {
   ArrowLeft, MapPin, Phone, Flag, Star, RefreshCw, Bell, ChevronRight,
   MessageCircle, ExternalLink, Truck, Wrench, ShieldCheck, RotateCcw,
-  Clock, Calendar, Heart,
+  Clock, Calendar, Heart, Home as HomeIcon, Store, QrCode, Share2, X,
 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { mockProducts } from "@/data/mockData";
 import { formatPrice, getDistance, getPlatformsForCity } from "@/lib/cityUtils";
 import SellerPriceTable from "@/components/SellerPriceTable";
@@ -63,10 +65,11 @@ const tvProduct = {
     ["Weight", "8.2 kg (without stand)"],
   ] as [string, string][],
   cityPartners: [
-    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9943440384", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "" },
-    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9943440384", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "" },
-    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9943440384", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20" },
+    { name: "Sri Murugan Electronics", price: 28500, km: 2.3, address: "45 Main Bazaar, Madurai", phone: "9943440384", rating: 4.3, photo: "🏪", holiday: false, holidayUntil: "", homeDelivery: true, deliveryFee: "₹40–₹80", sellerNote: "Brand new sealed pack with original Samsung India warranty. Free wall mounting + demo on delivery. Festive offer: Free 32GB pen-drive worth ₹499." },
+    { name: "Poorvika Electronics", price: 29800, km: 3.8, address: "KK Nagar, Madurai", phone: "9943440384", rating: 4.5, photo: "🏬", holiday: false, holidayUntil: "", homeDelivery: true, deliveryFee: "₹60", sellerNote: "Authorized Samsung dealer. EMI starts ₹999/month. Exchange your old TV for up to ₹3,000 off." },
+    { name: "Sangeetha Mobiles", price: 29500, km: 5.1, address: "Anna Nagar, Madurai", phone: "9943440384", rating: 4.1, photo: "🏪", holiday: true, holidayUntil: "Jan 20", homeDelivery: false, deliveryFee: "—", sellerNote: "Shop closed for Pongal until Jan 20. Online queries answered via WhatsApp." },
   ],
+  subcategory: "Smart TVs",
   reviews: [
     { user: "Ramesh K.", rating: 5, text: "Crystal clear picture quality! Best TV under 30k. Delivery from Sri Murugan was same day.", date: "Dec 2024" },
     { user: "Priya S.", rating: 4, text: "Good smart TV. Tizen OS is smooth. Remote could be better.", date: "Nov 2024" },
@@ -108,6 +111,9 @@ const ProductPage: React.FC = () => {
     new Date().toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", hour12: true })
   );
   const [showCompareBtn, setShowCompareBtn] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
+
+  const productUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const existingProduct = mockProducts.find(p => p.id === Number(id));
   const isTVProduct = Number(id) === 200 || !existingProduct;
@@ -210,14 +216,21 @@ const ProductPage: React.FC = () => {
         <div className="container py-4">
 
           {/* ── BREADCRUMB ── */}
-          <nav className="mb-4 flex items-center gap-1 text-sm text-muted-foreground">
-            <Link to="/" className="transition-all duration-200 hover:text-primary">Home</Link>
+          <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+            <Link to="/" className="flex items-center gap-1 transition-all duration-200 hover:text-primary">
+              <HomeIcon className="h-3.5 w-3.5" /> Home
+            </Link>
             <ChevronRight className="h-3 w-3" />
             <Link to={`/search?q=${encodeURIComponent(isTVProduct ? tvProduct.category : product!.category)}`} className="transition-all duration-200 hover:text-primary">
               {isTVProduct ? tvProduct.category : product!.category}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productBrand}</span>
+            <Link
+              to={`/search?q=${encodeURIComponent(isTVProduct ? tvProduct.subcategory : productBrand)}`}
+              className="notranslate transition-all duration-200 hover:text-primary"
+            >
+              {isTVProduct ? tvProduct.subcategory : productBrand}
+            </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="notranslate text-foreground font-medium truncate max-w-[200px]">{productName}</span>
           </nav>
@@ -288,21 +301,88 @@ const ProductPage: React.FC = () => {
                 />
               )}
 
-              {/* ── SPECS TABLE ── */}
+              {/* ── SPECS ACCORDION ── */}
               {specs && specs.length > 0 && (
                 <Reveal>
                   <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
-                    <h3 className="p-4 text-base font-bold text-foreground">📋 Product Specifications</h3>
-                    <table className="w-full text-sm">
-                      <tbody>
-                        {specs.map(([key, val], idx) => (
-                          <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
-                            <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
-                            <td className="notranslate px-4 py-2.5 text-foreground">{val}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <Accordion type="single" collapsible defaultValue="specs">
+                      <AccordionItem value="specs" className="border-b-0">
+                        <AccordionTrigger className="px-4 py-4 text-base font-bold text-foreground hover:no-underline">
+                          <span className="flex items-center gap-2">📋 Specifications</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-0 pb-0">
+                          <table className="w-full text-sm">
+                            <tbody>
+                              {specs.map(([key, val], idx) => (
+                                <tr key={key} className={idx % 2 === 0 ? "bg-muted/40" : ""}>
+                                  <td className="px-4 py-2.5 font-medium text-muted-foreground w-40">{key}</td>
+                                  <td className="notranslate px-4 py-2.5 text-foreground">{val}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                </Reveal>
+              )}
+
+              {/* ── DELIVERY & PICKUP OPTIONS ── */}
+              {cityPartner && (
+                <Reveal>
+                  <div>
+                    <h3 className="mb-3 text-base font-bold text-foreground flex items-center gap-2">
+                      🚚 Delivery & Pickup Options
+                    </h3>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {/* Store Pickup */}
+                      <div className="rounded-2xl border border-success/30 bg-success/5 p-4 transition-all duration-200 hover:shadow-card">
+                        <div className="mb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-full bg-success/15 p-2">
+                              <Store className="h-4 w-4 text-success" />
+                            </div>
+                            <p className="text-sm font-bold text-foreground">Store Pickup</p>
+                          </div>
+                          <span className="rounded-pill bg-success px-2 py-0.5 text-[10px] font-bold uppercase text-success-foreground">Free</span>
+                        </div>
+                        <p className="text-xs font-semibold text-success">Ready in 2 hours</p>
+                        <p className="mt-1.5 text-xs text-muted-foreground flex items-start gap-1">
+                          <MapPin className="h-3 w-3 mt-0.5 shrink-0" />
+                          <span className="notranslate">{cityPartner.address}</span>
+                        </p>
+                      </div>
+
+                      {/* Home Delivery */}
+                      <div className={`rounded-2xl border p-4 transition-all duration-200 hover:shadow-card ${
+                        (cityPartner as any).homeDelivery ? "border-primary/30 bg-primary-light" : "border-border bg-muted/40 opacity-70"
+                      }`}>
+                        <div className="mb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className={`rounded-full p-2 ${(cityPartner as any).homeDelivery ? "bg-primary/15" : "bg-muted"}`}>
+                              <Truck className={`h-4 w-4 ${(cityPartner as any).homeDelivery ? "text-primary" : "text-muted-foreground"}`} />
+                            </div>
+                            <p className="text-sm font-bold text-foreground">Home Delivery</p>
+                          </div>
+                          {(cityPartner as any).homeDelivery ? (
+                            <span className="notranslate rounded-pill bg-primary px-2 py-0.5 text-[10px] font-bold uppercase text-primary-foreground">
+                              {(cityPartner as any).deliveryFee || "₹40–₹80"}
+                            </span>
+                          ) : (
+                            <span className="rounded-pill bg-muted px-2 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">Unavailable</span>
+                          )}
+                        </div>
+                        {(cityPartner as any).homeDelivery ? (
+                          <>
+                            <p className="text-xs font-semibold text-primary">1–3 business days</p>
+                            <p className="mt-1.5 text-xs text-muted-foreground">Delivered to your doorstep with tracking & free installation.</p>
+                          </>
+                        ) : (
+                          <p className="text-xs text-muted-foreground">This seller offers store pickup only.</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </Reveal>
               )}
@@ -490,6 +570,41 @@ const ProductPage: React.FC = () => {
                 </div>
               </div>
 
+              {/* ── SHARE ROW (with QR) ── */}
+              <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-3 shadow-card">
+                <p className="flex-1 text-xs font-semibold text-muted-foreground">Share this product</p>
+                <button
+                  onClick={() => {
+                    if (navigator.share) navigator.share({ title: productName, url: productUrl }).catch(() => {});
+                    else { navigator.clipboard?.writeText(productUrl); }
+                  }}
+                  aria-label="Share"
+                  className="flex items-center gap-1 rounded-pill border border-border px-3 py-1.5 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
+                >
+                  <Share2 className="h-3.5 w-3.5" /> Share
+                </button>
+                <button
+                  onClick={() => setQrOpen(true)}
+                  aria-label="Show QR code"
+                  className="flex items-center gap-1 rounded-pill border border-primary px-3 py-1.5 text-xs font-semibold text-primary transition-all duration-200 hover:bg-primary-light"
+                >
+                  <QrCode className="h-3.5 w-3.5" /> QR
+                </button>
+              </div>
+
+              {/* ── SELLER'S NOTE ── */}
+              {cityPartner && (cityPartner as any).sellerNote && (
+                <div className="rounded-2xl border-l-4 border-primary bg-primary-light/60 p-4 shadow-card">
+                  <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                    <span className="text-sm leading-none">📝</span> Seller's Note
+                  </p>
+                  <p className="text-sm leading-relaxed text-foreground">
+                    “{(cityPartner as any).sellerNote}”
+                  </p>
+                  <p className="mt-2 text-[10px] text-muted-foreground notranslate">— {cityPartner.name}</p>
+                </div>
+              )}
+
               {/* ── TOP CITY PARTNER CARD ── */}
               {cityPartner && (
                 <div className="rounded-xl bg-card p-4 shadow-card">
@@ -540,6 +655,16 @@ const ProductPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* ── PAGE FOOTER: REPORT SELLER ── */}
+          <div className="mt-10 border-t border-border pt-5 text-center">
+            <button
+              onClick={() => setReportOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-all duration-200 hover:text-destructive"
+            >
+              <Flag className="h-3.5 w-3.5" /> Report Seller / Wrong information
+            </button>
+          </div>
         </div>
       </div>
 
@@ -551,6 +676,38 @@ const ProductPage: React.FC = () => {
         >
           + Compare
         </Link>
+      )}
+
+      {/* ── QR CODE MODAL ── */}
+      {qrOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in"
+          onClick={() => setQrOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-xs rounded-2xl bg-card p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setQrOpen(false)}
+              aria-label="Close"
+              className="absolute right-3 top-3 rounded-full p-1 text-muted-foreground transition-all duration-200 hover:bg-accent"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <h3 className="mb-1 text-center text-base font-bold text-foreground">Scan to share</h3>
+            <p className="mb-4 text-center text-xs text-muted-foreground notranslate truncate">{productName}</p>
+            <div className="flex justify-center rounded-xl bg-white p-4">
+              <QRCodeSVG value={productUrl} size={192} level="M" includeMargin={false} />
+            </div>
+            <button
+              onClick={() => { navigator.clipboard?.writeText(productUrl); }}
+              className="mt-4 w-full rounded-pill border border-border py-2 text-xs font-semibold text-foreground transition-all duration-200 hover:bg-accent"
+            >
+              Copy product link
+            </button>
+          </div>
+        </div>
       )}
 
       <ReportModal isOpen={reportOpen} onClose={() => setReportOpen(false)} productName={productName} />
