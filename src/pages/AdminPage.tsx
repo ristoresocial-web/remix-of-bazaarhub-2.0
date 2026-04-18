@@ -79,19 +79,22 @@ const AdminPage: React.FC = () => {
         <meta name="description" content="Bazaar Hub Admin Panel — Manage sellers, products, and platform settings." />
       </Helmet>
 
-      <div className="sticky top-0 z-20 border-b border-border bg-card shadow-card">
-        <div className="flex items-center justify-between px-4 py-3 md:px-6">
+      <div className="sticky top-0 z-20 border-b border-bh-border bg-white/90 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-4 py-3 md:px-6 h-16">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="h-5 w-5 text-primary" />
-            <BazaarLogo />
-            <span className="hidden sm:inline text-sm font-semibold text-foreground">Admin Panel</span>
+            <ShieldCheck className="h-5 w-5 text-bh-orange" />
+            <span className="font-display font-extrabold text-xl">
+              <span className="text-bh-orange">Bazaar</span>
+              <span className="text-bh-green">Hub</span>
+            </span>
+            <span className="hidden sm:inline text-sm font-semibold text-bh-text-secondary">Admin Panel</span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="relative rounded-full p-2 text-muted-foreground hover:bg-accent transition-all duration-200">
+            <button className="relative rounded-full p-2 text-bh-text-secondary hover:bg-bh-surface-2 transition-all duration-200">
               <Bell className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full bg-primary text-[10px] font-bold text-primary-foreground flex items-center justify-center">5</span>
+              <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full bg-bh-orange text-[10px] font-bold text-white flex items-center justify-center">5</span>
             </button>
-            <span className="text-sm font-semibold text-foreground hidden sm:inline">Admin</span>
+            <span className="text-sm font-semibold text-bh-text hidden sm:inline">Admin</span>
           </div>
         </div>
       </div>
