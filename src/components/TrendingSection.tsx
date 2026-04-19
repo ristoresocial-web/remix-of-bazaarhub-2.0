@@ -59,8 +59,13 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ city }) => {
     fetchTrending();
   }, [city]);
 
-  const handleClick = (query: string) => {
-    supabase.from("search_logs").insert({ search_query: query, city }).then(() => {});
+  const handleClick = async (query: string) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    supabase.from("search_logs").insert({
+      search_query: query,
+      city,
+      user_id: user?.id ?? null,
+    }).then(() => {});
     navigate(`/search?q=${encodeURIComponent(query)}&city=${encodeURIComponent(city)}`);
   };
 
