@@ -1,29 +1,55 @@
 
 
-User wants better category icons. Current ones were generated with Nano Banana 2 (`google/gemini-3.1-flash-image-preview`) using a generic prompt. They look decent but user wants higher quality.
+## Security Hardening Plan
 
-Options to improve:
-1. **Upgrade model** to `google/gemini-3-pro-image-preview` (Nano Banana Pro) — top-tier image quality, slower/costlier but visibly better.
-2. **Refine prompt** — add stronger claymorphism cues (studio lighting, ambient occlusion, hero subject framing, transparent background).
-3. **Transparent backgrounds** — current icons may have white/colored backgrounds. PNGs with transparent BG sit better on the gradient cards.
+Three real findings from the security scan. Here's the fix for each:
 
-Plan: regenerate all 12 category icons with Pro image model + tighter prompt formula + transparent background spec. Replace existing files in `src/assets/categories/`. No code changes needed — `CategoryGrid.tsx` already references these paths.
+### 1. Hide seller phone & WhatsApp from public (HIGH IMPACT)
+**Problem:** Anonymous visitors can read every seller's `phone` and `whatsapp` columns directly via the `sellers` table SELECT policy. This contradicts the existing memory rule (contact details must be gated to logged-in buyers, admin bypass `99434 40384`).
 
-## What I'll do
+**Fix:**
+- Create a SQL view `public.sellers_public` exposing only safe columns (id, shop_name, city, category, logo_url, banner_url, description, rating, total_reviews, is_verified, is_active, created_at).
+- Create a security-definer RPC `get_seller_contact(seller_id uuid)` that returns `{ phone, whatsapp }` only when caller is authenticated OR is admin.
+- Tighten the existing "Anyone can view active sellers" SELECT policy → restrict full-row read (incl. contact) to authenticated users; keep public-safe data via the view.
+- Update client code in `FindSellersPage`, `SellerProfilePage`, `ProductPage`, `ComparisonTable` to fetch contact via the RPC only after login check.
 
-1. **Regenerate 12 icons** using `google/gemini-3-pro-image-preview` (Nano Banana Pro — best quality available).
-2. **Use a refined prompt formula** per category:
-   > "[subject], 3D claymorphism icon, glossy clay material, soft studio lighting with ambient occlusion, vibrant Bazaar Hub orange (#F97316) and warm accents, isometric hero angle, ultra-detailed 4k render, transparent background, centered composition, friendly and tactile"
-3. **Save to** `src/assets/categories/*.png` (overwrites current files — `CategoryGrid.tsx` keeps working as-is).
-4. **QA each generated image** by viewing it before declaring done — re-roll any that look off.
+### 2. Stop leaking user search history
+**Problem:** `search_logs` SELECT is `USING (true)` on `{anon, authenticated}`, exposing per-user query history including `user_id`.
 
-## Categories to regenerate
-mobiles, electronics, laptops, tvs, home-kitchen, beauty, fashion, books, toys, pets, grocery, sports
+**Fix:**
+- Replace public SELECT policy. New rules:
+  - Users can SELECT only their own rows (`auth.uid() = user_id`).
+  - Admins can SELECT all (via `is_admin`).
+- Add a security-definer RPC `get_trending_searches(p_city text, p_days int)` that returns aggregated `{query, count}` only — no user_id leak. Update `TrendingSection.tsx` to call this RPC instead of raw table read.
 
-## Files touched
-- `src/assets/categories/*.png` (12 files, replaced)
-- No `.tsx` changes — paths are unchanged
+### 3. Tighten "always true" INSERT policy on search_logs
+**Problem:** Anyone can spam search_logs with arbitrary payloads.
 
-## Cost note
-Nano Banana Pro is more expensive than Flash. 12 images = one-time cost; icons are then static assets. Worth it for permanent homepage hero.
+**Fix:** Replace the `WITH CHECK (true)` insert policy with:
+- `length(trim(search_query)) between 1 and 200`
+- `length(city) between 1 and 100`
+- `user_id IS NULL OR user_id = auth.uid()` (prevents impersonation)
+
+### 4. Bonus: enable Leaked Password Protection
+Turn on Supabase HIBP password check during signup/change so common breached passwords are rejected.
+
+---
+
+### Files touched
+- **Migration** (new): policies, view, RPCs above
+- `src/components/TrendingSection.tsx` — switch to `get_trending_searches` RPC
+- `src/pages/FindSellersPage.tsx` — fetch contact via `get_seller_contact` after login check
+- `src/pages/SellerProfilePage.tsx` — same
+- `src/pages/ProductPage.tsx` — same (for cityPartner phone/WhatsApp)
+- `src/components/compare/ComparisonTable.tsx` — same
+- `src/integrations/supabase/types.ts` — auto-regenerated
+
+### What does NOT change
+- `ai_scores` public read — intentional (verdict cards on home).
+- `products`, `reviews`, `profiles` — already correctly scoped.
+- `contact_messages` insert policy — already has proper length validation, leaving as-is.
+- No rate limiting added (backend doesn't support it yet).
+
+### After deploy
+Re-run the security scan to confirm all three findings clear.
 
