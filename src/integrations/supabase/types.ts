@@ -221,6 +221,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -331,6 +338,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reviews_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       search_logs: {
@@ -416,9 +430,67 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      sellers_public: {
+        Row: {
+          banner_url: string | null
+          category: string | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          logo_url: string | null
+          rating: number | null
+          shop_name: string | null
+          total_reviews: number | null
+        }
+        Insert: {
+          banner_url?: string | null
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          shop_name?: string | null
+          total_reviews?: number | null
+        }
+        Update: {
+          banner_url?: string | null
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          logo_url?: string | null
+          rating?: number | null
+          shop_name?: string | null
+          total_reviews?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      get_seller_contact: {
+        Args: { _seller_id: string }
+        Returns: {
+          phone: string
+          whatsapp: string
+        }[]
+      }
+      get_trending_searches: {
+        Args: { p_city: string; p_days?: number }
+        Returns: {
+          count: number
+          query: string
+        }[]
+      }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
