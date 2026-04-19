@@ -36,40 +36,36 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ city }) => {
   const [compared] = useState(MOCK_COMPARED);
 
   useEffect(() => {
-    // Try to fetch real trending data from search_logs
+    // Fetch aggregated trending searches via secure RPC (no user_id leak)
     const fetchTrending = async () => {
       try {
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-        const { data } = await supabase
-          .from("search_logs")
-          .select("search_query")
-          .eq("city", city)
-          .gte("created_at", sevenDaysAgo.toISOString());
+        const { data } = await supabase.rpc("get_trending_searches", {
+          p_city: city,
+          p_days: 7,
+        });
 
         if (data && data.length > 5) {
-          // Count occurrences
-          const counts: Record<string, number> = {};
-          data.forEach((row: any) => {
-            const q = row.search_query;
-            counts[q] = (counts[q] || 0) + 1;
-          });
-          const sorted = Object.entries(counts)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 8)
-            .map(([query, count]) => ({ query, count }));
-          setTrending(sorted);
+          setTrending(
+            data.map((row: { query: string; count: number }) => ({
+              query: row.query,
+              count: Number(row.count),
+            }))
+          );
         }
       } catch {
-        // Use mock data
+        // Use mock data fallback
       }
     };
     fetchTrending();
   }, [city]);
 
-  const handleClick = (query: string) => {
-    supabase.from("search_logs").insert({ search_query: query, city }).then(() => {});
+  const handleClick = async (query: string) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    supabase.from("search_logs").insert({
+      search_query: query,
+      city,
+      user_id: user?.id ?? null,
+    }).then(() => {});
     navigate(`/search?q=${encodeURIComponent(query)}&city=${encodeURIComponent(city)}`);
   };
 
