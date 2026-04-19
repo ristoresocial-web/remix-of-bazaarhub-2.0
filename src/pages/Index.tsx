@@ -9,6 +9,7 @@ import BestComparisonCards from "@/components/BestComparisonCards";
 import FeaturedSellers from "@/components/FeaturedSellers";
 import BecomeSeller from "@/components/BecomeSeller";
 import CityOffersFloatingButton from "@/components/CityOffersFloatingButton";
+import TopResearchedProducts from "@/components/TopResearchedProducts";
 
 /* ── Scroll reveal hook ── */
 const useReveal = () => {
@@ -117,6 +118,11 @@ const Index = () => {
 
       {/* ── 2. STATS BAR ── */}
       <StatsBar />
+
+      {/* ── 2.5. TOP RESEARCHED PRODUCTS (Flash.co-style rail) ── */}
+      <RevealSection>
+        <TopResearchedProducts />
+      </RevealSection>
 
       {/* ── 3. CATEGORY GRID ── */}
       <RevealSection>
