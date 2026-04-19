@@ -47,6 +47,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_read: boolean
+          message: string
+          name: string
+          phone: string | null
+          topic: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          name: string
+          phone?: string | null
+          topic?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          name?: string
+          phone?: string | null
+          topic?: string | null
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
           category: string | null
@@ -112,16 +145,23 @@ export type Database = {
           brand: string
           category: string
           created_at: string
+          delivery_available: boolean
+          delivery_price: number
           description: string | null
           gallery_images: Json | null
           id: string
           image_url: string | null
+          is_active: boolean
           mrp: number
           name: string
+          price: number
           prices: Json | null
+          seller_id: string | null
           slug: string
           specs: Json | null
           status: string
+          stock: number
+          subcategory: string | null
           updated_at: string
           variants: Json | null
         }
@@ -129,16 +169,23 @@ export type Database = {
           brand?: string
           category?: string
           created_at?: string
+          delivery_available?: boolean
+          delivery_price?: number
           description?: string | null
           gallery_images?: Json | null
           id?: string
           image_url?: string | null
+          is_active?: boolean
           mrp?: number
           name: string
+          price?: number
           prices?: Json | null
+          seller_id?: string | null
           slug: string
           specs?: Json | null
           status?: string
+          stock?: number
+          subcategory?: string | null
           updated_at?: string
           variants?: Json | null
         }
@@ -146,20 +193,35 @@ export type Database = {
           brand?: string
           category?: string
           created_at?: string
+          delivery_available?: boolean
+          delivery_price?: number
           description?: string | null
           gallery_images?: Json | null
           id?: string
           image_url?: string | null
+          is_active?: boolean
           mrp?: number
           name?: string
+          price?: number
           prices?: Json | null
+          seller_id?: string | null
           slug?: string
           specs?: Json | null
           status?: string
+          stock?: number
+          subcategory?: string | null
           updated_at?: string
           variants?: Json | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -233,6 +295,44 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          buyer_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          seller_id: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          seller_id: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          seller_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       search_logs: {
         Row: {
           city: string
@@ -257,12 +357,69 @@ export type Database = {
         }
         Relationships: []
       }
+      sellers: {
+        Row: {
+          banner_url: string | null
+          category: string | null
+          city: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          is_verified: boolean
+          logo_url: string | null
+          phone: string | null
+          rating: number
+          shop_name: string
+          total_reviews: number
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          banner_url?: string | null
+          category?: string | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          rating?: number
+          shop_name: string
+          total_reviews?: number
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          banner_url?: string | null
+          category?: string | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          phone?: string | null
+          rating?: number
+          shop_name?: string
+          total_reviews?: number
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
