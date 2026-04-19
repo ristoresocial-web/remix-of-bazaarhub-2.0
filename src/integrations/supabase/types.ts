@@ -492,6 +492,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      profile_safe_update: {
+        Args: { _is_admin: boolean; _role: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
