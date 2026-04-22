@@ -1,47 +1,45 @@
 
 
-## Seed mock catalog with these 5 mobiles to make fallback comparisons demonstrable
+## Seed local + online sellers so the inline split view has data to render
 
-You've handed me a 5-product dataset. The right move is to **add these to the mock catalog** so the inline comparison fallback (same-brand & different-brand-same-specs) actually has data to surface on `/search`.
-
-### Why this is needed
-
-Right now `src/data/mockData.ts` doesn't contain Samsung M34, Redmi Note 12, Realme Narzo 60, or iPhone 14 in a way that lets the spec-matcher demonstrate Cases 3 & 4. Adding them means:
-
-- Search "Samsung M34" → shows 2 same-brand same-spec variants (Case 3 trigger)
-- Search any of them with online-only or local-only stock → fallback panel finds the other 3 as different-brand same-specs (Case 4 trigger)
-- All 4 share `6GB RAM / 128GB storage` → guaranteed ≥80% spec match in `smartFallback.ts`
+You've handed me a 4-seller dataset (2 online, 2 offline with distances). To make this show up under the comparison fallback panel for the 5 mobiles seeded last turn, I'll wire these as the default seller pool for those products.
 
 ### What I'll add
 
 **1 file edit**: `src/data/mockData.ts`
 
-Append 5 new `Product` entries matching the existing schema (id, slug, name, brand, category, image, specs as `[key,value][]`, prices array with mix of online affiliate + local seller, localShop, localAvailable, etc.). I'll mirror the structure of existing mobile entries already in the file.
+For each of the 5 mobiles seeded last turn (ids 15–19), replace/extend the `prices[]` array so it contains exactly these 4 sellers (where applicable per the stock distribution agreed earlier):
 
-To showcase all 4 fallback cases, stock distribution will be:
-- **id 1 — Samsung M34 5G**: both online + local (Case 1: split view)
-- **id 2 — Samsung M34 5G Variant**: online only (Case 2 → triggers same-brand fallback to id 1)
-- **id 3 — Redmi Note 12**: local only (Case 2 → no same-brand → Case 3 different-brand fallback to Realme/Samsung)
-- **id 4 — Realme Narzo 60**: both
-- **id 5 — iPhone 14**: online only, no spec siblings beyond RAM/storage (Case 4 demo: only own sellers shown)
+- **Amazon** — `isAffiliate: true`, online
+- **Flipkart** — `isAffiliate: true`, online
+- **Kumar Mobiles** — `isAffiliate: false`, local, `distance: 1.2`, address in current city
+- **Selvam Stores** — `isAffiliate: false`, local, `distance: 2.5`, address in current city
 
-Specs encoded as the existing tuple format:
-```ts
-specs: [["RAM","6GB"],["Storage","128GB"],["Battery","6000mAh"]]
-```
+Prices stay sorted low→high by the existing `ComparisonEngine` logic. Each seller keeps the existing `Product.prices[]` schema (platform, price, isAffiliate, inStock, url, shopName, distance).
+
+### Stock distribution per product (preserves the 4 fallback cases)
+
+| Product | Amazon | Flipkart | Kumar Mobiles | Selvam Stores |
+|---|---|---|---|---|
+| Samsung M34 5G | ✓ | ✓ | ✓ | ✓ |
+| Samsung M34 Variant | ✓ | ✓ | — | — |
+| Redmi Note 12 | — | — | ✓ | ✓ |
+| Realme Narzo 60 | ✓ | ✓ | ✓ | ✓ |
+| iPhone 14 | ✓ | ✓ | — | — |
 
 ### Files NOT touched
 
-- `InlineComparePanel.tsx`, `ComparisonEngine.tsx`, `SmartFallbackPanel.tsx`, `smartFallback.ts`, `SearchPage.tsx`, `ProductSearchCard.tsx` — already wired correctly. The data drives them.
-- No DB, no edge functions, no new routes.
+- `ComparisonEngine.tsx`, `InlineComparePanel.tsx`, `SellerPriceTable.tsx`, `SearchPage.tsx` — already render `prices[]` correctly with distance, online/offline split, and "Best Deal" badge.
+- `platformsData.ts` — Amazon and Flipkart are already registered there.
+- No DB, no edge functions, no new components.
 
 ### Verify after build
 
-1. Open `/search`
-2. Type "Samsung M34" → see 2 cards → expand variant → fallback shows the other Samsung M34
-3. Type "iPhone 14" → expand → fallback shows Redmi/Realme/Samsung as "Alternative Brand" with % match
+1. Open `/search`, type "Samsung M34 5G", click **Compare prices ▾**
+2. See split view: left column = Amazon + Flipkart (sorted low→high), right column = Kumar Mobiles (1.2km) + Selvam Stores (2.5km)
+3. Lowest price across both sides shows the **Best Deal** badge
 
-### Confirm before I code
+### Note on "Kumar Mobiles" & "Selvam Stores"
 
-If you instead want these 5 products to **replace** existing mock mobiles (not append), or to live in a new file, say so. Otherwise I'll append to `mockData.ts` as described.
+These will be hardcoded local-shop entries inside `mockData.ts` (no admin UI, no DB row). The current local-seller pipeline (`getCityPartnersForProduct` in `sellerData.ts`) generates random sellers per city — that stays untouched for other products. Only the 5 seeded mobiles get this fixed 4-seller pool so the demo is deterministic.
 
