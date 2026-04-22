@@ -45,6 +45,14 @@ const Navbar: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
       <nav className="mx-auto flex h-14 max-w-6xl items-center gap-2 overflow-x-auto px-3 sm:gap-4 sm:px-4">
+        {/* Logo */}
+        <Link to="/" aria-label="BazaarHub home" className="shrink-0 mr-1 sm:mr-2">
+          <span className="font-display font-extrabold text-lg sm:text-xl leading-none tracking-tight">
+            <span className="text-bh-orange">Bazaar</span>
+            <span className="text-bh-green">Hub</span>
+          </span>
+        </Link>
+
         {/* 1. Home */}
         <Link to="/" className={linkCls("/")}>
           Home
