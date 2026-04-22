@@ -60,7 +60,7 @@ const Index = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-hero text-bh-text mx-auto max-w-4xl"
           >
-            Find the <span className="text-bh-orange">Best Price</span> in Your City
+            Compare Prices. <span className="text-bh-orange">Buy Smarter.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="mx-auto mt-5 mb-8 max-w-xl text-base md:text-lg text-bh-text-secondary"
           >
-            Compare city partners vs Amazon, Flipkart — in real time.
+            Every seller in your city and every major online store, in one view.
           </motion.p>
 
           <motion.div
