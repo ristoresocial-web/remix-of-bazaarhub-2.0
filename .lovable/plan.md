@@ -1,42 +1,76 @@
 
 
-## Fallback logic is already implemented exactly as you described
+## Inline search → expand-to-compare (no separate page)
 
-The pseudocode you posted maps 1:1 to what's already running on `/product/compare`. Here's the proof:
+You're right that the current `/search` page only shows a grid of cards — to actually compare, the user has to leave the page and go to `/product/compare`. Your spec says **comparison must happen inline on the same page**. That's the only real delta; the comparison logic itself is already built and reusable.
 
-### Your pseudocode → current code
+### What I'll build
+
+**Each product card on `/search` becomes expandable.** Click a card → it expands inline (accordion style) and renders the full split online/offline view + fallback suggestions, **right there in the results list**. No navigation, no new page.
 
 ```text
-IF online && offline exist:        →  ComparisonEngine renders both columns
-   show both                          + green "Available Online & Nearby Store" banner
-
-ELSE IF one missing:               →  isSingleSource = true → mounts <SmartFallbackPanel/>
-   search same_brand + same_specs  →  findSameBrandSameSpec()  (≥80% spec match)
-   IF found: show suggestions      →  Section B renders with "Compare now?" CTA
-   ELSE:
-      search different_brand       →  findDifferentBrandSameSpec()  (≥70% match)
-      show alternatives            →  Section C with green "% match" pill
+[Product Card A]
+[Product Card B]   ← click
+  ┌─────────────────────────────────────────┐
+  │ ✓ Available Online & Nearby Store       │
+  │ ┌─────────────┬──────────────┐          │
+  │ │ Online      │ City Partner │          │
+  │ │ • Amazon ₹X │ • Shop1 ₹Y   │          │
+  │ │ • Flipkart  │ • Shop2 ₹Z   │  Save ₹  │
+  │ └─────────────┴──────────────┘          │
+  │ [If single source] → "Same brand        │
+  │  available — Compare?" button           │
+  │  ↓ click → renders alternatives inline  │
+  └─────────────────────────────────────────┘
+[Product Card C]
 ```
 
-Both helpers live in `src/lib/smartFallback.ts`, the panel in `src/components/compare/SmartFallbackPanel.tsx`, the mount point in `ComparisonEngine.tsx`. Section C only renders when Section B is empty — exact ELSE behaviour.
+### Files touched
 
-**No code changes required.** This is the third consecutive request for the same logic and it's been live since the first build.
+**1 new file**
+- `src/components/search/InlineComparePanel.tsx` — wraps `ComparisonEngine` + `SmartFallbackPanel`. Builds a `ComparisonResult` on the fly from the product's existing `prices[]` (online = `isAffiliate`, offline = local). Lazy mounted only when expanded.
 
----
+**3 edits**
+- `src/components/search/ProductSearchCard.tsx`
+  - Add `expanded` + `onToggleExpand` props
+  - Add a "Compare prices ▾" / "Hide ▴" button at card bottom
+  - Default sort already low→high; no change
+- `src/pages/SearchPage.tsx`
+  - Track `expandedProductId` in state (one open at a time)
+  - Render `<InlineComparePanel>` directly under the expanded card (full-width, spans grid row)
+  - Pass `expanded` flag to each card
+- `src/lib/smartFallback.ts`
+  - Already cached. No change. (Spec cache requirement = met.)
 
-### If the fallback isn't appearing for you on screen, it's a data/threshold issue, not missing logic
+### How the 4 cases map (using your existing data)
 
-Possible reasons fallback panel stays hidden:
-- The product you're testing has **both** online and offline sellers → fallback intentionally hidden (Case A)
-- No catalog products share ≥80% / ≥70% spec keys with the target → thresholds too strict for the mock data
-- Target product has no `specs` object populated
+| Case | Detection | UI shown inline |
+|---|---|---|
+| 1. Both | `prices` has both affiliate + local in stock | Split view + green banner + Best Deal badge |
+| 2. Online only | only affiliate prices | Online column + "Same brand available — Compare?" button → reveals same-brand fallback |
+| 3. Different brand | same-brand fallback empty | Auto-falls through to different-brand panel with "Alternative Brand" label + % match |
+| 4. None | both fallbacks empty | Shows only the available sellers, sorted low→high |
 
-### Pick one if you want a real change
+All four are handled by the existing `ComparisonEngine` + `SmartFallbackPanel` — I'm just mounting them inline on the search page instead of forcing a route change.
 
-- **A. Lower thresholds** (e.g. 60% same-brand, 50% different-brand) so the panel shows for more products
-- **B. Force-show panel always** (even when both sources exist) as a "you might also like" strip
-- **C. Show me a specific product slug where you expect fallback but don't see it** → I'll trace why and fix the data or logic
-- **D. Nothing — just confirming the spec is met** (no action)
+### CTAs (already present in ComparisonEngine, no rework)
+- Online card → **Buy Now** (orange, opens affiliate link)
+- Offline card → **View Nearby Store** (green, opens Google Maps)
 
-If none of A–D, describe what you see vs what you expect and I'll target that exact gap.
+### Performance
+- Inline panel is **mounted only when expanded** (lazy by default — React doesn't render it until state flips)
+- Spec match cache (`matchCache` Map in `smartFallback.ts`) already memoizes per session
+- Only one product expanded at a time → no runaway DOM growth
+- Existing `ITEMS_PER_PAGE = 12` pagination stays
+
+### Stays out (per your restrictions)
+- No OTP anywhere
+- No WhatsApp API additions (existing wa.me deeplinks unchanged)
+- No new compare route — `/product/compare` still exists for users who land on it directly, but `/search` no longer needs it
+- No backend, no edge functions
+
+### Mobile (current 760px viewport and below)
+- Expanded panel renders full-width below the card
+- Split view already stacks vertically under `md:` — no new responsive work
+- "Compare prices" button is 100% width on mobile, inline on desktop
 
