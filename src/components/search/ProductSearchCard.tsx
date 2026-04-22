@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { toggleWishlist, isInWishlist } from "@/lib/wishlist";
 import { formatPrice } from "@/lib/cityUtils";
 import type { Product } from "@/data/mockData";
@@ -12,10 +13,12 @@ interface ProductSearchCardProps {
   onToggleCompare: () => void;
   viewMode: "grid" | "list";
   isBestDeal?: boolean;
+  expanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
 const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
-  product, isCompare, onToggleCompare, viewMode, isBestDeal,
+  product, isCompare, onToggleCompare, viewMode, isBestDeal, expanded, onToggleExpand,
 }) => {
   const [wishlisted, setWishlisted] = React.useState(() => isInWishlist(String(product.id)));
 
