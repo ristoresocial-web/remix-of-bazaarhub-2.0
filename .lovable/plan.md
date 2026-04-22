@@ -1,55 +1,50 @@
 
 
-## Security Hardening Plan
+## Reorder homepage to match your sketch — keep all workflows intact
 
-Three real findings from the security scan. Here's the fix for each:
+Your sketch and the current homepage have the **same building blocks**. They're just in a slightly different order, and one section needs a small addition. No new pages, no workflow changes, no breaking edits.
 
-### 1. Hide seller phone & WhatsApp from public (HIGH IMPACT)
-**Problem:** Anonymous visitors can read every seller's `phone` and `whatsapp` columns directly via the `sellers` table SELECT policy. This contradicts the existing memory rule (contact details must be gated to logged-in buyers, admin bypass `99434 40384`).
+### Sketch vs current order
 
-**Fix:**
-- Create a SQL view `public.sellers_public` exposing only safe columns (id, shop_name, city, category, logo_url, banner_url, description, rating, total_reviews, is_verified, is_active, created_at).
-- Create a security-definer RPC `get_seller_contact(seller_id uuid)` that returns `{ phone, whatsapp }` only when caller is authenticated OR is admin.
-- Tighten the existing "Anyone can view active sellers" SELECT policy → restrict full-row read (incl. contact) to authenticated users; keep public-safe data via the view.
-- Update client code in `FindSellersPage`, `SellerProfilePage`, `ProductPage`, `ComparisonTable` to fetch contact via the RPC only after login check.
+| # | Your sketch | Current code | Action |
+|---|---|---|---|
+| 1 | Logo + Home + City Expo + Login + Location + Language | `Navbar.tsx` | ✓ Already matches — keep |
+| 2 | Big "Search Product" bar | Hero + `AISmartSearchBar` | ✓ Keep |
+| 3 | 4 stat cards (12,000+ City Partners · 8.2L+ Products · 420+ Cities · ₹180Cr Savings) | `StatsBar` | ✓ Keep |
+| 4 | **Today's Best Price Differences in Madurai (15 mins ago)** | `BestComparisonCards` | **Move up** (currently 4th, sketch wants it 4th — already correct, but currently it's *after* TopResearched) |
+| 5 | **Top Researched Products** (most searched by our users) | `TopResearchedProducts` | **Move down** to slot 5 |
+| 6 | "What are you looking for?" — **big search input + category buttons** | `CategoryGrid` (only has tiles, no search input) | **Add a search bar above the category tiles** |
+| 7 | Featured Sellers in Madurai | `FeaturedSellers` | ✓ Keep |
+| 8 | Footer | `Footer.tsx` | ✓ Keep |
 
-### 2. Stop leaking user search history
-**Problem:** `search_logs` SELECT is `USING (true)` on `{anon, authenticated}`, exposing per-user query history including `user_id`.
+### Concrete changes
 
-**Fix:**
-- Replace public SELECT policy. New rules:
-  - Users can SELECT only their own rows (`auth.uid() = user_id`).
-  - Admins can SELECT all (via `is_admin`).
-- Add a security-definer RPC `get_trending_searches(p_city text, p_days int)` that returns aggregated `{query, count}` only — no user_id leak. Update `TrendingSection.tsx` to call this RPC instead of raw table read.
+**File 1 — `src/pages/Index.tsx`** (reorder only):
+- Hero (unchanged)
+- `StatsBar` (unchanged)
+- `BestComparisonCards` ← moved up to position 4
+- `TopResearchedProducts` ← moved down to position 5
+- `CategoryGrid` (now with embedded search — see below) ← position 6
+- Keep "How It Works" + "Featured Sellers" + "Price Alert banner" + "Become a Seller" below, in current order
+- All `RevealSection` wrappers preserved → animations unchanged
 
-### 3. Tighten "always true" INSERT policy on search_logs
-**Problem:** Anyone can spam search_logs with arbitrary payloads.
-
-**Fix:** Replace the `WITH CHECK (true)` insert policy with:
-- `length(trim(search_query)) between 1 and 200`
-- `length(city) between 1 and 100`
-- `user_id IS NULL OR user_id = auth.uid()` (prevents impersonation)
-
-### 4. Bonus: enable Leaked Password Protection
-Turn on Supabase HIBP password check during signup/change so common breached passwords are rejected.
-
----
-
-### Files touched
-- **Migration** (new): policies, view, RPCs above
-- `src/components/TrendingSection.tsx` — switch to `get_trending_searches` RPC
-- `src/pages/FindSellersPage.tsx` — fetch contact via `get_seller_contact` after login check
-- `src/pages/SellerProfilePage.tsx` — same
-- `src/pages/ProductPage.tsx` — same (for cityPartner phone/WhatsApp)
-- `src/components/compare/ComparisonTable.tsx` — same
-- `src/integrations/supabase/types.ts` — auto-regenerated
+**File 2 — `src/components/CategoryGrid.tsx`** (small addition):
+- Heading already says "What are you looking for?" ✓
+- Add a centered search input directly under the heading that submits to `/search?q=...&city=...` (same target as the hero search). One small form, ~15 lines. Reuses existing `bh-orange` button styling, no new dependencies.
+- Category tiles below stay exactly as they are.
 
 ### What does NOT change
-- `ai_scores` public read — intentional (verdict cards on home).
-- `products`, `reviews`, `profiles` — already correctly scoped.
-- `contact_messages` insert policy — already has proper length validation, leaving as-is.
-- No rate limiting added (backend doesn't support it yet).
+- Navbar, mobile nav, ticker, city selector, language switcher — untouched
+- Hero `AISmartSearchBar` — untouched
+- All AI features (suggestions, scores, verdicts) — untouched
+- All routes, auth gates, WhatsApp/contact gating — untouched
+- All animations and `framer-motion` reveals — preserved
+- "How It Works", "Price Alert banner", "Become a Seller", `CityOffersFloatingButton` — kept where they are (sketch doesn't show them but they're harmless and link to existing pages)
+- No DB / RLS / edge function changes
+- Memory rules respected: cream theme, `notranslate` on prices, positive tone, gated contact
 
-### After deploy
-Re-run the security scan to confirm all three findings clear.
+### Result
+The first scroll on the homepage will read top-to-bottom exactly like your sketch: Navbar → Hero search → Stats → Today's Best Price Differences → Top Researched → "What are you looking for?" with search + categories → Featured Sellers → Footer. Everything underneath continues to work as today.
+
+Approve this and I'll make the two file edits.
 
