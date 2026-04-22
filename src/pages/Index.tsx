@@ -119,19 +119,19 @@ const Index = () => {
       {/* ── 2. STATS BAR ── */}
       <StatsBar />
 
-      {/* ── 2.5. TOP RESEARCHED PRODUCTS (Flash.co-style rail) ── */}
+      {/* ── 3. TODAY'S BEST PRICE DIFFERENCES ── */}
+      <RevealSection>
+        <BestComparisonCards city={selectedCity} />
+      </RevealSection>
+
+      {/* ── 4. TOP RESEARCHED PRODUCTS ── */}
       <RevealSection>
         <TopResearchedProducts />
       </RevealSection>
 
-      {/* ── 3. CATEGORY GRID ── */}
+      {/* ── 5. CATEGORY GRID (with embedded search) ── */}
       <RevealSection>
         <CategoryGrid />
-      </RevealSection>
-
-      {/* ── 4. BEST COMPARISON CARDS ── */}
-      <RevealSection>
-        <BestComparisonCards city={selectedCity} />
       </RevealSection>
 
       {/* ── 5. HOW IT WORKS ── */}
