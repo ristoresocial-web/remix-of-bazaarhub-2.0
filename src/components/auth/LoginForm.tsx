@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Loader2, KeyRound } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/lib/authValidation";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const looksLikeMobile = (s: string) => /^[6-9]\d{9}$/.test(s.replace(/\D/g, ""));
 
@@ -146,21 +145,6 @@ const LoginForm: React.FC = () => {
       >
         {loading ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : "Log In"}
       </button>
-
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className="block">
-            <button
-              type="button"
-              disabled
-              className="flex h-11 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-border bg-muted text-sm font-semibold text-muted-foreground"
-            >
-              <KeyRound className="h-4 w-4" /> Login with OTP
-            </button>
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>Coming soon</TooltipContent>
-      </Tooltip>
     </form>
   );
 };
