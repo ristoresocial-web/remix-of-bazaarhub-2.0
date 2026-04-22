@@ -1,5 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 import electronics from "@/assets/categories/electronics.png";
 import mobiles from "@/assets/categories/mobiles.png";
 import laptops from "@/assets/categories/laptops.png";
