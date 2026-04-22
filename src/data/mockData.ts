@@ -399,11 +399,12 @@ export const mockSearchProducts: Product[] = [
     description: "Samsung Galaxy M34 5G with 6.5\" Super AMOLED, Exynos 1280, 50MP OIS camera, and massive 6000mAh battery.",
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "6000mAh"]],
     localAvailable: true,
-    localShop: { name: "Poorvika Mobiles", address: "123 Main Bazaar, Madurai", km: 1.2, phone: "+91 99434 40384" },
+    localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Poorvika (Local)", price: 16499, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 16999, url: "https://amazon.in", isAffiliate: true, inStock: true },
       { platform: "Flipkart", price: 17299, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 16499, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Selvam Stores (Local)", price: 16799, url: "#", isAffiliate: false, inStock: true },
     ],
   },
   {
@@ -431,9 +432,10 @@ export const mockSearchProducts: Product[] = [
     description: "Redmi Note 12 with 6.67\" AMOLED 120Hz, Snapdragon 685, 50MP triple camera, and 5000mAh battery.",
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "5000mAh"]],
     localAvailable: true,
-    localShop: { name: "Sangeetha Mobiles", address: "78 KK Nagar, Madurai", km: 2.4, phone: "+91 99434 40384" },
+    localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Sangeetha (Local)", price: 13999, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 13999, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Selvam Stores (Local)", price: 14299, url: "#", isAffiliate: false, inStock: true },
     ],
   },
   {
@@ -446,11 +448,12 @@ export const mockSearchProducts: Product[] = [
     description: "Realme Narzo 60 with 6.43\" Super AMOLED, MediaTek Dimensity 6020, 64MP camera, and 5000mAh battery.",
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "5000mAh"]],
     localAvailable: true,
-    localShop: { name: "Kumar Electronics", address: "12 MG Road, Madurai", km: 0.8, phone: "+91 99434 40384" },
+    localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Kumar Electronics (Local)", price: 15499, url: "#", isAffiliate: false, inStock: true },
       { platform: "Amazon", price: 15999, url: "https://amazon.in", isAffiliate: true, inStock: true },
       { platform: "Flipkart", price: 16299, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 15499, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Selvam Stores (Local)", price: 15799, url: "#", isAffiliate: false, inStock: true },
     ],
   },
   {
@@ -466,7 +469,6 @@ export const mockSearchProducts: Product[] = [
     prices: [
       { platform: "Amazon", price: 57999, url: "https://amazon.in", isAffiliate: true, inStock: true },
       { platform: "Flipkart", price: 58499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
-      { platform: "Croma", price: 59900, url: "https://croma.com", isAffiliate: true, inStock: true },
     ],
   },
 ];
