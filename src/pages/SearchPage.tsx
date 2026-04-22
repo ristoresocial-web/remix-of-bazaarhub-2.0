@@ -292,22 +292,47 @@ const SearchPage: React.FC = () => {
                 onSortChange={setSortBy}
               />
 
-              <div className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-                  : "space-y-3"
-              }>
-                {paginated.map(p => (
-                  <ProductSearchCard
-                    key={p.id}
-                    product={p}
-                    isCompare={compareList.includes(p.id)}
-                    onToggleCompare={() => toggleCompare(p.id)}
-                    viewMode={viewMode}
-                    isBestDeal={sortBy === "price_asc" && currentPage === 1 && p.id === paginated[0]?.id}
-                  />
-                ))}
-              </div>
+              {viewMode === "list" ? (
+                <div className="space-y-3">
+                  {paginated.map(p => (
+                    <React.Fragment key={p.id}>
+                      <ProductSearchCard
+                        product={p}
+                        isCompare={compareList.includes(p.id)}
+                        onToggleCompare={() => toggleCompare(p.id)}
+                        viewMode={viewMode}
+                        isBestDeal={sortBy === "price_asc" && currentPage === 1 && p.id === paginated[0]?.id}
+                        expanded={expandedProductId === p.id}
+                        onToggleExpand={() => setExpandedProductId(prev => prev === p.id ? null : p.id)}
+                      />
+                      {expandedProductId === p.id && (
+                        <InlineComparePanel product={p} city={city} />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {paginated.map(p => (
+                    <React.Fragment key={p.id}>
+                      <ProductSearchCard
+                        product={p}
+                        isCompare={compareList.includes(p.id)}
+                        onToggleCompare={() => toggleCompare(p.id)}
+                        viewMode={viewMode}
+                        isBestDeal={sortBy === "price_asc" && currentPage === 1 && p.id === paginated[0]?.id}
+                        expanded={expandedProductId === p.id}
+                        onToggleExpand={() => setExpandedProductId(prev => prev === p.id ? null : p.id)}
+                      />
+                      {expandedProductId === p.id && (
+                        <div className="sm:col-span-2 lg:col-span-3">
+                          <InlineComparePanel product={p} city={city} />
+                        </div>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
 
               {/* PAGINATION */}
               {totalPages > 1 && (
