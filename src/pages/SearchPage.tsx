@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import FilterPanel, { type SortOption, type AvailabilityFilter } from "@/components/search/FilterPanel";
 import ProductSearchCard from "@/components/search/ProductSearchCard";
+import InlineComparePanel from "@/components/search/InlineComparePanel";
 import SortBar from "@/components/search/SortBar";
 import { getAvailability } from "@/lib/smartFallback";
 import {
