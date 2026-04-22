@@ -465,10 +465,11 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop",
     description: "Apple iPhone 14 with A15 Bionic, 6.1\" Super Retina XDR OLED, advanced 12MP dual camera, and Crash Detection.",
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "3279mAh"]],
-    localAvailable: false,
+    localAvailable: true,
+    localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Amazon", price: 57999, url: "https://amazon.in", isAffiliate: true, inStock: true },
-      { platform: "Flipkart", price: 58499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Amazon", price: 70000, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 70500, url: "#", isAffiliate: false, inStock: true },
     ],
   },
 ];
