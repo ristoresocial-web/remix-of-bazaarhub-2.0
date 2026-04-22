@@ -9,9 +9,10 @@ import { ProductCardSkeleton } from "@/components/LoadingSkeleton";
 import { formatPrice } from "@/lib/cityUtils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import FilterPanel, { type SortOption } from "@/components/search/FilterPanel";
+import FilterPanel, { type SortOption, type AvailabilityFilter } from "@/components/search/FilterPanel";
 import ProductSearchCard from "@/components/search/ProductSearchCard";
 import SortBar from "@/components/search/SortBar";
+import { getAvailability } from "@/lib/smartFallback";
 import {
   Pagination,
   PaginationContent,
@@ -43,7 +44,7 @@ const SearchPage: React.FC = () => {
   const urlCity = searchParams.get("city") || "";
   const urlCategory = searchParams.get("category") || "";
   const urlBrand = searchParams.get("brand") || "";
-  const urlSort = (searchParams.get("sort") || "most_compared") as SortOption;
+  const urlSort = (searchParams.get("sort") || "price_asc") as SortOption;
   const urlPage = parseInt(searchParams.get("page") || "1", 10);
 
   const [query, setQuery] = useState(urlQuery);
@@ -54,6 +55,7 @@ const SearchPage: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(urlBrand ? [urlBrand] : []);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200000]);
   const [localOnly, setLocalOnly] = useState(false);
+  const [availability, setAvailability] = useState<AvailabilityFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>(urlSort);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [compareList, setCompareList] = useState<number[]>([]);
@@ -63,7 +65,7 @@ const SearchPage: React.FC = () => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timer);
-  }, [urlQuery, sortBy, selectedCategories, selectedBrands, priceRange, localOnly]);
+  }, [urlQuery, sortBy, selectedCategories, selectedBrands, priceRange, localOnly, availability]);
 
   // Compute min/max for slider
   const priceMinMax = useMemo<[number, number]>(() => {
@@ -109,9 +111,13 @@ const SearchPage: React.FC = () => {
       const cheapest = getCheapest(p);
       if (cheapest < priceRange[0] || cheapest > priceRange[1]) return false;
       if (localOnly && !p.localAvailable) return false;
+      if (availability !== "all") {
+        const a = getAvailability(p);
+        if (availability !== a) return false;
+      }
       return true;
     });
-  }, [queryMatched, selectedCategories, selectedBrands, priceRange, localOnly]);
+  }, [queryMatched, selectedCategories, selectedBrands, priceRange, localOnly, availability]);
 
   // Sort
   const sorted = useMemo(() => {
@@ -148,7 +154,8 @@ const SearchPage: React.FC = () => {
     setSelectedBrands([]);
     setPriceRange(priceMinMax);
     setLocalOnly(false);
-    setSortBy("most_compared");
+    setAvailability("all");
+    setSortBy("price_asc");
     setCurrentPage(1);
   };
 
@@ -266,6 +273,8 @@ const SearchPage: React.FC = () => {
               minMax={priceMinMax}
               localOnly={localOnly}
               onLocalOnlyChange={setLocalOnly}
+              availability={availability}
+              onAvailabilityChange={setAvailability}
               sortBy={sortBy}
               onSortChange={setSortBy}
               counts={filterCounts}
@@ -293,6 +302,7 @@ const SearchPage: React.FC = () => {
                     isCompare={compareList.includes(p.id)}
                     onToggleCompare={() => toggleCompare(p.id)}
                     viewMode={viewMode}
+                    isBestDeal={sortBy === "price_asc" && currentPage === 1 && p.id === paginated[0]?.id}
                   />
                 ))}
               </div>
