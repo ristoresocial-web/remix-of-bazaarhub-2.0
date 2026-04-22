@@ -1,50 +1,27 @@
 
 
-## Reorder homepage to match your sketch — keep all workflows intact
+## Remove duplicate search bar from homepage
 
-Your sketch and the current homepage have the **same building blocks**. They're just in a slightly different order, and one section needs a small addition. No new pages, no workflow changes, no breaking edits.
+You currently have **two search bars** stacked on the homepage:
+1. Hero `AISmartSearchBar` (top, under "Find the Best Price in Your City")
+2. Plain search input inside `CategoryGrid` ("What are you looking for?" section)
 
-### Sketch vs current order
+You want only one. The hero search is the smarter, AI-powered one and is the right one to keep.
 
-| # | Your sketch | Current code | Action |
-|---|---|---|---|
-| 1 | Logo + Home + City Expo + Login + Location + Language | `Navbar.tsx` | ✓ Already matches — keep |
-| 2 | Big "Search Product" bar | Hero + `AISmartSearchBar` | ✓ Keep |
-| 3 | 4 stat cards (12,000+ City Partners · 8.2L+ Products · 420+ Cities · ₹180Cr Savings) | `StatsBar` | ✓ Keep |
-| 4 | **Today's Best Price Differences in Madurai (15 mins ago)** | `BestComparisonCards` | **Move up** (currently 4th, sketch wants it 4th — already correct, but currently it's *after* TopResearched) |
-| 5 | **Top Researched Products** (most searched by our users) | `TopResearchedProducts` | **Move down** to slot 5 |
-| 6 | "What are you looking for?" — **big search input + category buttons** | `CategoryGrid` (only has tiles, no search input) | **Add a search bar above the category tiles** |
-| 7 | Featured Sellers in Madurai | `FeaturedSellers` | ✓ Keep |
-| 8 | Footer | `Footer.tsx` | ✓ Keep |
+### Change
 
-### Concrete changes
-
-**File 1 — `src/pages/Index.tsx`** (reorder only):
-- Hero (unchanged)
-- `StatsBar` (unchanged)
-- `BestComparisonCards` ← moved up to position 4
-- `TopResearchedProducts` ← moved down to position 5
-- `CategoryGrid` (now with embedded search — see below) ← position 6
-- Keep "How It Works" + "Featured Sellers" + "Price Alert banner" + "Become a Seller" below, in current order
-- All `RevealSection` wrappers preserved → animations unchanged
-
-**File 2 — `src/components/CategoryGrid.tsx`** (small addition):
-- Heading already says "What are you looking for?" ✓
-- Add a centered search input directly under the heading that submits to `/search?q=...&city=...` (same target as the hero search). One small form, ~15 lines. Reuses existing `bh-orange` button styling, no new dependencies.
-- Category tiles below stay exactly as they are.
+**File: `src/components/CategoryGrid.tsx`**
+- Remove the embedded search form (the `<form>` block with the input + Search button) added in the previous step.
+- Remove now-unused imports: `useState`, `useNavigate`, `Search` icon.
+- Remove the `query` state and `handleSearch` handler.
+- Keep the heading "What are you looking for?" + subtitle.
+- Keep all 12 category tiles exactly as they are.
 
 ### What does NOT change
-- Navbar, mobile nav, ticker, city selector, language switcher — untouched
-- Hero `AISmartSearchBar` — untouched
-- All AI features (suggestions, scores, verdicts) — untouched
-- All routes, auth gates, WhatsApp/contact gating — untouched
-- All animations and `framer-motion` reveals — preserved
-- "How It Works", "Price Alert banner", "Become a Seller", `CityOffersFloatingButton` — kept where they are (sketch doesn't show them but they're harmless and link to existing pages)
-- No DB / RLS / edge function changes
-- Memory rules respected: cream theme, `notranslate` on prices, positive tone, gated contact
+- Hero `AISmartSearchBar` — stays as the single homepage search
+- Navbar search (desktop + mobile) — separate, stays as-is
+- Category tiles, animations, links — all preserved
+- No other files touched
 
-### Result
-The first scroll on the homepage will read top-to-bottom exactly like your sketch: Navbar → Hero search → Stats → Today's Best Price Differences → Top Researched → "What are you looking for?" with search + categories → Featured Sellers → Footer. Everything underneath continues to work as today.
-
-Approve this and I'll make the two file edits.
+Result: clean homepage with one prominent AI search at the top, and the categories section becomes a pure visual grid below.
 
