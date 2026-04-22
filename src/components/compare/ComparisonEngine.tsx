@@ -190,8 +190,8 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
 
         {/* Local column (right) */}
         <div className="rounded-3xl md:rounded-l-none border border-bh-green/20 bg-bh-green-light/40 p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-green-dark">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="flex items-center gap-2 font-display text-sm sm:text-base font-bold text-bh-green-dark">
               🏪 {city} City Partners
             </h3>
             <div className="flex items-center gap-1">
@@ -208,7 +208,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
             </div>
           </div>
 
-          {sortedLocal.map((partner) => (
+          {(showAllLocal ? sortedLocal : sortedLocal.slice(0, INITIAL_VISIBLE)).map((partner) => (
             <CityPartnerCard
               key={partner.id}
               partner={partner}
@@ -219,6 +219,16 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
               onGatedAction={handleGatedAction}
             />
           ))}
+          {sortedLocal.length > INITIAL_VISIBLE && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllLocal((v) => !v)}
+              className="w-full text-bh-green-dark hover:bg-bh-green/10 text-xs"
+            >
+              {showAllLocal ? "Show less" : `Show all ${sortedLocal.length} sellers`}
+            </Button>
+          )}
         </div>
       </div>
 
