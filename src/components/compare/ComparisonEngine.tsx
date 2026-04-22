@@ -32,10 +32,14 @@ const TRUST_COLORS: Record<string, string> = {
   new: "text-muted-foreground",
 };
 
+const INITIAL_VISIBLE = 3;
+
 const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
   const { isLoggedIn } = useAuth();
   const [sortOnline, setSortOnline] = useState<SortOnline>("price");
   const [sortLocal, setSortLocal] = useState<SortLocal>("price");
+  const [showAllOnline, setShowAllOnline] = useState(false);
+  const [showAllLocal, setShowAllLocal] = useState(false);
 
   const { product, onlineSellers, cityPartners, lowestOnlinePrice, lowestLocalPrice, priceDifference } = data;
 
@@ -119,8 +123,8 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
       <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-0 items-stretch">
         {/* Online column (left) */}
         <div className="rounded-3xl md:rounded-r-none border border-bh-blue/20 bg-bh-blue-light/40 p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-blue">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="flex items-center gap-2 font-display text-sm sm:text-base font-bold text-bh-blue">
               🌐 Online Sellers
             </h3>
             <div className="flex items-center gap-1">
@@ -136,7 +140,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
             </div>
           </div>
 
-          {sortedOnline.map((seller) => (
+          {(showAllOnline ? sortedOnline : sortedOnline.slice(0, INITIAL_VISIBLE)).map((seller) => (
             <OnlineSellerCard
               key={seller.platform}
               seller={seller}
@@ -145,6 +149,16 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
               city={city}
             />
           ))}
+          {sortedOnline.length > INITIAL_VISIBLE && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllOnline((v) => !v)}
+              className="w-full text-bh-blue hover:bg-bh-blue/10 text-xs"
+            >
+              {showAllOnline ? "Show less" : `Show all ${sortedOnline.length} sellers`}
+            </Button>
+          )}
         </div>
 
         {/* Center savings pill divider — the star */}
@@ -176,8 +190,8 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
 
         {/* Local column (right) */}
         <div className="rounded-3xl md:rounded-l-none border border-bh-green/20 bg-bh-green-light/40 p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-green-dark">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="flex items-center gap-2 font-display text-sm sm:text-base font-bold text-bh-green-dark">
               🏪 {city} City Partners
             </h3>
             <div className="flex items-center gap-1">
@@ -194,7 +208,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
             </div>
           </div>
 
-          {sortedLocal.map((partner) => (
+          {(showAllLocal ? sortedLocal : sortedLocal.slice(0, INITIAL_VISIBLE)).map((partner) => (
             <CityPartnerCard
               key={partner.id}
               partner={partner}
@@ -205,6 +219,16 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
               onGatedAction={handleGatedAction}
             />
           ))}
+          {sortedLocal.length > INITIAL_VISIBLE && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllLocal((v) => !v)}
+              className="w-full text-bh-green-dark hover:bg-bh-green/10 text-xs"
+            >
+              {showAllLocal ? "Show less" : `Show all ${sortedLocal.length} sellers`}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -259,19 +283,30 @@ function OnlineSellerCard({
           <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-blue"}`}>
             ₹{seller.price.toLocaleString("en-IN")}
           </p>
-          {!seller.inStock && <span className="text-[10px] text-destructive">Out of stock</span>}
+          {isAbsoluteLowest && (
+            <span className="inline-block mt-0.5 rounded-pill bg-success/15 text-success text-[9px] font-bold px-2 py-0.5 uppercase tracking-wider">
+              ✓ Lowest Price
+            </span>
+          )}
+          {!seller.inStock && <span className="block text-[10px] text-destructive">Out of stock</span>}
         </div>
       </div>
-      <div className="mt-2 flex items-center justify-between text-xs text-bh-text-muted">
+      <div className="mt-2 flex items-center justify-between gap-2 text-xs text-bh-text-muted">
         <span>⚡ {seller.delivery}</span>
-        <a
-          href={seller.url}
-          target="_blank"
-          rel="nofollow sponsored noopener noreferrer"
-          className="flex items-center gap-1 text-bh-orange font-semibold hover:underline"
+        <Button
+          asChild
+          size="sm"
+          className="h-8 gap-1 text-[11px] bg-bh-orange hover:bg-bh-orange-dark text-white"
+          disabled={!seller.inStock}
         >
-          Visit <ExternalLink className="h-3 w-3" />
-        </a>
+          <a
+            href={seller.url}
+            target="_blank"
+            rel="nofollow sponsored noopener noreferrer"
+          >
+            Buy Now <ExternalLink className="h-3 w-3" />
+          </a>
+        </Button>
       </div>
     </motion.div>
   );
@@ -332,18 +367,35 @@ function CityPartnerCard({
           <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-green-dark"}`}>
             ₹{partner.price.toLocaleString("en-IN")}
           </p>
+          {isAbsoluteLowest && (
+            <span className="inline-block mt-0.5 rounded-pill bg-success/15 text-success text-[9px] font-bold px-2 py-0.5 uppercase tracking-wider">
+              ✓ Lowest Price
+            </span>
+          )}
           {partner.inStock ? (
-            <span className="text-[10px] text-bh-green-dark font-bold">● In Stock</span>
+            <span className="block text-[10px] text-bh-green-dark font-bold">● In Stock</span>
           ) : (
-            <span className="text-[10px] text-destructive">Out of Stock</span>
+            <span className="block text-[10px] text-destructive">Out of Stock</span>
           )}
         </div>
       </div>
 
       <p className="mt-1 text-[10px] text-bh-text-muted">{partner.address}</p>
 
-      {/* Contact buttons — gated */}
-      <div className="mt-2 flex items-center gap-2">
+      {/* Primary CTA — View Nearby Store */}
+      <Button
+        size="sm"
+        className="mt-2 w-full h-8 gap-1 text-[11px] bg-bh-green-dark hover:bg-bh-green text-white"
+        onClick={() => {
+          if (!onGatedAction("view this nearby store")) return;
+          window.open(partner.googleMapsUrl, "_blank", "noopener,noreferrer");
+        }}
+      >
+        <Navigation className="h-3 w-3" /> View Nearby Store
+      </Button>
+
+      {/* Secondary contact buttons — gated */}
+      <div className="mt-2 flex items-center gap-2 flex-wrap">
         <Button
           size="sm"
           variant="outline"
@@ -365,17 +417,6 @@ function CityPartnerCard({
           }}
         >
           <MessageCircle className="h-3 w-3" /> WhatsApp
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 gap-1 text-[10px]"
-          onClick={() => {
-            if (!onGatedAction("get directions")) return;
-            window.open(partner.googleMapsUrl);
-          }}
-        >
-          <Navigation className="h-3 w-3" /> Directions
         </Button>
       </div>
     </motion.div>
