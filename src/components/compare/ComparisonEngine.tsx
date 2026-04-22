@@ -367,18 +367,35 @@ function CityPartnerCard({
           <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-green-dark"}`}>
             ₹{partner.price.toLocaleString("en-IN")}
           </p>
+          {isAbsoluteLowest && (
+            <span className="inline-block mt-0.5 rounded-pill bg-success/15 text-success text-[9px] font-bold px-2 py-0.5 uppercase tracking-wider">
+              ✓ Lowest Price
+            </span>
+          )}
           {partner.inStock ? (
-            <span className="text-[10px] text-bh-green-dark font-bold">● In Stock</span>
+            <span className="block text-[10px] text-bh-green-dark font-bold">● In Stock</span>
           ) : (
-            <span className="text-[10px] text-destructive">Out of Stock</span>
+            <span className="block text-[10px] text-destructive">Out of Stock</span>
           )}
         </div>
       </div>
 
       <p className="mt-1 text-[10px] text-bh-text-muted">{partner.address}</p>
 
-      {/* Contact buttons — gated */}
-      <div className="mt-2 flex items-center gap-2">
+      {/* Primary CTA — View Nearby Store */}
+      <Button
+        size="sm"
+        className="mt-2 w-full h-8 gap-1 text-[11px] bg-bh-green-dark hover:bg-bh-green text-white"
+        onClick={() => {
+          if (!onGatedAction("view this nearby store")) return;
+          window.open(partner.googleMapsUrl, "_blank", "noopener,noreferrer");
+        }}
+      >
+        <Navigation className="h-3 w-3" /> View Nearby Store
+      </Button>
+
+      {/* Secondary contact buttons — gated */}
+      <div className="mt-2 flex items-center gap-2 flex-wrap">
         <Button
           size="sm"
           variant="outline"
@@ -400,17 +417,6 @@ function CityPartnerCard({
           }}
         >
           <MessageCircle className="h-3 w-3" /> WhatsApp
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 gap-1 text-[10px]"
-          onClick={() => {
-            if (!onGatedAction("get directions")) return;
-            window.open(partner.googleMapsUrl);
-          }}
-        >
-          <Navigation className="h-3 w-3" /> Directions
         </Button>
       </div>
     </motion.div>
