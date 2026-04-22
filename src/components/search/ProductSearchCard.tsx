@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { toggleWishlist, isInWishlist } from "@/lib/wishlist";
 import { formatPrice } from "@/lib/cityUtils";
 import type { Product } from "@/data/mockData";
@@ -12,10 +13,12 @@ interface ProductSearchCardProps {
   onToggleCompare: () => void;
   viewMode: "grid" | "list";
   isBestDeal?: boolean;
+  expanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
 const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
-  product, isCompare, onToggleCompare, viewMode, isBestDeal,
+  product, isCompare, onToggleCompare, viewMode, isBestDeal, expanded, onToggleExpand,
 }) => {
   const [wishlisted, setWishlisted] = React.useState(() => isInWishlist(String(product.id)));
 
@@ -66,13 +69,24 @@ const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
             </span>
           )}
         </div>
-        <div className="flex flex-col items-center gap-2 shrink-0">
+        <div className="flex flex-col items-end gap-2 shrink-0">
           <button onClick={handleWishlist} className="text-muted-foreground hover:text-destructive transition-colors">
             <Heart className={`h-4 w-4 ${wishlisted ? "fill-destructive text-destructive" : ""}`} />
           </button>
           <label className="flex items-center gap-1 cursor-pointer">
             <Checkbox checked={isCompare} onCheckedChange={onToggleCompare} className="h-3.5 w-3.5" />
           </label>
+          {onToggleExpand && (
+            <Button
+              type="button"
+              size="sm"
+              variant={expanded ? "secondary" : "default"}
+              onClick={onToggleExpand}
+              className="h-7 gap-1 text-[10px] px-2"
+            >
+              {expanded ? <>Hide <ChevronUp className="h-3 w-3" /></> : <>Compare <ChevronDown className="h-3 w-3" /></>}
+            </Button>
+          )}
         </div>
       </div>
     );
@@ -125,6 +139,23 @@ const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
           <Heart className={`h-4 w-4 ${wishlisted ? "fill-destructive text-destructive" : ""}`} />
         </button>
       </div>
+      {onToggleExpand && (
+        <div className="px-3 pb-2">
+          <Button
+            type="button"
+            size="sm"
+            variant={expanded ? "secondary" : "default"}
+            onClick={onToggleExpand}
+            className="w-full h-8 gap-1 text-xs"
+          >
+            {expanded ? (
+              <>Hide comparison <ChevronUp className="h-3 w-3" /></>
+            ) : (
+              <>Compare prices <ChevronDown className="h-3 w-3" /></>
+            )}
+          </Button>
+        </div>
+      )}
       <div className="px-3 pb-2">
         <p className="text-[9px] text-muted-foreground">
           Prices via affiliate APIs — may vary.
