@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import type { ComparisonResult, OnlineSeller, CityPartner } from "@/data/comparisonMockData";
+import { allProducts } from "@/data/mockData";
+import SmartFallbackPanel from "./SmartFallbackPanel";
 
 interface ComparisonEngineProps {
   data: ComparisonResult;
@@ -64,8 +66,39 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
     return true;
   };
 
+  const hasOnline = onlineSellers.length > 0;
+  const hasLocal = cityPartners.length > 0;
+  const isSingleSource = (hasOnline && !hasLocal) || (!hasOnline && hasLocal);
+
+  // Match this comparison product to a real product entry by name (best effort) for fallback suggestions.
+  const fallbackTarget = useMemo(() => {
+    if (!isSingleSource) return null;
+    const lowerName = product.name.toLowerCase();
+    return (
+      allProducts.find((p) => p.name.toLowerCase() === lowerName) ||
+      allProducts.find((p) => p.brand.toLowerCase() === product.brand.toLowerCase()) ||
+      null
+    );
+  }, [isSingleSource, product.name, product.brand]);
+
   return (
     <div className="space-y-6">
+      {/* Availability status banner */}
+      {hasOnline && hasLocal && (
+        <div className="flex items-center justify-center gap-2 rounded-pill bg-bh-green-light border border-bh-green/30 px-4 py-2 text-center">
+          <span className="text-sm font-bold text-bh-green-dark">
+            ✓ Available Online & Nearby Store — Best Price guaranteed
+          </span>
+        </div>
+      )}
+      {isSingleSource && (
+        <div className="flex items-center justify-center gap-2 rounded-pill bg-bh-orange-light border border-bh-orange/30 px-4 py-2 text-center">
+          <span className="text-sm font-bold text-bh-orange-dark">
+            {hasOnline ? "🌐 Available Online only — see alternatives below" : "🏪 Available at Nearby Stores only — see alternatives below"}
+          </span>
+        </div>
+      )}
+
       {/* Product Header */}
       <div className="flex items-center gap-4 rounded-2xl border border-bh-border bg-bh-surface p-4 shadow-bh-sm">
         <img src={product.image} alt={product.name} className="h-20 w-20 rounded-xl object-contain bg-bh-surface-2" loading="lazy" />
@@ -174,6 +207,11 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
           ))}
         </div>
       </div>
+
+      {/* Smart fallback for single-source products */}
+      {isSingleSource && fallbackTarget && (
+        <SmartFallbackPanel target={fallbackTarget} />
+      )}
     </div>
   );
 };
@@ -206,7 +244,7 @@ function OnlineSellerCard({
             </span>
             {isAbsoluteLowest && (
               <Badge className="bg-bh-orange text-white text-[10px] gap-1 shadow-price">
-                <Trophy className="h-3 w-3" /> Lowest in {city}
+                <Trophy className="h-3 w-3" /> 🏆 Best Deal
               </Badge>
             )}
             {isLowest && !isAbsoluteLowest && (
@@ -272,7 +310,7 @@ function CityPartnerCard({
             <span className="font-display font-bold text-bh-text">{partner.shopName}</span>
             {isAbsoluteLowest && (
               <Badge className="bg-bh-orange text-white text-[10px] gap-1 shadow-price">
-                <Trophy className="h-3 w-3" /> Lowest in {city}
+                <Trophy className="h-3 w-3" /> 🏆 Best Deal
               </Badge>
             )}
             {isLowest && !isAbsoluteLowest && (
