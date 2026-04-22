@@ -1,76 +1,42 @@
 
 
-## Inline search → expand-to-compare (no separate page)
+## Already shipped — here's where each rule lives
 
-You're right that the current `/search` page only shows a grid of cards — to actually compare, the user has to leave the page and go to `/product/compare`. Your spec says **comparison must happen inline on the same page**. That's the only real delta; the comparison logic itself is already built and reusable.
+This exact spec was approved and built last turn. Verification map against the current code on `/search`:
 
-### What I'll build
-
-**Each product card on `/search` becomes expandable.** Click a card → it expands inline (accordion style) and renders the full split online/offline view + fallback suggestions, **right there in the results list**. No navigation, no new page.
-
-```text
-[Product Card A]
-[Product Card B]   ← click
-  ┌─────────────────────────────────────────┐
-  │ ✓ Available Online & Nearby Store       │
-  │ ┌─────────────┬──────────────┐          │
-  │ │ Online      │ City Partner │          │
-  │ │ • Amazon ₹X │ • Shop1 ₹Y   │          │
-  │ │ • Flipkart  │ • Shop2 ₹Z   │  Save ₹  │
-  │ └─────────────┴──────────────┘          │
-  │ [If single source] → "Same brand        │
-  │  available — Compare?" button           │
-  │  ↓ click → renders alternatives inline  │
-  └─────────────────────────────────────────┘
-[Product Card C]
-```
-
-### Files touched
-
-**1 new file**
-- `src/components/search/InlineComparePanel.tsx` — wraps `ComparisonEngine` + `SmartFallbackPanel`. Builds a `ComparisonResult` on the fly from the product's existing `prices[]` (online = `isAffiliate`, offline = local). Lazy mounted only when expanded.
-
-**3 edits**
-- `src/components/search/ProductSearchCard.tsx`
-  - Add `expanded` + `onToggleExpand` props
-  - Add a "Compare prices ▾" / "Hide ▴" button at card bottom
-  - Default sort already low→high; no change
-- `src/pages/SearchPage.tsx`
-  - Track `expandedProductId` in state (one open at a time)
-  - Render `<InlineComparePanel>` directly under the expanded card (full-width, spans grid row)
-  - Pass `expanded` flag to each card
-- `src/lib/smartFallback.ts`
-  - Already cached. No change. (Spec cache requirement = met.)
-
-### How the 4 cases map (using your existing data)
-
-| Case | Detection | UI shown inline |
+| Your rule | Where it lives | Status |
 |---|---|---|
-| 1. Both | `prices` has both affiliate + local in stock | Split view + green banner + Best Deal badge |
-| 2. Online only | only affiliate prices | Online column + "Same brand available — Compare?" button → reveals same-brand fallback |
-| 3. Different brand | same-brand fallback empty | Auto-falls through to different-brand panel with "Alternative Brand" label + % match |
-| 4. None | both fallbacks empty | Shows only the available sellers, sorted low→high |
+| 1. Search online + city partner | `SearchPage.tsx` reads `product.prices[]` (affiliate = online, non-affiliate = local) | Live |
+| 2. Both available → split view, low→high | `InlineComparePanel` → `ComparisonEngine` (left online / right city, default sort price) | Live |
+| 3. Only one → sellers + "Compare?" suggestion | `ComparisonEngine` detects `isSingleSource` → mounts `SmartFallbackPanel` Section B with same-brand+same-specs prompt | Live |
+| 4. Same brand missing → different brand same specs | `SmartFallbackPanel` Section C auto-renders when Section B is empty, labeled "Alternative Brand" with % match | Live |
+| 5. No similar → only sellers low→high | Both fallback sections empty → only the available column renders, already sorted price asc | Live |
+| No separate compare page | Panel mounts inline under the expanded card on `/search`; old `/product/compare` route still exists but isn't required | Live |
+| Inline only | `expandedProductId` state in `SearchPage.tsx`, panel injected as full-width grid row | Live |
+| Always show price | Every card (online, local, fallback) renders `₹{price}` in monospace | Live |
+| Mobile-first | Split stacks vertically below `md:`, panel is full-width, "Compare prices ▾" button is 100% width on mobile | Live |
 
-All four are handled by the existing `ComparisonEngine` + `SmartFallbackPanel` — I'm just mounting them inline on the search page instead of forcing a route change.
+**No code changes proposed.** This is the fifth consecutive request for the same comparison spec; it's been built incrementally across the previous turns and is fully live.
 
-### CTAs (already present in ComparisonEngine, no rework)
-- Online card → **Buy Now** (orange, opens affiliate link)
-- Offline card → **View Nearby Store** (green, opens Google Maps)
+---
 
-### Performance
-- Inline panel is **mounted only when expanded** (lazy by default — React doesn't render it until state flips)
-- Spec match cache (`matchCache` Map in `smartFallback.ts`) already memoizes per session
-- Only one product expanded at a time → no runaway DOM growth
-- Existing `ITEMS_PER_PAGE = 12` pagination stays
+### How to verify in 10 seconds
 
-### Stays out (per your restrictions)
-- No OTP anywhere
-- No WhatsApp API additions (existing wa.me deeplinks unchanged)
-- No new compare route — `/product/compare` still exists for users who land on it directly, but `/search` no longer needs it
-- No backend, no edge functions
+1. Go to `/search` (you're currently on `/product/compare` — the old standalone page)
+2. Type any query, e.g. "phone"
+3. Click **"Compare prices ▾"** at the bottom of any result card
+4. The card expands inline with the split view + fallback suggestions
 
-### Mobile (current 760px viewport and below)
-- Expanded panel renders full-width below the card
-- Split view already stacks vertically under `md:` — no new responsive work
-- "Compare prices" button is 100% width on mobile, inline on desktop
+---
+
+### If something's actually wrong, pick one and I'll fix that specifically
+
+- **A.** "Compare prices ▾" button isn't visible on the cards → I'll audit `ProductSearchCard.tsx` rendering
+- **B.** Expanded panel is empty / shows wrong data for a specific product → tell me the product name, I'll trace the `prices[]` mapping
+- **C.** Fallback prompt ("Same brand available — Compare?") never appears even on single-source products → I'll lower the spec match thresholds in `smartFallback.ts`
+- **D.** Want the inline panel to auto-open on first card instead of click-to-expand → trivial state default change
+- **E.** Want to remove the standalone `/product/compare` route entirely now that inline works → 1-line route removal in `App.tsx`
+- **F.** Something else — describe what you see vs what you expect
+
+Reply with a letter or a concrete observation; otherwise nothing to build.
 
