@@ -1,42 +1,47 @@
 
 
-## Already shipped — here's where each rule lives
+## Seed mock catalog with these 5 mobiles to make fallback comparisons demonstrable
 
-This exact spec was approved and built last turn. Verification map against the current code on `/search`:
+You've handed me a 5-product dataset. The right move is to **add these to the mock catalog** so the inline comparison fallback (same-brand & different-brand-same-specs) actually has data to surface on `/search`.
 
-| Your rule | Where it lives | Status |
-|---|---|---|
-| 1. Search online + city partner | `SearchPage.tsx` reads `product.prices[]` (affiliate = online, non-affiliate = local) | Live |
-| 2. Both available → split view, low→high | `InlineComparePanel` → `ComparisonEngine` (left online / right city, default sort price) | Live |
-| 3. Only one → sellers + "Compare?" suggestion | `ComparisonEngine` detects `isSingleSource` → mounts `SmartFallbackPanel` Section B with same-brand+same-specs prompt | Live |
-| 4. Same brand missing → different brand same specs | `SmartFallbackPanel` Section C auto-renders when Section B is empty, labeled "Alternative Brand" with % match | Live |
-| 5. No similar → only sellers low→high | Both fallback sections empty → only the available column renders, already sorted price asc | Live |
-| No separate compare page | Panel mounts inline under the expanded card on `/search`; old `/product/compare` route still exists but isn't required | Live |
-| Inline only | `expandedProductId` state in `SearchPage.tsx`, panel injected as full-width grid row | Live |
-| Always show price | Every card (online, local, fallback) renders `₹{price}` in monospace | Live |
-| Mobile-first | Split stacks vertically below `md:`, panel is full-width, "Compare prices ▾" button is 100% width on mobile | Live |
+### Why this is needed
 
-**No code changes proposed.** This is the fifth consecutive request for the same comparison spec; it's been built incrementally across the previous turns and is fully live.
+Right now `src/data/mockData.ts` doesn't contain Samsung M34, Redmi Note 12, Realme Narzo 60, or iPhone 14 in a way that lets the spec-matcher demonstrate Cases 3 & 4. Adding them means:
 
----
+- Search "Samsung M34" → shows 2 same-brand same-spec variants (Case 3 trigger)
+- Search any of them with online-only or local-only stock → fallback panel finds the other 3 as different-brand same-specs (Case 4 trigger)
+- All 4 share `6GB RAM / 128GB storage` → guaranteed ≥80% spec match in `smartFallback.ts`
 
-### How to verify in 10 seconds
+### What I'll add
 
-1. Go to `/search` (you're currently on `/product/compare` — the old standalone page)
-2. Type any query, e.g. "phone"
-3. Click **"Compare prices ▾"** at the bottom of any result card
-4. The card expands inline with the split view + fallback suggestions
+**1 file edit**: `src/data/mockData.ts`
 
----
+Append 5 new `Product` entries matching the existing schema (id, slug, name, brand, category, image, specs as `[key,value][]`, prices array with mix of online affiliate + local seller, localShop, localAvailable, etc.). I'll mirror the structure of existing mobile entries already in the file.
 
-### If something's actually wrong, pick one and I'll fix that specifically
+To showcase all 4 fallback cases, stock distribution will be:
+- **id 1 — Samsung M34 5G**: both online + local (Case 1: split view)
+- **id 2 — Samsung M34 5G Variant**: online only (Case 2 → triggers same-brand fallback to id 1)
+- **id 3 — Redmi Note 12**: local only (Case 2 → no same-brand → Case 3 different-brand fallback to Realme/Samsung)
+- **id 4 — Realme Narzo 60**: both
+- **id 5 — iPhone 14**: online only, no spec siblings beyond RAM/storage (Case 4 demo: only own sellers shown)
 
-- **A.** "Compare prices ▾" button isn't visible on the cards → I'll audit `ProductSearchCard.tsx` rendering
-- **B.** Expanded panel is empty / shows wrong data for a specific product → tell me the product name, I'll trace the `prices[]` mapping
-- **C.** Fallback prompt ("Same brand available — Compare?") never appears even on single-source products → I'll lower the spec match thresholds in `smartFallback.ts`
-- **D.** Want the inline panel to auto-open on first card instead of click-to-expand → trivial state default change
-- **E.** Want to remove the standalone `/product/compare` route entirely now that inline works → 1-line route removal in `App.tsx`
-- **F.** Something else — describe what you see vs what you expect
+Specs encoded as the existing tuple format:
+```ts
+specs: [["RAM","6GB"],["Storage","128GB"],["Battery","6000mAh"]]
+```
 
-Reply with a letter or a concrete observation; otherwise nothing to build.
+### Files NOT touched
+
+- `InlineComparePanel.tsx`, `ComparisonEngine.tsx`, `SmartFallbackPanel.tsx`, `smartFallback.ts`, `SearchPage.tsx`, `ProductSearchCard.tsx` — already wired correctly. The data drives them.
+- No DB, no edge functions, no new routes.
+
+### Verify after build
+
+1. Open `/search`
+2. Type "Samsung M34" → see 2 cards → expand variant → fallback shows the other Samsung M34
+3. Type "iPhone 14" → expand → fallback shows Redmi/Realme/Samsung as "Alternative Brand" with % match
+
+### Confirm before I code
+
+If you instead want these 5 products to **replace** existing mock mobiles (not append), or to live in a new file, say so. Otherwise I'll append to `mockData.ts` as described.
 
