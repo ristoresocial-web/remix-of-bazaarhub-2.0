@@ -401,10 +401,10 @@ export const mockSearchProducts: Product[] = [
     localAvailable: true,
     localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Amazon", price: 16999, url: "https://amazon.in", isAffiliate: true, inStock: true },
-      { platform: "Flipkart", price: 17299, url: "https://flipkart.com", isAffiliate: true, inStock: true },
-      { platform: "Kumar Mobiles (Local)", price: 16499, url: "#", isAffiliate: false, inStock: true },
-      { platform: "Selvam Stores (Local)", price: 16799, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Amazon", price: 15000, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 14800, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 15200, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Selvam Stores (Local)", price: 15100, url: "#", isAffiliate: false, inStock: true },
     ],
   },
   {
@@ -418,8 +418,8 @@ export const mockSearchProducts: Product[] = [
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "6000mAh"]],
     localAvailable: false,
     prices: [
-      { platform: "Amazon", price: 17499, url: "https://amazon.in", isAffiliate: true, inStock: true },
-      { platform: "Flipkart", price: 17799, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Amazon", price: 14900, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Flipkart", price: 14750, url: "https://flipkart.com", isAffiliate: true, inStock: true },
     ],
   },
   {
@@ -434,8 +434,8 @@ export const mockSearchProducts: Product[] = [
     localAvailable: true,
     localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Kumar Mobiles (Local)", price: 13999, url: "#", isAffiliate: false, inStock: true },
-      { platform: "Selvam Stores (Local)", price: 14299, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 13000, url: "#", isAffiliate: false, inStock: true },
+      { platform: "Selvam Stores (Local)", price: 12800, url: "#", isAffiliate: false, inStock: true },
     ],
   },
   {
@@ -465,10 +465,11 @@ export const mockSearchProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop",
     description: "Apple iPhone 14 with A15 Bionic, 6.1\" Super Retina XDR OLED, advanced 12MP dual camera, and Crash Detection.",
     specs: [["RAM", "6GB"], ["Storage", "128GB"], ["Battery", "3279mAh"]],
-    localAvailable: false,
+    localAvailable: true,
+    localShop: { name: "Kumar Mobiles", address: "45 Anna Salai, Madurai", km: 1.2, phone: "+91 99434 40384" },
     prices: [
-      { platform: "Amazon", price: 57999, url: "https://amazon.in", isAffiliate: true, inStock: true },
-      { platform: "Flipkart", price: 58499, url: "https://flipkart.com", isAffiliate: true, inStock: true },
+      { platform: "Amazon", price: 70000, url: "https://amazon.in", isAffiliate: true, inStock: true },
+      { platform: "Kumar Mobiles (Local)", price: 70500, url: "#", isAffiliate: false, inStock: true },
     ],
   },
 ];
