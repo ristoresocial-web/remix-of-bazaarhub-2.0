@@ -43,6 +43,7 @@ import BlogPostPage from "./pages/BlogPostPage";
 import SitemapPage from "./pages/SitemapPage";
 import AboutPage from "./pages/AboutPage";
 import SellerLoginPage from "./pages/SellerLoginPage";
+import LoginChooserPage from "./pages/LoginChooserPage";
 
 // Lazy-loaded heavy pages
 const SearchPage = lazy(() => import("./pages/SearchPage"));
@@ -78,7 +79,8 @@ const AnimatedRoutes = () => {
               
               <Route path="/account/change-password" element={<PageTransition><ChangePasswordPage /></PageTransition>} />
               <Route path="/seller/register" element={<PageTransition><SellerRegisterPage /></PageTransition>} />
-              <Route path="/login" element={<PageTransition><SellerLoginPage /></PageTransition>} />
+              <Route path="/login" element={<PageTransition><LoginChooserPage /></PageTransition>} />
+              <Route path="/seller/login" element={<PageTransition><SellerLoginPage /></PageTransition>} />
               <Route path="/seller/dashboard" element={<PageTransition><SellerDashboardPage /></PageTransition>} />
               <Route path="/admin" element={<PageTransition><AdminPage /></PageTransition>} />
               <Route path="/buyer/login" element={<PageTransition><BuyerLoginPage /></PageTransition>} />

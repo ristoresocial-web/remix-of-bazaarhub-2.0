@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* 3. Log In */}
-        <Link to="/buyer/login" className={linkCls("/buyer/login")}>
+        <Link to="/login" className={linkCls("/login")}>
           Log In
         </Link>
 
