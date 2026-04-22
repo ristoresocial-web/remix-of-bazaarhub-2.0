@@ -61,6 +61,7 @@ const SearchPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [compareList, setCompareList] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(urlPage);
+  const [expandedProductId, setExpandedProductId] = useState<number | null>(null);
 
   useEffect(() => {
     setLoading(true);
