@@ -11,10 +11,11 @@ interface ProductSearchCardProps {
   isCompare: boolean;
   onToggleCompare: () => void;
   viewMode: "grid" | "list";
+  isBestDeal?: boolean;
 }
 
 const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
-  product, isCompare, onToggleCompare, viewMode,
+  product, isCompare, onToggleCompare, viewMode, isBestDeal,
 }) => {
   const [wishlisted, setWishlisted] = React.useState(() => isInWishlist(String(product.id)));
 
@@ -82,6 +83,11 @@ const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
       <Link to={`/product/${product.id}/${product.slug}`} className="block">
         <div className="relative h-48 overflow-hidden rounded-t-card bg-background p-4">
           <img src={product.image} alt={product.name} className="h-full w-full object-contain" loading="lazy" />
+          {isBestDeal && (
+            <span className="absolute right-2 top-2 rounded-pill bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground shadow-md">
+              🏆 Best Deal
+            </span>
+          )}
           {product.localAvailable && (
             <span className="absolute left-2 top-2 rounded-pill bg-success px-2 py-0.5 text-[10px] font-semibold text-success-foreground">
               City Partner

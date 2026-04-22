@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type SortOption = "price_asc" | "price_desc" | "best_diff" | "most_compared";
+export type AvailabilityFilter = "all" | "online" | "offline" | "both";
 
 interface FilterCounts {
   categories: { name: string; count: number }[];
@@ -26,6 +27,8 @@ interface FilterPanelProps {
   minMax: [number, number];
   localOnly: boolean;
   onLocalOnlyChange: (v: boolean) => void;
+  availability: AvailabilityFilter;
+  onAvailabilityChange: (v: AvailabilityFilter) => void;
   sortBy: SortOption;
   onSortChange: (s: SortOption) => void;
   counts: FilterCounts;
@@ -37,6 +40,7 @@ const FilterContent: React.FC<FilterPanelProps> = ({
   selectedBrands, onBrandsChange,
   priceRange, onPriceRangeChange, minMax,
   localOnly, onLocalOnlyChange,
+  availability, onAvailabilityChange,
   sortBy, onSortChange,
   counts, onReset,
 }) => {
@@ -110,6 +114,24 @@ const FilterContent: React.FC<FilterPanelProps> = ({
           <span>₹{priceRange[0].toLocaleString("en-IN")}</span>
           <span>₹{priceRange[1].toLocaleString("en-IN")}</span>
         </div>
+      </div>
+
+      {/* Availability */}
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-muted-foreground uppercase">🛒 Availability</p>
+        <RadioGroup value={availability} onValueChange={(v) => onAvailabilityChange(v as AvailabilityFilter)}>
+          {[
+            { value: "all", label: "All sources" },
+            { value: "both", label: "Online & Nearby" },
+            { value: "online", label: "Online only" },
+            { value: "offline", label: "Nearby store only" },
+          ].map(opt => (
+            <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
+              <RadioGroupItem value={opt.value} className="h-3.5 w-3.5" />
+              <span className="text-sm text-foreground">{opt.label}</span>
+            </label>
+          ))}
+        </RadioGroup>
       </div>
 
       {/* City Partners Only */}
