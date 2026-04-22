@@ -32,10 +32,14 @@ const TRUST_COLORS: Record<string, string> = {
   new: "text-muted-foreground",
 };
 
+const INITIAL_VISIBLE = 3;
+
 const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
   const { isLoggedIn } = useAuth();
   const [sortOnline, setSortOnline] = useState<SortOnline>("price");
   const [sortLocal, setSortLocal] = useState<SortLocal>("price");
+  const [showAllOnline, setShowAllOnline] = useState(false);
+  const [showAllLocal, setShowAllLocal] = useState(false);
 
   const { product, onlineSellers, cityPartners, lowestOnlinePrice, lowestLocalPrice, priceDifference } = data;
 
