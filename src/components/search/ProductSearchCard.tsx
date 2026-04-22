@@ -128,6 +128,23 @@ const ProductSearchCard: React.FC<ProductSearchCardProps> = ({
           <Heart className={`h-4 w-4 ${wishlisted ? "fill-destructive text-destructive" : ""}`} />
         </button>
       </div>
+      {onToggleExpand && (
+        <div className="px-3 pb-2">
+          <Button
+            type="button"
+            size="sm"
+            variant={expanded ? "secondary" : "default"}
+            onClick={onToggleExpand}
+            className="w-full h-8 gap-1 text-xs"
+          >
+            {expanded ? (
+              <>Hide comparison <ChevronUp className="h-3 w-3" /></>
+            ) : (
+              <>Compare prices <ChevronDown className="h-3 w-3" /></>
+            )}
+          </Button>
+        </div>
+      )}
       <div className="px-3 pb-2">
         <p className="text-[9px] text-muted-foreground">
           Prices via affiliate APIs — may vary.
