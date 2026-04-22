@@ -11,12 +11,12 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AppProvider } from "@/contexts/AppContext";
 import Navbar from "@/components/Navbar";
-import MobileBottomNav from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import ChatbotWidget from "@/components/ChatbotWidget";
 import ScrollToTop from "@/components/ScrollToTop";
 import LoadingFallback from "@/components/LoadingFallback";
+
+// Lazy chatbot — its panel JS only loads when opened
+const ChatbotWidget = lazy(() => import("@/components/ChatbotWidget"));
 
 // Eager-loaded pages
 import Index from "./pages/Index";
@@ -103,7 +103,6 @@ const AnimatedRoutes = () => {
         </Suspense>
       </main>
       {!isDashboard && <Footer />}
-      {!isDashboard && <MobileBottomNav />}
     </>
   );
 };
@@ -119,8 +118,9 @@ const App = () => (
             <BrowserRouter>
               <AuthProvider>
                 <AnimatedRoutes />
-                <WhatsAppButton />
-                <ChatbotWidget />
+                <Suspense fallback={null}>
+                  <ChatbotWidget />
+                </Suspense>
                 <ScrollToTop />
               </AuthProvider>
             </BrowserRouter>
