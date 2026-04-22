@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Search } from "lucide-react";
+import React from "react";
+import { Link } from "react-router-dom";
 import electronics from "@/assets/categories/electronics.png";
 import mobiles from "@/assets/categories/mobiles.png";
 import laptops from "@/assets/categories/laptops.png";
@@ -32,44 +31,13 @@ const categories: Category[] = [
 ];
 
 const CategoryGrid: React.FC = () => {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState("");
-  const city = (typeof window !== "undefined" && localStorage.getItem("bazaarhub_city")) || "Madurai";
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const q = query.trim();
-    if (!q) return;
-    navigate(`/search?q=${encodeURIComponent(q)}&city=${encodeURIComponent(city)}`);
-  };
-
   return (
     <section className="container py-14">
-      <div className="mb-6 text-center">
+      <div className="mb-8 text-center">
         <h2 className="text-title text-bh-text font-display">What are you looking for?</h2>
         <p className="mt-1 text-sm text-bh-text-secondary">Browse popular categories near you</p>
       </div>
 
-      {/* Embedded category search */}
-      <form
-        onSubmit={handleSearch}
-        className="mx-auto mb-8 flex max-w-2xl items-center overflow-hidden rounded-pill border border-bh-border bg-white shadow-bh-sm transition-all duration-200 focus-within:border-bh-orange focus-within:shadow-price"
-      >
-        <Search className="ml-4 h-5 w-5 text-bh-text-muted" />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search Product"
-          className="flex-1 border-none bg-transparent px-3 py-3 text-sm text-bh-text outline-none placeholder:text-bh-text-muted"
-        />
-        <button
-          type="submit"
-          className="m-1.5 rounded-pill bg-bh-orange px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-orange-dark"
-        >
-          Search
-        </button>
-      </form>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-6 lg:grid-cols-6">
         {categories.map((cat, idx) => (
           <Link
