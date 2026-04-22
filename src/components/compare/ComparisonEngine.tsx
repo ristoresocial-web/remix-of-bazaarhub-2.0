@@ -283,19 +283,30 @@ function OnlineSellerCard({
           <p className={`notranslate font-mono text-lg font-medium price-animate ${isAbsoluteLowest ? "text-bh-orange-dark" : "text-bh-blue"}`}>
             ₹{seller.price.toLocaleString("en-IN")}
           </p>
-          {!seller.inStock && <span className="text-[10px] text-destructive">Out of stock</span>}
+          {isAbsoluteLowest && (
+            <span className="inline-block mt-0.5 rounded-pill bg-success/15 text-success text-[9px] font-bold px-2 py-0.5 uppercase tracking-wider">
+              ✓ Lowest Price
+            </span>
+          )}
+          {!seller.inStock && <span className="block text-[10px] text-destructive">Out of stock</span>}
         </div>
       </div>
-      <div className="mt-2 flex items-center justify-between text-xs text-bh-text-muted">
+      <div className="mt-2 flex items-center justify-between gap-2 text-xs text-bh-text-muted">
         <span>⚡ {seller.delivery}</span>
-        <a
-          href={seller.url}
-          target="_blank"
-          rel="nofollow sponsored noopener noreferrer"
-          className="flex items-center gap-1 text-bh-orange font-semibold hover:underline"
+        <Button
+          asChild
+          size="sm"
+          className="h-8 gap-1 text-[11px] bg-bh-orange hover:bg-bh-orange-dark text-white"
+          disabled={!seller.inStock}
         >
-          Visit <ExternalLink className="h-3 w-3" />
-        </a>
+          <a
+            href={seller.url}
+            target="_blank"
+            rel="nofollow sponsored noopener noreferrer"
+          >
+            Buy Now <ExternalLink className="h-3 w-3" />
+          </a>
+        </Button>
       </div>
     </motion.div>
   );
