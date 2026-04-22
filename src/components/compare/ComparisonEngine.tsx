@@ -123,8 +123,8 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
       <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-0 items-stretch">
         {/* Online column (left) */}
         <div className="rounded-3xl md:rounded-r-none border border-bh-blue/20 bg-bh-blue-light/40 p-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="flex items-center gap-2 font-display text-base font-bold text-bh-blue">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h3 className="flex items-center gap-2 font-display text-sm sm:text-base font-bold text-bh-blue">
               🌐 Online Sellers
             </h3>
             <div className="flex items-center gap-1">
@@ -140,7 +140,7 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
             </div>
           </div>
 
-          {sortedOnline.map((seller) => (
+          {(showAllOnline ? sortedOnline : sortedOnline.slice(0, INITIAL_VISIBLE)).map((seller) => (
             <OnlineSellerCard
               key={seller.platform}
               seller={seller}
@@ -149,6 +149,16 @@ const ComparisonEngine: React.FC<ComparisonEngineProps> = ({ data, city }) => {
               city={city}
             />
           ))}
+          {sortedOnline.length > INITIAL_VISIBLE && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAllOnline((v) => !v)}
+              className="w-full text-bh-blue hover:bg-bh-blue/10 text-xs"
+            >
+              {showAllOnline ? "Show less" : `Show all ${sortedOnline.length} sellers`}
+            </Button>
+          )}
         </div>
 
         {/* Center savings pill divider — the star */}
