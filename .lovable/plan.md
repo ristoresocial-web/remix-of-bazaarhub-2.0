@@ -1,45 +1,39 @@
 
 
-## Seed local + online sellers so the inline split view has data to render
+## Align seeded mobile prices to your exact case dataset
 
-You've handed me a 4-seller dataset (2 online, 2 offline with distances). To make this show up under the comparison fallback panel for the 5 mobiles seeded last turn, I'll wire these as the default seller pool for those products.
+You've handed me precise price points per (product, seller) pair across the 4 fallback cases. The 5 seeded mobiles already exist with the right seller pool — only the **prices** need to match your numbers exactly.
 
-### What I'll add
+### What changes
 
-**1 file edit**: `src/data/mockData.ts`
+**1 file edit**: `src/data/mockData.ts` — update the `prices[]` arrays for the 5 seeded mobiles (ids 15–19).
 
-For each of the 5 mobiles seeded last turn (ids 15–19), replace/extend the `prices[]` array so it contains exactly these 4 sellers (where applicable per the stock distribution agreed earlier):
+| Product | Amazon | Flipkart | Kumar Mobiles (1.2km) | Selvam Stores (2.5km) | Case |
+|---|---|---|---|---|---|
+| **id 15 — Samsung M34 5G** | ₹15,000 | ₹14,800 | ₹15,200 | ₹15,100 | Case 1: Both available → split view |
+| **id 16 — Samsung M34 Variant** | ₹14,900 | ₹14,750 | — | — | Case 2: Online only → same-brand fallback to id 15 |
+| **id 17 — Redmi Note 12** | — | — | ₹13,000 | ₹12,800 | Case 3: Offline only → diff-brand fallback |
+| **id 18 — Realme Narzo 60** | (kept as-is, both sides) | (kept) | (kept) | (kept) | Demo extra, Case 1 |
+| **id 19 — iPhone 14** | ₹70,000 | — | ₹70,500 | — | Case 4: Mixed, no spec siblings (battery 3279mAh differs) |
 
-- **Amazon** — `isAffiliate: true`, online
-- **Flipkart** — `isAffiliate: true`, online
-- **Kumar Mobiles** — `isAffiliate: false`, local, `distance: 1.2`, address in current city
-- **Selvam Stores** — `isAffiliate: false`, local, `distance: 2.5`, address in current city
+Note on Case 4: your dataset gives iPhone seller_id 1 (Amazon) + seller_id 3 (Kumar Mobiles offline). I'll honor that exactly — iPhone gets 1 online + 1 offline, no Flipkart, no Selvam.
 
-Prices stay sorted low→high by the existing `ComparisonEngine` logic. Each seller keeps the existing `Product.prices[]` schema (platform, price, isAffiliate, inStock, url, shopName, distance).
-
-### Stock distribution per product (preserves the 4 fallback cases)
-
-| Product | Amazon | Flipkart | Kumar Mobiles | Selvam Stores |
-|---|---|---|---|---|
-| Samsung M34 5G | ✓ | ✓ | ✓ | ✓ |
-| Samsung M34 Variant | ✓ | ✓ | — | — |
-| Redmi Note 12 | — | — | ✓ | ✓ |
-| Realme Narzo 60 | ✓ | ✓ | ✓ | ✓ |
-| iPhone 14 | ✓ | ✓ | — | — |
+Lowest-price markers per the existing `ComparisonEngine`:
+- id 15 → Flipkart ₹14,800 (Best Online), Selvam ₹15,100 (Best Local)
+- id 16 → Flipkart ₹14,750 (only Best Online; fallback panel mounts)
+- id 17 → Selvam ₹12,800 (only Best Local; fallback panel mounts)
+- id 19 → Amazon ₹70,000 (Best Online), Kumar ₹70,500 (Best Local)
 
 ### Files NOT touched
 
-- `ComparisonEngine.tsx`, `InlineComparePanel.tsx`, `SellerPriceTable.tsx`, `SearchPage.tsx` — already render `prices[]` correctly with distance, online/offline split, and "Best Deal" badge.
-- `platformsData.ts` — Amazon and Flipkart are already registered there.
+- `ComparisonEngine.tsx`, `InlineComparePanel.tsx`, `SmartFallbackPanel.tsx`, `smartFallback.ts`, `SearchPage.tsx`, `ProductSearchCard.tsx` — already wired.
+- All other 14 mock products — untouched.
 - No DB, no edge functions, no new components.
 
 ### Verify after build
 
-1. Open `/search`, type "Samsung M34 5G", click **Compare prices ▾**
-2. See split view: left column = Amazon + Flipkart (sorted low→high), right column = Kumar Mobiles (1.2km) + Selvam Stores (2.5km)
-3. Lowest price across both sides shows the **Best Deal** badge
-
-### Note on "Kumar Mobiles" & "Selvam Stores"
-
-These will be hardcoded local-shop entries inside `mockData.ts` (no admin UI, no DB row). The current local-seller pipeline (`getCityPartnersForProduct` in `sellerData.ts`) generates random sellers per city — that stays untouched for other products. Only the 5 seeded mobiles get this fixed 4-seller pool so the demo is deterministic.
+1. `/search` → "Samsung M34 5G" → expand → split view with these exact 4 prices, Flipkart flagged Best Online, Selvam flagged Best Local
+2. `/search` → "Samsung M34 Variant" → expand → 2 online sellers + same-brand fallback card pointing to id 15
+3. `/search` → "Redmi Note 12" → expand → 2 local sellers + different-brand fallback to Samsung/Realme
+4. `/search` → "iPhone 14" → expand → Amazon ₹70k + Kumar ₹70.5k, no fallback siblings (specs don't match)
 
