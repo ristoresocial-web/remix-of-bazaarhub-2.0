@@ -1,70 +1,42 @@
 
 
-## Comparison UI is already built — proposing only the deltas you actually asked for
+## Fallback logic is already implemented exactly as you described
 
-Re-checked `ComparisonEngine.tsx`, `SmartFallbackPanel.tsx`, `FilterPanel.tsx`, `SearchPage.tsx`, `ProductSearchCard.tsx`. 7 of your 8 sections are live. Here's the honest gap-only plan.
+The pseudocode you posted maps 1:1 to what's already running on `/product/compare`. Here's the proof:
 
-### What's already done — no changes
+### Your pseudocode → current code
 
-| Your section | Where | Notes |
-|---|---|---|
-| 1. Product header (image, name, specs, best deal) | `ComparisonEngine` header card | Live |
-| 2. Split online/offline + Best Deal badge + savings pill | `ComparisonEngine` | Live, mobile stacks vertically already |
-| 3. Conditional fallback when one source missing | `ComparisonEngine` → `SmartFallbackPanel` | Live |
-| 4. Same-brand-same-specs → different-brand-same-specs with % match + Compare CTA | `SmartFallbackPanel` | Live |
-| 5. Filters (price, brand, availability) + default Low→High sort | `FilterPanel` + `SearchPage` | Live |
-| 7. Distance for offline, clean cards, mobile responsive | `CityPartnerCard` shows km | Live |
-| 8. Spec cache | `smartFallback.ts` `matchCache` Map | Live |
+```text
+IF online && offline exist:        →  ComparisonEngine renders both columns
+   show both                          + green "Available Online & Nearby Store" banner
 
-No OTP, no WhatsApp API — already compliant.
+ELSE IF one missing:               →  isSingleSource = true → mounts <SmartFallbackPanel/>
+   search same_brand + same_specs  →  findSameBrandSameSpec()  (≥80% spec match)
+   IF found: show suggestions      →  Section B renders with "Compare now?" CTA
+   ELSE:
+      search different_brand       →  findDifferentBrandSameSpec()  (≥70% match)
+      show alternatives            →  Section C with green "% match" pill
+```
 
----
+Both helpers live in `src/lib/smartFallback.ts`, the panel in `src/components/compare/SmartFallbackPanel.tsx`, the mount point in `ComparisonEngine.tsx`. Section C only renders when Section B is empty — exact ELSE behaviour.
 
-### Gaps to close (the only real work)
-
-**Gap 1 — "Best price highlighted in green" (your §7)**
-Today the cheapest card uses **orange** (Best Deal badge + orange ring). Your spec says **green**. Two clean options:
-
-- **1a (recommended):** Keep orange "🏆 Best Deal" badge (brand-consistent, already eye-catching) and add a small **green "Lowest Price"** sub-pill under the price number on the cheapest card. Best of both: brand identity + your green-cue rule.
-- **1b:** Swap the entire winner ring + badge to green. Loses brand orange accent but matches your spec literally.
-
-**Gap 2 — Explicit action buttons (your §6)**
-- Online cards today have a "Visit" affiliate link. I'll **rename to "Buy Now"** and restyle as a filled orange button (clearer CTA, same affiliate attrs).
-- Offline cards have Call / WhatsApp / Directions. I'll **add a primary "View Nearby Store"** button at the top of the action row that opens Google Maps directions (same target as Directions, just promoted to primary CTA per your spec).
-
-**Gap 3 — Lazy load sellers (your §8)**
-Today all online + offline cards render at once. For products with many sellers this is wasted paint on mobile.
-- Render the **first 3 cards per side** immediately.
-- Show a **"Show all N sellers"** button to reveal the rest. Pure client-side, no network.
-
-**Gap 4 — Mobile polish at 760px viewport (current view)**
-Quick audit at your current 760×455 viewport:
-- The savings pill currently sits between the two columns on `md:` and above; at narrow widths it becomes a horizontal strip — already fine.
-- Sort `<select>` and headers can wrap awkwardly under 380px; I'll tighten the header row with `flex-wrap` and smaller text on `xs`.
+**No code changes required.** This is the third consecutive request for the same logic and it's been live since the first build.
 
 ---
 
-### Files touched (all edits, no new files)
+### If the fallback isn't appearing for you on screen, it's a data/threshold issue, not missing logic
 
-1. **`src/components/compare/ComparisonEngine.tsx`**
-   - Add green "Lowest Price" sub-pill on absolute-lowest card (Gap 1a)
-   - Rename online "Visit" → "Buy Now" filled button (Gap 2)
-   - Add primary "View Nearby Store" button on offline cards (Gap 2)
-   - Add `showAllOnline` / `showAllLocal` state + "Show all N" toggle (Gap 3)
-   - Tighten header row responsiveness (Gap 4)
+Possible reasons fallback panel stays hidden:
+- The product you're testing has **both** online and offline sellers → fallback intentionally hidden (Case A)
+- No catalog products share ≥80% / ≥70% spec keys with the target → thresholds too strict for the mock data
+- Target product has no `specs` object populated
 
-That's it. **One file edit.** No new components, no DB, no edge functions, no route changes.
+### Pick one if you want a real change
 
-### What stays disabled / out of scope (per your rules)
-- No OTP anywhere
-- No WhatsApp API — keep existing `wa.me` deeplink as-is on offline cards
-- No ratings/reviews UI changes
-- No "AI Best for You" tag
-- No homepage changes
+- **A. Lower thresholds** (e.g. 60% same-brand, 50% different-brand) so the panel shows for more products
+- **B. Force-show panel always** (even when both sources exist) as a "you might also like" strip
+- **C. Show me a specific product slug where you expect fallback but don't see it** → I'll trace why and fix the data or logic
+- **D. Nothing — just confirming the spec is met** (no action)
 
----
-
-### Decision needed before I code
-
-Pick **1a** (orange Best Deal badge + green Lowest Price sub-pill — recommended) or **1b** (swap winner styling fully to green). I'll proceed with **1a** by default if you just say "go".
+If none of A–D, describe what you see vs what you expect and I'll target that exact gap.
 
